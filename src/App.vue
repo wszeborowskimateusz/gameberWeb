@@ -1,10 +1,17 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Strona Główna</router-link> |
+      <router-link to="/login">Login</router-link> |
+      <router-link to="/about">O nas</router-link>
     </div>
-    <router-view/>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <router-view></router-view>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
