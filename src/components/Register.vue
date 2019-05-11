@@ -3,7 +3,7 @@
         <h2>Zarejestruj się</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">Nazwa użytkownika</label>
                 <input type="text" v-model="user.username" v-validate="'required'"
                     name="username" class="form-control"
                     :class="{ 'is-invalid': submitted && errors.has('username') }" />
@@ -11,7 +11,7 @@
                     class="invalid-feedback">{{ errors.first('username') }}</div>
             </div>
             <div class="form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Hasło</label>
                 <input type="password" v-model="user.password"
                     v-validate="{ required: true, min: 6 }"
                     name="password" class="form-control"
