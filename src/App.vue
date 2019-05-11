@@ -3,6 +3,7 @@
     <div id="nav">
       <router-link to="/">Strona Główna</router-link> |
       <router-link to="/login">Login</router-link> |
+      <router-link to="/register">Zarejestruj się</router-link> |
       <router-link to="/about">O nas</router-link>
     </div>
     <div class="container">

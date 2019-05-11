@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Login from './components/Login.vue';
+import Register from './components/Register.vue';
 
 Vue.use(Router);
 
@@ -19,6 +20,7 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
     { path: '/login', component: Login },
+    { path: '/register', component: Register },
     { path: '*', redirect: '/' },
   ],
 });
