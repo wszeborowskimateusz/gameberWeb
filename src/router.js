@@ -4,7 +4,7 @@ import Home from './views/Home.vue';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -23,3 +23,21 @@ export default new Router({
     },
   ],
 });
+
+// Prevent accessing restricted pages if not logged in
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login', '/register', '/'];
+  const authRequired = !publicPages.includes(to.path);
+
+  // See if there is a JWT in local storage
+  const loggedIn = localStorage.getItem('user');
+
+  if (authRequired && !loggedIn) {
+    return next('/login');
+  }
+
+  return next();
+});
+
+export default router;
