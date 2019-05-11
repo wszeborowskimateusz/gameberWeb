@@ -20,8 +20,8 @@
                     class="invalid-feedback">{{ errors.first('password') }}</div>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary">Register</button>
-                <router-link to="/login" class="btn btn-link">Cancel</router-link>
+                <button class="btn btn-primary">Zarejestruj się</button>
+                <router-link to="/login" class="btn btn-link">Anuluj</router-link>
             </div>
         </form>
     </div>
