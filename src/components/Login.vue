@@ -17,6 +17,9 @@
                 <div v-show="submitted && !password" class="invalid-feedback">
                     Hasło jest konieczne
                 </div>
+                <div v-show="!status.loggedIn && button_pressed" class="text-danger">
+                    Nieudana próba zalogowania
+                </div>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary">Login</button>
@@ -35,10 +38,11 @@ export default {
       username: '',
       password: '',
       submitted: false,
+      button_pressed: false,
     };
   },
   computed: {
-    ...mapState('account', ['status']),
+    ...mapState('users', ['status']),
   },
   created() {
     // reset login status

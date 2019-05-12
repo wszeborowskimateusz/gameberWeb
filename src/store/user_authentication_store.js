@@ -1,5 +1,6 @@
 import userService from '../services/user_authentication';
 import router from '../router';
+import toasts from '../utilities/toasts';
 
 const userToken = JSON.parse(localStorage.getItem('user'));
 const userState = userToken
@@ -15,6 +16,7 @@ const actions = {
           router.push('/');
         },
         (error) => {
+          toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
           commit('loginFailure', error);
         },
       );
@@ -31,6 +33,7 @@ const actions = {
           router.push('/login');
         },
         (error) => {
+          toasts.errorToast('Wystąpił problem przy próbie rejestracji. Spróbuj ponownie.');
           commit('registerFailure', error);
         },
       );
@@ -59,6 +62,7 @@ const mutations = {
   },
 };
 /* eslint-enable no-param-reassign */
+
 
 export default {
   namespaced: true,
