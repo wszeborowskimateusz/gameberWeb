@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'login',
@@ -36,13 +37,20 @@ export default {
       submitted: false,
     };
   },
+  computed: {
+    ...mapState('account', ['status']),
+  },
+  created() {
+    // reset login status
+    this.logout();
+  },
   methods: {
+    ...mapActions('users', ['login', 'logout']),
     handleSubmit() {
-      console.log(`Your username is: ${this.username} and password: ${this.password}`);
       this.submitted = true;
       const { username, password } = this;
       if (username && password) {
-        // TODO handle logging in
+        this.login({ username, password });
       }
     },
   },

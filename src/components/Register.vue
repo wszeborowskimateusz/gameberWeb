@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'register',
@@ -40,12 +41,16 @@ export default {
       submitted: false,
     };
   },
+  computed: {
+    ...mapState('users', ['status']),
+  },
   methods: {
+    ...mapActions('users', ['register']),
     handleSubmit() {
       this.submitted = true;
       this.$validator.validate().then((valid) => {
         if (valid) {
-          // TODO register a user
+          this.register(this.user);
         }
       });
     },
