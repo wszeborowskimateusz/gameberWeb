@@ -14,6 +14,7 @@ const actions = {
         (user) => {
           commit('loginSuccess', user);
           router.push('/');
+          toasts.successToast(`Witaj z powrotem ${username}`);
         },
         (error) => {
           toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
@@ -31,6 +32,7 @@ const actions = {
         (userResponse) => {
           commit('registerSuccess', userResponse);
           router.push('/login');
+          toasts.successToast('Rejestracja przebiegła pomyślnie. Teraz możesz się zalogować.');
         },
         (error) => {
           toasts.errorToast('Wystąpił problem przy próbie rejestracji. Spróbuj ponownie.');
