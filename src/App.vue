@@ -8,15 +8,19 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-sm-6 offset-sm-3">
+            <!--<div class="col-sm-6 offset-sm-3">-->
                 <router-view></router-view>
-            </div>
+            <!--</div>-->
         </div>
     </div>
   </div>
 </template>
 
 <style>
+body {
+    background-color: #9DCADF;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -30,10 +34,10 @@
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #427696;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #847D88
 }
 </style>

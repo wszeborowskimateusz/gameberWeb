@@ -29,7 +29,7 @@ function login(username, password) {
     body: JSON.stringify({ username, password }),
   };
 
-  return fetch(`${config.apiUrl}/signin`, requestOptions)
+  return fetch(`${config.apiUrl}/users/signin`, requestOptions)
     .then(handleResponse)
     .then((user) => {
       if (user.token) {
@@ -46,8 +46,8 @@ function register(user) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(user),
   };
-
-  return fetch(`${config.apiUrl}/signup`, requestOptions).then(handleResponse);
+  console.log(requestOptions.body);
+  return fetch(`${config.apiUrl}/users/signup`, requestOptions).then(handleResponse);
 }
 
 

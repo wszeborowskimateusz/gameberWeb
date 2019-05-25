@@ -1,5 +1,5 @@
 <template>
-    <div class="register">
+    <div class="register col-sm-6 offset-sm-3">
         <h2>Zarejestruj się</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
