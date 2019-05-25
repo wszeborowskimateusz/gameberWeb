@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
+import Toasts from './utilities/toasts';
 
 Vue.use(Router);
 
@@ -35,6 +36,7 @@ router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user');
 
   if (authRequired && !loggedIn) {
+    Toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
     return next('/login');
   }
 
