@@ -1,11 +1,13 @@
+import pl from 'vee-validate/dist/locale/pl';
 import Vue from 'vue';
-import VeeValidate from 'vee-validate';
+import VeeValidate, { Validator } from 'vee-validate';
 import App from './App.vue';
 import router from './router';
 
 import store from './store/store';
 
-Vue.use(VeeValidate);
+Validator.localize('pl', pl);
+Vue.use(VeeValidate, { locale: 'pl' });
 
 Vue.config.productionTip = false;
 

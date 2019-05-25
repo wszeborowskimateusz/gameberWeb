@@ -3,17 +3,17 @@
         <h2>Zarejestruj się</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
-                <label for="username">Nazwa użytkownika</label>
+                <label for="login">Nazwa użytkownika</label>
                 <input type="text" v-model="user.username" v-validate="'required'"
-                    name="username" class="form-control"
-                    :class="{ 'is-invalid': submitted && errors.has('username') }" />
-                <div v-if="submitted && errors.has('username')"
-                    class="invalid-feedback">{{ errors.first('username') }}</div>
+                    name="login" class="form-control"
+                    :class="{ 'is-invalid': submitted && errors.has('login') }" />
+                <div v-if="submitted && errors.has('login')"
+                    class="invalid-feedback">{{ errors.first('login') }}</div>
             </div>
             <div class="form-group">
                 <label htmlFor="email">Email</label>
                 <input type="email" v-model="user.email"
-                    v-validate="required|email"
+                    v-validate="'required|email'"
                     name="email" class="form-control"
                     :class="{ 'is-invalid': submitted && errors.has('email') }" />
                 <div v-if="submitted && errors.has('email')"
@@ -23,10 +23,10 @@
                 <label htmlFor="password">Hasło</label>
                 <input type="password" v-model="user.password"
                     v-validate="{ required: true, min: 6 }"
-                    name="password" class="form-control"
-                    :class="{ 'is-invalid': submitted && errors.has('password') }" />
-                <div v-if="submitted && errors.has('password')"
-                    class="invalid-feedback">{{ errors.first('password') }}</div>
+                    name="hasło" class="form-control"
+                    :class="{ 'is-invalid': submitted && errors.has('hasło') }" />
+                <div v-if="submitted && errors.has('hasło')"
+                    class="invalid-feedback">{{ errors.first('hasło') }}</div>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary">Zarejestruj się</button>
