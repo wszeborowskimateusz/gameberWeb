@@ -9,7 +9,8 @@
     <div id="nav" v-if="status.loggedIn">
       <router-link to="/">Strona Główna</router-link> |
       <router-link to="/about">O nas</router-link>
-      <button class="btn float-right" @click="logout()">Wyloguj się</button>
+      <button class="btn btn-info float-right" @click="logout()">
+         <i class="fas fa-sign-out-alt"></i> Wyloguj się</button>
     </div>
     <div class="container">
         <div class="row">
