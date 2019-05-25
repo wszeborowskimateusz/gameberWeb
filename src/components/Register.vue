@@ -4,7 +4,7 @@
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
                 <label for="login">Nazwa użytkownika</label>
-                <input type="text" v-model="user.username" v-validate="'required'"
+                <input type="text" v-model="user.login" v-validate="'required'"
                     name="login" class="form-control"
                     :class="{ 'is-invalid': submitted && errors.has('login') }" />
                 <div v-if="submitted && errors.has('login')"
@@ -12,7 +12,7 @@
             </div>
             <div class="form-group">
                 <label htmlFor="email">Email</label>
-                <input type="email" v-model="user.email"
+                <input type="email" v-model="user.mail"
                     v-validate="'required|email'"
                     name="email" class="form-control"
                     :class="{ 'is-invalid': submitted && errors.has('email') }" />
@@ -44,9 +44,9 @@ export default {
   data() {
     return {
       user: {
-        username: '',
+        login: '',
         password: '',
-        email: '',
+        mail: '',
       },
       submitted: false,
     };

@@ -7,6 +7,7 @@ function logout() {
 
 function handleResponse(response) {
   return response.text().then((text) => {
+    console.log(response);
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
@@ -32,8 +33,8 @@ function login(username, password) {
   return fetch(`${config.apiUrl}/users/signin`, requestOptions)
     .then(handleResponse)
     .then((user) => {
-      if (user.token) {
-        localStorage.setItem('user', JSON.stringify(user));
+      if (user.jwtToken) {
+        localStorage.setItem('user', JSON.stringify(user.jwtToken));
       }
 
       return user;
@@ -46,7 +47,7 @@ function register(user) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(user),
   };
-  console.log(requestOptions.body);
+
   return fetch(`${config.apiUrl}/users/signup`, requestOptions).then(handleResponse);
 }
 
