@@ -1,10 +1,15 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" v-if="!status.loggedIn">
       <router-link to="/">Strona Główna</router-link> |
       <router-link to="/login">Login</router-link> |
       <router-link to="/register">Zarejestruj się</router-link> |
       <router-link to="/about">O nas</router-link>
+    </div>
+    <div id="nav" v-if="status.loggedIn">
+      <router-link to="/">Strona Główna</router-link> |
+      <router-link to="/about">O nas</router-link>
+      <button class="btn float-right" @click="logout()">Wyloguj się</button>
     </div>
     <div class="container">
         <div class="row">
@@ -41,3 +46,16 @@ body {
   color: #847D88
 }
 </style>
+
+<script>
+import { mapState, mapActions } from 'vuex';
+
+export default {
+  computed: {
+    ...mapState('users', ['status']),
+  },
+  methods: {
+    ...mapActions('users', ['logout']),
+  },
+};
+</script>

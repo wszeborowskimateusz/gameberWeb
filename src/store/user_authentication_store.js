@@ -24,6 +24,7 @@ const actions = {
   },
   logout({ commit }) {
     userService.logout();
+    toasts.successToast('Pomyślnie wylogowano się');
     commit('logout');
   },
   register({ commit }, user) {
