@@ -26,19 +26,19 @@
           <li class="nav-item">
             <a href="#" class="nav-link">
               <img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png">
-              {{level}}
+              {{user.level}}
             </a>
           </li>
           <li class="nav-item">
             <!--Here we can add a link to a strore in the future-->
             <a href="#" class="nav-link">
               <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">
-              {{numberOfCoins}}
+              {{user.numberOfCoins}}
             </a>
           </li>
           <li class="nav-item">
             <router-link to="/userProfile" name="profil"
-                class="nav-link rounded-circle icon-button">
+                class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/nolan/2x/user.png"/>
               Profil
             </router-link>
@@ -75,7 +75,6 @@ body {
   color: #2c3e50;
 }
 #nav {
-  /*padding: 30px;*/
   margin-bottom: 2em;
   background-color: #F4E5DD;
 }
@@ -88,15 +87,6 @@ body {
 #nav a.router-link-exact-active {
   color: #847D88
 }
-
-.icon-button {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    outline: none;
-    border: 0;
-    background: transparent;
-}
 </style>
 
 <script>
@@ -105,8 +95,10 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      numberOfCoins: 100,
-      level: 5,
+      user: {
+        numberOfCoins: 100,
+        level: 5,
+      },
     };
   },
   computed: {
