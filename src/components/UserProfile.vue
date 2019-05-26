@@ -30,7 +30,10 @@
                 <div class="progress-bar dynamic progress-bar-animated progress-bar-striped bg-info"
                     :style="{ width: user.experiencePoints + '%' }"
                     role="progressbar" :aria-valuenow="user.experiencePoints"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                    aria-valuemin="0" :aria-valuemax="user.pointsToAchieveNewLevel"></div>
+                <div class="progress-bar-title bar-title">
+                    {{user.experiencePoints}} / {{user.pointsToAchieveNewLevel}}
+                </div>
             </div>
         </div>
 
@@ -72,6 +75,20 @@
     position: absolute;
 }
 
+.progress {
+  position: relative;
+}
+
+.progress-bar-title {
+  position: absolute;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  color: #fff;
+  right: 0;
+  left: 0;
+  top: 0;
+}
 
 </style>
 
@@ -85,6 +102,7 @@ export default {
         username: 'Ana',
         level: 5,
         experiencePoints: 70,
+        pointsToAchieveNewLevel: 100,
       },
     };
   },
