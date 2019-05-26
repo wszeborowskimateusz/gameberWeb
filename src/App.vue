@@ -1,17 +1,37 @@
 <template>
   <div id="app">
-    <div id="nav" v-if="!status.loggedIn">
-      <router-link to="/">Strona Główna</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/register">Zarejestruj się</router-link> |
-      <router-link to="/about">O nas</router-link>
-    </div>
-    <div id="nav" v-if="status.loggedIn">
-      <router-link to="/">Strona Główna</router-link> |
-      <router-link to="/about">O nas</router-link>
-      <button class="btn btn-info float-right" @click="logout()">
-         <i class="fas fa-sign-out-alt"></i> Wyloguj się</button>
-    </div>
+    <nav id="nav" class="navbar navbar-default navbar-expand-lg sticky-top">
+      <button class="navbar-toggler navbar-light" type="button"
+        data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation" id="dataToggler">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item active">
+            <router-link class="nav-link" to="/">Strona Główna</router-link>
+          </li>
+          <li v-if="!status.loggedIn" class="nav-item">
+            <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+          <li v-if="!status.loggedIn" class="nav-item">
+            <router-link class="nav-link" to="/register">Zarejestruj się</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/about">O nas</router-link>
+          </li>
+        </ul>
+        <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
+          <li>
+            <button class="btn btn-info" @click="logout()">
+              <i class="fas fa-sign-out-alt"></i> Wyloguj się
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
     <div class="container">
         <div class="row">
             <!--<div class="col-sm-6 offset-sm-3">-->
@@ -35,8 +55,11 @@ body {
   color: #2c3e50;
 }
 #nav {
-  padding: 30px;
+  /*padding: 30px;*/
+  margin-bottom: 2em;
+  background-color: #F4E5DD;
 }
+
 
 #nav a {
   font-weight: bold;
