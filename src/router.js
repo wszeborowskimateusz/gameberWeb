@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './components/Home.vue';
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
+import UserProfile from './components/UserProfile.vue';
 import Toasts from './utilities/toasts';
 
 Vue.use(Router);
@@ -19,6 +20,7 @@ const router = new Router({
     },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
+    { path: '/userProfile', component: UserProfile },
     { path: '*', redirect: '/' },
   ],
 });

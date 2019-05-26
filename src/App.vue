@@ -23,7 +23,27 @@
           </li>
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
-          <li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png">
+              {{level}}
+            </a>
+          </li>
+          <li class="nav-item">
+            <!--Here we can add a link to a strore in the future-->
+            <a href="#" class="nav-link">
+              <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">
+              {{numberOfCoins}}
+            </a>
+          </li>
+          <li class="nav-item">
+            <router-link to="/userProfile" name="profil"
+                class="nav-link rounded-circle icon-button">
+              <img width="25" src="https://img.icons8.com/nolan/2x/user.png"/>
+              Profil
+            </router-link>
+          </li>
+          <li class="nav-item">
             <button class="btn btn-info" @click="logout()">
               <i class="fas fa-sign-out-alt"></i> Wyloguj się
             </button>
@@ -60,7 +80,6 @@ body {
   background-color: #F4E5DD;
 }
 
-
 #nav a {
   font-weight: bold;
   color: #427696;
@@ -69,12 +88,27 @@ body {
 #nav a.router-link-exact-active {
   color: #847D88
 }
+
+.icon-button {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+}
 </style>
 
 <script>
 import { mapState, mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      numberOfCoins: 100,
+      level: 5,
+    };
+  },
   computed: {
     ...mapState('users', ['status']),
   },
