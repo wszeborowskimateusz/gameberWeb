@@ -1,10 +1,10 @@
 <template>
-  <div class="about col-12 overrides">
+  <div class="about col-12">
     <h1 class="mb-5">Gameber - Game + Remember</h1>
 
     <div class="row">
       <div class="col-6">
-        <h3 class="mb-3">Gameber to przede wszystkim:</h3>
+        <h3 class="mb-3">Gameber to:</h3>
         <ul class="list-group" id="features-list">
           <li class="list-group-item">
             <i class="fas fa-smile-beam float-left"></i> Świetna zabawa</li>
@@ -41,10 +41,6 @@
 
 .about {
   text-align: center;
-}
-
-.overrides .list-group {
-  background-color: #CDACA8;
 }
 
 </style>
