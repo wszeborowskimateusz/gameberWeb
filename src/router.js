@@ -39,6 +39,10 @@ router.beforeEach((to, from, next) => {
     return next('/login');
   }
 
+  if (loggedIn && (to.path === '/login' || to.path === '/register')) {
+    return next('/');
+  }
+
   return next();
 });
 
