@@ -1,8 +1,8 @@
 <template>
     <div class="profil col-12">
         <div class="row">
-            <div class="avatar col-3 p-4">
-                <div class="avatar__image float-left">
+            <div class="avatar  col-sm-12 col-lg-3 col-md-12 p-4">
+                <div class="avatar__image">
                     <img width="250" :src="user.avatar_url"/>
                     <button class="image_badge btn btn-default" onclick="this.blur();"
                             v-on:click="addNewAvatar()">
@@ -11,20 +11,20 @@
                     <h1>{{user.username}}</h1>
                 </div>
             </div>
-            <div class="achievements col-6 pt-4 float-left">
+            <div class="achievements col-sm-12 col-lg-6 col-md-12 p-5 float-left">
                 <h2>Twoje osiągnięcia:</h2>
                 <img src="https://img.icons8.com/dusk/100/000000/prize.png">
                 <img src="https://img.icons8.com/dusk/100/000000/trophy.png">
                 <img src="https://img.icons8.com/dusk/100/000000/medal2.png">
             </div>
-            <div class="col-3 pt-4">
+            <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
                 <button class="btn btn-primary" v-on:click="changeBackgroundImage()">
                     Zmień zdjęcie w tle
                     <img width="25" src="https://img.icons8.com/clouds/100/000000/picture.png">
                 </button>
             </div>
         </div>
-        <div class="bottom p-5">
+        <div class="bottom mx-auto p-5">
             <h3>Poziom {{user.level}}</h3>
             <div class="progress">
                 <div class="progress-bar dynamic progress-bar-animated progress-bar-striped bg-info"
