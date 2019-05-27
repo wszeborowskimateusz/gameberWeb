@@ -1,5 +1,5 @@
 <template>
-    <div class="profil col-12">
+    <div class="profil col-12" :style="{'background-image' : 'url(' + user.backgroundImage +')'}">
         <div class="row">
             <div class="avatar  col-sm-12 col-lg-3 col-md-12 p-4">
                 <div class="avatar__image">
@@ -13,9 +13,8 @@
             </div>
             <div class="achievements col-sm-12 col-lg-6 col-md-12 p-5 float-left">
                 <h2>Twoje osiągnięcia:</h2>
-                <img src="https://img.icons8.com/dusk/100/000000/prize.png">
-                <img src="https://img.icons8.com/dusk/100/000000/trophy.png">
-                <img src="https://img.icons8.com/dusk/100/000000/medal2.png">
+                <img v-for="achievement in user.achievements" :src="achievement"
+                    v-bind:key="achievement"/>
             </div>
             <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
                 <button class="btn btn-primary" v-on:click="changeBackgroundImage()">
@@ -58,7 +57,6 @@
     width: var(--width);
 }
 .profil {
-    background-image: url("https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260");
     height: auto;
     min-height: 550px;
     color: #EDCDC3;
@@ -100,9 +98,14 @@ export default {
       user: {
         avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png',
         username: 'Ana',
+        backgroundImage: 'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
         level: 5,
         experiencePoints: 70,
         pointsToAchieveNewLevel: 100,
+        achievements: ['https://img.icons8.com/dusk/100/000000/prize.png',
+          'https://img.icons8.com/dusk/100/000000/trophy.png',
+          'https://img.icons8.com/dusk/100/000000/medal2.png',
+          'https://img.icons8.com/dusk/100/000000/diploma.png'],
       },
     };
   },
