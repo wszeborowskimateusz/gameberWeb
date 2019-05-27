@@ -35,7 +35,7 @@ function login(username, password) {
     .then((user) => {
       if (user.jwtToken) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
-      }
+      } else return Promise.reject(new Error("No token provided in server's response"));
 
       return user;
     });

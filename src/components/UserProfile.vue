@@ -13,8 +13,16 @@
             </div>
             <div class="achievements col-sm-12 col-lg-6 col-md-12 p-5 float-left">
                 <h2>Twoje osiągnięcia:</h2>
-                <img v-for="achievement in user.achievements" :src="achievement"
-                    v-bind:key="achievement"/>
+                <a href="#" v-for="achievement in user.achievements"
+                    v-bind:key="achievement" :title="achievement.name">
+                    <img  :src="achievement.src"/>
+                </a>
+                <div v-if="!user.achievements || user.achievements.length === 0">
+                    <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
+                    <img src="https://img.icons8.com/ios/100/000000/empty-set-filled.png">
+                </div>
+
+
             </div>
             <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
                 <button class="btn btn-primary" v-on:click="changeBackgroundImage()">
@@ -82,7 +90,7 @@
   text-align: center;
   line-height: 20px;
   overflow: hidden;
-  color: #fff;
+  color: #000;
   right: 0;
   left: 0;
   top: 0;
@@ -92,29 +100,27 @@
 
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
   data() {
     return {
-      user: {
-        avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png',
-        username: 'Ana',
-        backgroundImage: 'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-        level: 5,
-        experiencePoints: 70,
-        pointsToAchieveNewLevel: 100,
-        achievements: ['https://img.icons8.com/dusk/100/000000/prize.png',
-          'https://img.icons8.com/dusk/100/000000/trophy.png',
-          'https://img.icons8.com/dusk/100/000000/medal2.png',
-          'https://img.icons8.com/dusk/100/000000/diploma.png'],
-      },
+
     };
   },
+  computed: {
+    ...mapState('userProfile', ['user']),
+  },
+  mounted() {
+    this.getUserData();
+  },
   methods: {
+    ...mapActions('userProfile', ['getUserData']),
     addNewAvatar() {
       console.log('This is new avatar');
     },
     changeBackgroundImage() {
-      console.log('Background image changed');
+
     },
   },
 };
