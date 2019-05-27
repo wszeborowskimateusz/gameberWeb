@@ -7,9 +7,10 @@ const userDefaultState = {
     avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png',
     username: 'No name',
     backgroundImage: 'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-    level: 0,
+    level: 1,
     experiencePoints: 19,
     pointsToAchieveNewLevel: 100,
+    numberOfCoins: 100,
     achievements: [
       { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
       { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },

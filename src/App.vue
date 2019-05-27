@@ -95,14 +95,11 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      user: {
-        numberOfCoins: 100,
-        level: 5,
-      },
     };
   },
   computed: {
     ...mapState('users', ['status']),
+    ...mapState('userProfile', ['user']),
   },
   methods: {
     ...mapActions('users', ['logout']),
