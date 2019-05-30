@@ -1,5 +1,10 @@
 # client_web
 
+## Color palet
+```
+https://www.design-seeds.com/wander/wanderlust/color-journey-2/
+```
+
 ## Project setup
 ```
 npm install
