@@ -30,7 +30,7 @@ const router = new Router({
 // Prevent accessing restricted pages if not logged in
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/', '/about', '/map'];
+  const publicPages = ['/login', '/register', '/', '/about'];
   const authRequired = !publicPages.includes(to.path);
 
   // See if there is a JWT in local storage

@@ -5,7 +5,14 @@
 </template>
 
 <script>
-export default {
+import { mapActions } from 'vuex';
 
+export default {
+  methods: {
+    ...mapActions('userProfile', ['getUserData']),
+  },
+  mounted() {
+    this.getUserData();
+  },
 };
 </script>
