@@ -82,7 +82,6 @@
 
 <script>
 import WordLearning from './Games/WordLearning.vue';
-import WordGet from './Games/WordGet.vue';
 
 export default {
   data() {
@@ -103,7 +102,7 @@ export default {
           },
         },
         {
-          name: 'WordGet',
+          name: 'WordLearning',
           gameInfo: {
             id: '3',
             info: 'this is some info',
@@ -130,7 +129,6 @@ export default {
   },
   components: {
     WordLearning,
-    WordGet,
   },
   methods: {
     nextGame() {
