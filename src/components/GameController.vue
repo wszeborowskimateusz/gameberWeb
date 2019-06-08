@@ -24,9 +24,15 @@
                 role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-12 p-1" role="group" aria-label="First group">
                     <button type="button" class="m-3 btn btn-primary"
-                        v-on:click="prevGame()">Poprzedni</button>
+                        v-on:click="prevGame()">
+                        <img src="https://img.icons8.com/plasticine/30/000000/circled-chevron-left.png">
+                        Poprzedni
+                    </button>
                     <button type="button" class="m-3 btn btn-primary"
-                        v-on:click="nextGame()">Następny</button>
+                        v-on:click="nextGame()">
+                        Następny
+                        <img src="https://img.icons8.com/plasticine/30/000000/circled-chevron-right.png">
+                    </button>
                 </div>
             </div>
         </div>
