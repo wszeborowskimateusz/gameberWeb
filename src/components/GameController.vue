@@ -36,6 +36,7 @@
 
 .game {
     height: 65vh;
+    padding: 1%;
 }
 
 .progress {
