@@ -24,10 +24,18 @@ export default {
   props: {
     gameInfo: Object,
   },
+  mounted() {
+    this.playSound(this.gameInfo.sound);
+  },
+  updated() {
+    this.playSound(this.gameInfo.sound);
+  },
   methods: {
     playSound(sound) {
-      const audio = new Audio(sound);
-      audio.play();
+      if (sound) {
+        const audio = new Audio(sound);
+        audio.play();
+      }
     },
   },
 };
