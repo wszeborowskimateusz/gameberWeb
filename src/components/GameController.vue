@@ -4,7 +4,9 @@
             :style="{'background-image' : 'url(' + categoryBackgroundImage +')'}">
         </div>
         <div class="content">
-            <h2 class="title">Kategoria: {{this.categoryName}}</h2>
+            <img :src="categoryCountryIcon">
+            <h2 class="title pl-3 pr-3">Kategoria: {{this.categoryName}}</h2>
+            <img :src="categoryIcon">
             <div class="progress m-2">
                     <div class="progress-bar dynamic progress-bar-animated progress-bar-striped"
                         :style="{ width: this.gameProgress + '%' }"
@@ -46,6 +48,7 @@
 }
 .title {
     height: 7vh;
+    display: inline-block;
 }
 
 .background-image {
@@ -64,7 +67,7 @@
 }
 
 .game {
-    height: 62vh;
+    height: 60vh;
     padding: 1%;
     background: rgba(244, 229, 221, 0.5);
 }
@@ -138,6 +141,8 @@ export default {
       categoryBackgroundImage: 'https://wallup.net/wp-content/uploads/2018/10/09/1036532-animals-background-53.jpg',
       categoryName: 'Zwierzęta Arktyki',
       categoryId: this.$route.params.id,
+      categoryCountryIcon: 'https://img.icons8.com/color/48/000000/iceland.png',
+      categoryIcon: 'https://img.icons8.com/color/48/000000/seal.png',
     };
   },
   computed: {
