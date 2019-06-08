@@ -1,6 +1,8 @@
 <template>
     <div class="word_learning">
         <h1>This is some other component </h1>
+        Id = {{gameInfo.id}}
+        Info = {{gameInfo.info}}
     </div>
 </template>
 
@@ -14,6 +16,8 @@
 
 <script>
 export default {
-
+  props: {
+    gameInfo: Object,
+  },
 };
 </script>

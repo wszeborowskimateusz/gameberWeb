@@ -1,7 +1,8 @@
 <template>
     <div class="GameController col-12">
         <h3 class="title">This is categorie with id = {{$route.params.id}}</h3>
-        <component class="game" :is="currentGameComponent"></component>
+        <component class="game" v-bind:gameInfo="this.gameInfo"
+            :is="currentGameComponent"></component>
         <ul class="pagination justify-content-center">
             <li class="page-item pr-5 pt-3">
                 <button v-on:click="changeComponent('WordGet')"
@@ -18,7 +19,6 @@
 <style scoped>
 .GameController {
      text-align: center;
-     height: 100%;
 }
 .title {
     height: 5vh;
@@ -38,6 +38,10 @@ export default {
   data() {
     return {
       currentGameComponent: 'WordLearning',
+      gameInfo: {
+        id: 'some id',
+        info: 'this is some info',
+      },
     };
   },
   components: {
@@ -47,6 +51,8 @@ export default {
   methods: {
     changeComponent(name) {
       this.currentGameComponent = name;
+      this.gameInfo.id = name;
+      this.gameInfo.info = `This is info for ${name}`;
     },
   },
 };
