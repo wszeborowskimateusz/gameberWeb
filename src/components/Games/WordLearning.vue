@@ -8,7 +8,6 @@
 
 .word_learning {
     background-color: aliceblue;
-    padding-top: 35%;
 }
 
 </style>
