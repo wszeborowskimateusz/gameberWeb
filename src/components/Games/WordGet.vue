@@ -1,6 +1,6 @@
 <template>
     <div class="word_learning">
-        <h1>This is world learning component </h1>
+        <h1>This is some other component </h1>
     </div>
 </template>
 
