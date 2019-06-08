@@ -6,7 +6,7 @@
         <div class="col-12 font-weight-bold">
             <h2>{{gameInfo.polishName}} - {{gameInfo.englishName}}</h2>
         </div>
-        <div class="col-12">
+        <div v-if="gameInfo.sound" class="col-12">
             <button class="btn" v-on:click="playSound(gameInfo.sound)">
                 <img src="https://img.icons8.com/nolan/64/000000/medium-volume.png">
             </button>
