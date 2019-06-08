@@ -1,11 +1,10 @@
-<!--:style="{'background-image' : 'url(' + categoryBackgroundImage +')'}" -->
 <template>
     <div class="GameController col-12">
         <div class="background-image"
             :style="{'background-image' : 'url(' + categoryBackgroundImage +')'}">
         </div>
         <div class="content">
-            <h3 class="title">This is categorie with id = {{$route.params.id}}</h3>
+            <h2 class="title">Kategoria: {{this.categoryName}}</h2>
             <div class="progress m-2">
                     <div class="progress-bar dynamic progress-bar-animated progress-bar-striped"
                         :style="{ width: this.gameProgress + '%' }"
@@ -120,6 +119,8 @@ export default {
       ],
       currentGameIndex: 0,
       categoryBackgroundImage: 'https://wallup.net/wp-content/uploads/2018/10/09/1036532-animals-background-53.jpg',
+      categoryName: 'Zwierzęta Arktyki',
+      categoryId: this.$route.params.id,
     };
   },
   computed: {
