@@ -1,5 +1,6 @@
 <template>
     <div class="GameController col-12">
+        <h3>This is categorie with id = {{$route.params.id}}</h3>
         <component class="game" :is="currentGameComponent"></component>
         <ul class="pagination justify-content-center">
             <li class="page-item pr-5 pt-3">
