@@ -21,8 +21,6 @@
                     <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
                     <img src="https://img.icons8.com/ios/100/000000/empty-set-filled.png">
                 </div>
-
-
             </div>
             <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
                 <button class="btn btn-primary" v-on:click="changeBackgroundImage()">
@@ -43,7 +41,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 

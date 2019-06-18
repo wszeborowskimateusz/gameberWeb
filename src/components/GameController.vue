@@ -1,25 +1,25 @@
 <template>
     <div class="GameController col-12">
         <div class="background-image"
-            :style="{'background-image' : 'url(' + categoryBackgroundImage +')'}">
+            :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}">
         </div>
         <div class="content">
-            <img :src="categoryCountryIcon">
-            <h2 class="title pl-3 pr-3">Kategoria: {{this.categoryName}}</h2>
-            <img :src="categoryIcon">
+            <img :src="category.categoryCountryIcon">
+            <h2 class="title pl-3 pr-3">Kategoria: {{this.category.categoryName}}</h2>
+            <img :src="category.categoryIcon">
             <div class="progress m-2">
                     <div class="progress-bar dynamic progress-bar-animated progress-bar-striped"
                         :style="{ width: this.gameProgress + '%' }"
                         role="progressbar" :aria-valuenow="this.gameProgress"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     <div class="progress-bar-title bar-title">
-                        {{this.currentGameIndex + 1}} / {{this.games.length}}
+                        {{this.currentGameIndex + 1}} / {{this.category.games.length}}
                     </div>
             </div>
-            <div class="gameContainer">
+            <div v-if="category.games.length > 0" class="gameContainer">
                 <component class="game"
-                    v-bind:gameInfo="games[currentGameIndex].gameInfo"
-                    :is="games[currentGameIndex].name">
+                    v-bind:gameInfo="category.games[currentGameIndex].gameInfo"
+                    :is="category.games[currentGameIndex].name">
                 </component>
             </div>
             <div class="btn-toolbar mb-12 justify-content-center"
@@ -90,73 +90,46 @@
 </style>
 
 <script>
+import { mapState } from 'vuex';
 import WordLearning from './Games/WordLearning.vue';
+import gameControllerService from '../services/gameControllerService';
 
 export default {
   data() {
     return {
-      games: [
-        {
-          name: 'WordLearning',
-          gameInfo: {
-            id: '1',
-            polishName: 'Foka',
-            englishName: 'Seal',
-            img: 'http://bi.gazeta.pl/im/3/11672/z11672953IER,Foka-grenlandzka.jpg',
-            sound: '',
-          },
-        },
-        {
-          name: 'WordLearning',
-          gameInfo: {
-            id: '2',
-            polishName: 'Niedźwiedź polarny',
-            englishName: 'Polar bear',
-            img: 'https://vignette.wikia.nocookie.net/harrypotter/images/2/25/POLAR.jpg/revision/latest?cb=20160925151133&path-prefix=pl',
-            sound: 'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
-          },
-        },
-        {
-          name: 'WordLearning',
-          gameInfo: {
-            id: '3',
-            polishName: 'Mors',
-            englishName: 'Walrus',
-            img: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Pacific_Walrus_-_Bull_%288247646168%29.jpg',
-            sound: '',
-          },
-        },
-        {
-          name: 'WordLearning',
-          gameInfo: {
-            id: '4',
-            polishName: 'Wilk',
-            englishName: 'Wolf',
-            img: 'https://4.bp.blogspot.com/-aGeDdmUSRiM/WJJKJa_-sMI/AAAAAAABITI/Du7ATdHn8NUH1cP35IGSgNJ_jBeBppx1gCLcB/s1600/ScreenShot8509.jpg',
-            sound: '',
-          },
-        },
-      ],
+      category: {
+        games: [],
+        categoryBackgroundImage: '',
+        categoryName: '',
+        categoryCountryIcon: '',
+        categoryIcon: '',
+      },
       currentGameIndex: 0,
-      categoryBackgroundImage: 'https://wallup.net/wp-content/uploads/2018/10/09/1036532-animals-background-53.jpg',
-      categoryName: 'Zwierzęta Arktyki',
       categoryId: this.$route.params.id,
-      categoryCountryIcon: 'https://img.icons8.com/color/48/000000/iceland.png',
-      categoryIcon: 'https://img.icons8.com/color/48/000000/seal.png',
     };
   },
+  created() {
+    this.fetchCategory();
+  },
   computed: {
+    ...mapState('users', ['user']),
     gameProgress() {
-      return (this.currentGameIndex + 1) / this.games.length * 100;
+      return (this.currentGameIndex + 1) / this.category.games.length * 100;
     },
   },
   components: {
     WordLearning,
   },
   methods: {
+    fetchCategory() {
+      gameControllerService.getCategoryData(this.user, this.categoryId)
+        .then((category) => { this.category = category; });
+    },
     nextGame() {
-      if (this.currentGameIndex + 1 < this.games.length) {
+      if (this.currentGameIndex + 1 < this.category.games.length) {
         this.currentGameIndex += 1;
+      } else {
+        // TODO Handle user finishing category
       }
     },
     prevGame() {
