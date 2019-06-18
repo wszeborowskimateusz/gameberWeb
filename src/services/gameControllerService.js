@@ -5,9 +5,16 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'WordPicker',
+      gameInfo: {
+        img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
+        correctAnswer: 0,
+        answers: ['Seal', 'Bear', 'Penguin', 'Water'],
+      },
+    },
+    {
       name: 'WordLearning',
       gameInfo: {
-        id: '1',
         polishName: 'Foka',
         englishName: 'Seal',
         img: 'http://bi.gazeta.pl/im/3/11672/z11672953IER,Foka-grenlandzka.jpg',
@@ -17,7 +24,6 @@ const defaultCategory = {
     {
       name: 'WordLearning',
       gameInfo: {
-        id: '2',
         polishName: 'Niedźwiedź polarny',
         englishName: 'Polar bear',
         img: 'https://vignette.wikia.nocookie.net/harrypotter/images/2/25/POLAR.jpg/revision/latest?cb=20160925151133&path-prefix=pl',
@@ -27,7 +33,6 @@ const defaultCategory = {
     {
       name: 'WordLearning',
       gameInfo: {
-        id: '3',
         polishName: 'Mors',
         englishName: 'Walrus',
         img: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Pacific_Walrus_-_Bull_%288247646168%29.jpg',
@@ -37,7 +42,6 @@ const defaultCategory = {
     {
       name: 'WordLearning',
       gameInfo: {
-        id: '4',
         polishName: 'Wilk',
         englishName: 'Wolf',
         img: 'https://4.bp.blogspot.com/-aGeDdmUSRiM/WJJKJa_-sMI/AAAAAAABITI/Du7ATdHn8NUH1cP35IGSgNJ_jBeBppx1gCLcB/s1600/ScreenShot8509.jpg',

@@ -92,6 +92,7 @@
 <script>
 import { mapState } from 'vuex';
 import WordLearning from './Games/WordLearning.vue';
+import WordPicker from './Games/WordPicker.vue';
 import gameControllerService from '../services/gameControllerService';
 
 export default {
@@ -119,6 +120,7 @@ export default {
   },
   components: {
     WordLearning,
+    WordPicker,
   },
   methods: {
     fetchCategory() {
