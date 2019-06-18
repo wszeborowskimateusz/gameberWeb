@@ -26,6 +26,9 @@
 </style>
 
 <script>
+require('bootstrap');
+const bootbox = require('bootbox');
+
 export default {
   props: {
     gameInfo: Object,
@@ -45,9 +48,18 @@ export default {
     },
     checkAnswer(answerId) {
       if (answerId === this.gameInfo.correctAnswer) {
-        alert('Correct');
+        bootbox.alert({
+          message: 'Tak jest! To jest prawidłowa odpowiedź!<img src="https://img.icons8.com/color/48/000000/fire-element.png">',
+          backdrop: true,
+          centerVertical: true,
+        });
+        this.$parent.nextGame();
       } else {
-        alert('Wrong');
+        bootbox.alert({
+          message: 'Niestety nie jest to prawidłowa odpowiedź <img src="https://img.icons8.com/color/48/000000/sad.png">',
+          backdrop: true,
+          centerVertical: true,
+        });
       }
     },
   },
