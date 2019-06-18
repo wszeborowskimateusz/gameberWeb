@@ -1,7 +1,8 @@
 <template>
     <div class="wordPicker row">
         <div class="col-12">
-            <img width="250" height="250" v-bind:src="gameInfo.img" class="rounded">
+            <img width="250" height="250" v-bind:src="gameInfo.img"
+                class="wordPickerImage rounded">
         </div>
         <div class="col-12">
             <button class="btn btn-primary m-3"
@@ -26,7 +27,8 @@
 </style>
 
 <script>
-const bootbox = require('bootbox');
+import tippy from 'tippy.js';
+import bootbox from '../../utilities/bootbox';
 
 export default {
   props: {
@@ -34,6 +36,14 @@ export default {
   },
   mounted() {
     this.playSound(this.gameInfo.sound);
+    tippy('.wordPickerImage', {
+      content: `${this.gameInfo.answers[this.gameInfo.correctAnswer]}`,
+      placement: 'right',
+      arrow: true,
+      animation: 'shift-away',
+      theme: 'google',
+      interactive: true,
+    });
   },
   updated() {
     this.playSound(this.gameInfo.sound);
@@ -47,18 +57,10 @@ export default {
     },
     checkAnswer(answerId) {
       if (answerId === this.gameInfo.correctAnswer) {
-        bootbox.alert({
-          message: 'Tak jest! To jest prawidłowa odpowiedź!<img src="https://img.icons8.com/color/48/000000/fire-element.png">',
-          backdrop: true,
-          centerVertical: true,
-        });
+        bootbox.alert('Tak jest! To jest prawidłowa odpowiedź!<img src="https://img.icons8.com/color/48/000000/fire-element.png">');
         this.$parent.nextGame();
       } else {
-        bootbox.alert({
-          message: 'Niestety nie jest to prawidłowa odpowiedź <img src="https://img.icons8.com/color/48/000000/sad.png">',
-          backdrop: true,
-          centerVertical: true,
-        });
+        bootbox.alert('Niestety nie jest to prawidłowa odpowiedź <img src="https://img.icons8.com/color/48/000000/sad.png">');
       }
     },
   },
