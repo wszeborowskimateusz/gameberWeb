@@ -26,7 +26,6 @@
 </style>
 
 <script>
-require('bootstrap');
 const bootbox = require('bootbox');
 
 export default {

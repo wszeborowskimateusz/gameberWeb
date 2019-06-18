@@ -6,6 +6,8 @@ import router from './router';
 
 import store from './store/store';
 
+require('bootstrap');
+
 Validator.localize('pl', pl);
 Vue.use(VeeValidate, { locale: 'pl' });
 
