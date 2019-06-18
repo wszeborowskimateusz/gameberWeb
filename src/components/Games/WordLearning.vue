@@ -15,8 +15,10 @@
 </template>
 
 <style scoped>
-
-
+.btn:focus,.btn:active {
+   outline: none !important;
+   box-shadow: none;
+}
 </style>
 
 <script>

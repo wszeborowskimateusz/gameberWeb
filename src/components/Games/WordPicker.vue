@@ -10,11 +10,19 @@
                     {{answer}}
             </button>
         </div>
+        <div v-if="gameInfo.sound" class="col-12">
+            <button class="btn" v-on:click="playSound(gameInfo.sound)">
+                <img src="https://img.icons8.com/nolan/64/000000/medium-volume.png">
+            </button>
+        </div>
     </div>
 </template>
 
 <style scoped>
-
+.btn:focus,.btn:active {
+   outline: none !important;
+   box-shadow: none;
+}
 </style>
 
 <script>
@@ -22,7 +30,19 @@ export default {
   props: {
     gameInfo: Object,
   },
+  mounted() {
+    this.playSound(this.gameInfo.sound);
+  },
+  updated() {
+    this.playSound(this.gameInfo.sound);
+  },
   methods: {
+    playSound(sound) {
+      if (sound) {
+        const audio = new Audio(sound);
+        audio.play();
+      }
+    },
     checkAnswer(answerId) {
       if (answerId === this.gameInfo.correctAnswer) {
         alert('Correct');

@@ -10,6 +10,7 @@ const defaultCategory = {
         img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
         correctAnswer: 0,
         answers: ['Seal', 'Bear', 'Penguin', 'Water'],
+        sound: 'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
       },
     },
     {
