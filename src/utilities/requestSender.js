@@ -1,5 +1,3 @@
-import config from '../../config';
-
 function handleResponse(response) {
   return response.text().then((text) => {
     console.log(response);
@@ -14,13 +12,13 @@ function handleResponse(response) {
 }
 
 export default {
-  getUserData(token) {
+  sendGetRequest(token, url) {
     if (token != null) {
       const requestOptions = {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       };
-      return fetch(`${config.apiUrl}/users/profile`, requestOptions)
+      return fetch(`${url}`, requestOptions)
         .then(response => handleResponse(response));
     }
     return Promise.reject(new Error('No token provided'));

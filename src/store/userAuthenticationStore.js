@@ -1,4 +1,4 @@
-import userService from '../services/user_authentication';
+import userService from '../services/userAuthenticationService';
 import router from '../router';
 import toasts from '../utilities/toasts';
 

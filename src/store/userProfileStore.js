@@ -1,4 +1,4 @@
-import userProfileService from '../services/user_profile';
+import userProfileService from '../services/userProfileService';
 import toasts from '../utilities/toasts';
 
 const userToken = JSON.parse(localStorage.getItem('user'));
