@@ -24,6 +24,10 @@
    outline: none !important;
    box-shadow: none;
 }
+
+img {
+  max-width: 100%;
+}
 </style>
 
 <script>

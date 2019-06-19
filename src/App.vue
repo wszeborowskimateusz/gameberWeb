@@ -100,6 +100,9 @@ export default {
     return {
     };
   },
+  mounted() {
+
+  },
   computed: {
     ...mapState('users', ['status']),
     ...mapState('userProfile', ['user']),

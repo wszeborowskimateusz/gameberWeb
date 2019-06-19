@@ -1,10 +1,10 @@
 <template>
     <div class="wordGuesser row">
-        <div class="col-6 my-auto">
-            <img width="250" height="250" v-bind:src="gameInfo.img"
+        <div class="col-sm-12 col-md-6 my-auto">
+            <img width="250px" height="250px" v-bind:src="gameInfo.img"
                 class="wordPickerImage rounded">
         </div>
-        <div class="col-6 my-auto">
+        <div class="col-sm-12 col-md-6 my-auto">
             <form>
                 <label for="userAnswer">Wpisz poniżej co widzisz na obrazku</label>
                 <div class="input-group">
@@ -22,7 +22,9 @@
 </template>
 
 <style scoped>
-
+img {
+  max-width: 100%;
+}
 </style>
 
 <script>
