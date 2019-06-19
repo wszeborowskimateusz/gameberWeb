@@ -1,10 +1,15 @@
 <template>
     <div class="word_learning row">
         <div class="col-12 image">
-            <img width="350" height="250" v-bind:src="gameInfo.img" class="rounded">
+            <img width="330" height="230" v-bind:src="gameInfo.img" class="rounded">
         </div>
         <div class="col-12 font-weight-bold">
-            <h2>{{gameInfo.polishName}} - {{gameInfo.englishName}}</h2>
+            <h2><span class="text-center polishName">{{gameInfo.polishName}}</span></h2>
+            <h2>
+              <span class="text-center font-weight-bold englishName">
+                {{gameInfo.englishName}}
+              </span>
+            </h2>
         </div>
         <div v-if="gameInfo.sound" class="col-12">
             <button class="btn" v-on:click="playSound(gameInfo.sound)">
@@ -18,6 +23,12 @@
 .btn:focus,.btn:active {
    outline: none !important;
    box-shadow: none;
+}
+.polishName {
+  font-size: 0.5em;
+}
+.englishName {
+  font-size: 0.8em;
 }
 </style>
 
