@@ -93,6 +93,7 @@
 import { mapState } from 'vuex';
 import WordLearning from './Games/WordLearning.vue';
 import WordPicker from './Games/WordPicker.vue';
+import WordGuessing from './Games/WordGuessing.vue';
 import gameControllerService from '../services/gameControllerService';
 
 export default {
@@ -121,6 +122,7 @@ export default {
   components: {
     WordLearning,
     WordPicker,
+    WordGuessing,
   },
   methods: {
     fetchCategory() {

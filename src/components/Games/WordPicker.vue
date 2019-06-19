@@ -27,8 +27,8 @@
 </style>
 
 <script>
-import tippy from 'tippy.js';
 import bootbox from '../../utilities/bootbox';
+import tooltip from '../../utilities/tippy';
 
 export default {
   props: {
@@ -36,14 +36,7 @@ export default {
   },
   mounted() {
     this.playSound(this.gameInfo.sound);
-    tippy('.wordPickerImage', {
-      content: `${this.gameInfo.answers[this.gameInfo.correctAnswer]}`,
-      placement: 'right',
-      arrow: true,
-      animation: 'shift-away',
-      theme: 'google',
-      interactive: true,
-    });
+    tooltip.addTooltip('.wordPickerImage', `${this.gameInfo.answers[this.gameInfo.correctAnswer]}`);
   },
   updated() {
     this.playSound(this.gameInfo.sound);
@@ -57,10 +50,10 @@ export default {
     },
     checkAnswer(answerId) {
       if (answerId === this.gameInfo.correctAnswer) {
-        bootbox.alert('Tak jest! To jest prawidłowa odpowiedź!<img src="https://img.icons8.com/color/48/000000/fire-element.png">');
+        bootbox.correctAnswerAlert();
         this.$parent.nextGame();
       } else {
-        bootbox.alert('Niestety nie jest to prawidłowa odpowiedź <img src="https://img.icons8.com/color/48/000000/sad.png">');
+        bootbox.incorrectAnswerAlert();
       }
     },
   },
