@@ -5,6 +5,31 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'WordMatching',
+      gameInfo: {
+        polishName: 'Pingwin',
+        correctAnswer: 'Penguin',
+        answers: [
+          {
+            img: 'http://bi.gazeta.pl/im/3/11672/z11672953IER,Foka-grenlandzka.jpg',
+            name: 'Seal',
+          },
+          {
+            img: 'https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iKIWgaiJUtss/v2/1000x-1.jpg',
+            name: 'Penguin',
+          },
+          {
+            img: 'https://vignette.wikia.nocookie.net/harrypotter/images/2/25/POLAR.jpg/revision/latest?cb=20160925151133&path-prefix=pl',
+            name: 'Bear',
+          },
+          {
+            img: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Pacific_Walrus_-_Bull_%288247646168%29.jpg',
+            name: 'Walrus',
+          },
+        ],
+      },
+    },
+    {
       name: 'WordGuessing',
       gameInfo: {
         img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
