@@ -8,4 +8,12 @@ export default {
     return a;
   },
   /* eslint-enable no-param-reassign */
+  findLongestStringLength(array) {
+    return array.reduce((a, b) => (a.length > b.length ? a : b), '').length;
+  },
+  removeStringFromArray(array, string) {
+    for (let i = array.length - 1; i >= 0; i -= 1) {
+      if (array[i] === string) array.splice(i, 1);
+    }
+  },
 };

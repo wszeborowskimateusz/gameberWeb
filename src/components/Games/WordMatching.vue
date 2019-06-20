@@ -77,7 +77,7 @@
 </style>
 
 <script>
-import shuffle from '../../utilities/shuffle';
+import shuffle from '../../utilities/arrayManipulation';
 import bootbox from '../../utilities/bootbox';
 
 export default {
@@ -96,11 +96,9 @@ export default {
   methods: {
     checkAnswer() {
       if (this.selectedAnswer !== -1 && this.selectedAnswer === this.gameInfo.correctAnswer) {
-        console.log(`Selected: ${this.selectedAnswer}\nCorrect: ${this.gameInfo.correctAnswer}`);
         bootbox.correctAnswerAlert();
         this.$parent.nextGame();
       } else {
-        console.log(`Selected: ${this.selectedAnswer}\nCorrect: ${this.gameInfo.correctAnswer}`);
         bootbox.incorrectAnswerAlert();
       }
     },

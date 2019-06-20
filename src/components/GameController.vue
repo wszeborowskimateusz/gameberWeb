@@ -95,6 +95,7 @@ import WordLearning from './Games/WordLearning.vue';
 import WordPicker from './Games/WordPicker.vue';
 import WordGuessing from './Games/WordGuessing.vue';
 import WordMatching from './Games/WordMatching.vue';
+import WordSearch from './Games/WordSearch.vue';
 import gameControllerService from '../services/gameControllerService';
 
 export default {
@@ -125,6 +126,7 @@ export default {
     WordPicker,
     WordGuessing,
     WordMatching,
+    WordSearch,
   },
   methods: {
     fetchCategory() {

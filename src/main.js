@@ -7,6 +7,8 @@ import router from './router';
 import store from './store/store';
 
 require('bootstrap');
+window.wordsearch = require('wordsearch');
+
 
 Validator.localize('pl', pl);
 Vue.use(VeeValidate, { locale: 'pl' });

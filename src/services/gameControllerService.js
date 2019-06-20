@@ -5,6 +5,12 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'WordSearch',
+      gameInfo: {
+        words: ['penguin', 'bear', 'seal', 'walrus', 'wolf'],
+      },
+    },
+    {
       name: 'WordMatching',
       gameInfo: {
         polishName: 'Pingwin',
