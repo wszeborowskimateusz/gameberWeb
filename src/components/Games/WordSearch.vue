@@ -81,23 +81,45 @@ export default {
     const puzzleSize = Math.min(longestWordSize, 8);
     this.puzzle = wordsearch(this.gameInfo.words, puzzleSize, puzzleSize);
 
-    this.wordsToSearch = this.gameInfo.words.slice();
-
     this.puzzle.unplaced.forEach(
-      word => arrayManipulation.removeStringFromArray(this.wordsToSearch, word),
+      word => arrayManipulation.removeStringFromArray(this.gameInfo.words, word),
     );
+
+    this.wordsToSearch = this.gameInfo.words.slice();
   },
   methods: {
     pressLetter(event, x, y) {
       console.log(x + y);
-      // if(!$(event.target).hasClass('crossed')){
       $(event.target).toggleClass('puzzleButton puzzleButtonMarked');
-      // }
     },
     checkAnswer() {
-      if (true) {
+      let wordFromBegining = '';
+      let wordFromEnd = '';
+      $('.puzzleButtonMarked').each(function () {
+        wordFromBegining = wordFromBegining.concat($(this).text().trim());
+      });
+      wordFromEnd = wordFromBegining.split('').reverse().join('');
+
+      if (this.wordsToSearch.includes(wordFromBegining)
+            || this.wordsToSearch.includes(wordFromEnd)) {
         $('.puzzleButtonMarked').addClass('crossed puzzleButton');
         $('.puzzleButtonMarked').removeClass('puzzleButtonMarked');
+
+        if (this.wordsToSearch.includes(wordFromBegining)) {
+          const index = this.wordsToSearch.indexOf(wordFromBegining);
+          if (index !== -1) this.wordsToSearch.splice(index, 1);
+        } else {
+          const index = this.wordsToSearch.indexOf(wordFromEnd);
+          if (index !== -1) this.wordsToSearch.splice(index, 1);
+        }
+
+        if (this.wordsToSearch.length === 0) {
+          this.puzzleSolved();
+        }
+      } else {
+        $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
+        bootbox.alert(`Niestety nie wykreśliłeś żadnego z podanych wyrazów
+            <img src="https://img.icons8.com/color/48/000000/sad.png">`);
       }
     },
     puzzleSolved() {
