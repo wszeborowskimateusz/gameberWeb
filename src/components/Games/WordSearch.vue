@@ -3,8 +3,9 @@
         <div class="puzzle col-6">
             <div v-for="(row, x) in puzzle.grid" v-bind:key="row.length + x" >
                 <button class="puzzleButton btn btn-primary m-1"
-                    v-on:click="pressLetter($event, x, y)"
-                    v-for="(cell, y) in row" v-bind:key="cell + y">
+                    v-on:click="pressLetter($event)"
+                    v-for="(cell, y) in row" v-bind:key="cell + y"
+                    v-bind:id="x + ',' + y">
                         {{cell}}
                 </button>
             </div>
@@ -94,47 +95,83 @@ export default {
     this.wordsToSearch = this.gameInfo.words.slice();
   },
   methods: {
-    pressLetter(event, x, y) {
-      console.log(x + y);
+    pressLetter(event) {
       $(event.target).toggleClass('puzzleButton puzzleButtonMarked');
     },
     checkAnswer() {
       let wordFromBegining = '';
       let wordFromEnd = '';
-      // TODO Make sure all the letters are adjucent to each other
+      let id = [];
+      const checkedButtonsIds = [];
+
+      // Get one of pozzible words - either reading from begining or from the end
       $('.puzzleButtonMarked').each(function () {
         wordFromBegining = wordFromBegining.concat($(this).text().trim());
+        id = $(this).attr('id').split(',');
+        checkedButtonsIds.push({ x: parseInt(id[0], 10), y: parseInt(id[1], 10) });
       });
+
       wordFromEnd = wordFromBegining.split('').reverse().join('');
 
+      // Check if each crossed letter is adjacent to each other
+      if (checkedButtonsIds.length > 1) {
+        const direction = {
+          x: checkedButtonsIds[1].x - checkedButtonsIds[0].x,
+          y: checkedButtonsIds[1].y - checkedButtonsIds[0].y,
+        };
+        if (direction.x > 1 || direction.y > 1 || direction.x < -1 || direction.y < -1) {
+          this.adjacentCrossingInformation();
+          return;
+        }
+        for (let i = 1; i < checkedButtonsIds.length; i += 1) {
+          if ((checkedButtonsIds[i - 1].x + direction.x !== checkedButtonsIds[i].x)
+             || (checkedButtonsIds[i - 1].y + direction.y !== checkedButtonsIds[i].y)) {
+            this.adjacentCrossingInformation();
+            return;
+          }
+        }
+      }
+
+      // Check if user crossed an actual word to cross
       if (this.wordsToSearch.includes(wordFromBegining)
             || this.wordsToSearch.includes(wordFromEnd)) {
         $('.puzzleButtonMarked').addClass('crossed puzzleButton');
         $('.puzzleButtonMarked').removeClass('puzzleButtonMarked');
 
+        // Remove a found word from a list of words to find
         if (this.wordsToSearch.includes(wordFromBegining)) {
           const index = this.wordsToSearch.indexOf(wordFromBegining);
-          if (index !== -1) this.wordsToSearch.splice(index, 1);
+          if (index !== -1) { this.wordsToSearch.splice(index, 1); }
         } else {
           const index = this.wordsToSearch.indexOf(wordFromEnd);
-          if (index !== -1) this.wordsToSearch.splice(index, 1);
+          if (index !== -1) { this.wordsToSearch.splice(index, 1); }
         }
 
         $(`.word:contains("${wordFromBegining}")`).addClass('crossedWord');
         $(`.word:contains("${wordFromEnd}")`).addClass('crossedWord');
-        // TODO Cross out a word in a list
+
+        // If no words left to find
         if (this.wordsToSearch.length === 0) {
           this.puzzleSolved();
         }
       } else {
-        $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
-        bootbox.alert(`Niestety nie wykreśliłeś żadnego z podanych wyrazów
-            <img src="https://img.icons8.com/color/48/000000/sad.png">`);
+        this.wrongWordCrossed();
       }
     },
     puzzleSolved() {
       bootbox.correctAnswerAlert();
       this.$parent.nextGame();
+    },
+    wrongWordCrossed() {
+      $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
+      bootbox.alert(`Niestety nie wykreśliłeś żadnego z podanych wyrazów
+            <img src="https://img.icons8.com/color/48/000000/sad.png">`);
+    },
+    adjacentCrossingInformation() {
+      $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
+      bootbox.alert(`Musisz wykreślać literki przylegające do siebie 
+            poziomo, pionowo lub ukośnie
+            <img src="https://img.icons8.com/color/48/000000/sad.png">`);
     },
   },
 };
