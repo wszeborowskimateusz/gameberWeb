@@ -57,6 +57,12 @@
     height: 3vw;
     text-transform: uppercase;
 }
+
+.crossedWord {
+    text-decoration: line-through;
+    background-color: #847D88;
+    color: black;
+}
 </style>
 
 <script>
@@ -95,6 +101,7 @@ export default {
     checkAnswer() {
       let wordFromBegining = '';
       let wordFromEnd = '';
+      // TODO Make sure all the letters are adjucent to each other
       $('.puzzleButtonMarked').each(function () {
         wordFromBegining = wordFromBegining.concat($(this).text().trim());
       });
@@ -113,6 +120,9 @@ export default {
           if (index !== -1) this.wordsToSearch.splice(index, 1);
         }
 
+        $(`.word:contains("${wordFromBegining}")`).addClass('crossedWord');
+        $(`.word:contains("${wordFromEnd}")`).addClass('crossedWord');
+        // TODO Cross out a word in a list
         if (this.wordsToSearch.length === 0) {
           this.puzzleSolved();
         }
