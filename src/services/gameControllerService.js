@@ -5,6 +5,20 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'Crossword',
+      gameInfo: {
+        words: [
+          { word: 'penguin', description: 'Czarno białe zwierze' },
+          { word: 'bear', description: 'Biały miś' },
+          { word: 'seal', description: 'Patrz jak ... płacze' },
+          { word: 'walrus', description: 'Gruby i wygląda jak foka z kłami' },
+          { word: 'wolf', description: 'Taki większy pies' },
+          { word: 'glacier', description: 'Góra lodowa' },
+          { word: 'cold', description: 'Nie ciepło' },
+        ],
+      },
+    },
+    {
       name: 'WordSearch',
       gameInfo: {
         words: ['penguin', 'bear', 'seal', 'walrus', 'wolf'],
