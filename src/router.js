@@ -6,6 +6,7 @@ import Register from './components/Register.vue';
 import UserProfile from './components/UserProfile.vue';
 import GameMap from './components/GameMap.vue';
 import GameController from './components/GameController.vue';
+import AvatarsStore from './components/AvatarsStore.vue';
 import Toasts from './utilities/toasts';
 
 Vue.use(Router);
@@ -25,6 +26,7 @@ const router = new Router({
     { path: '/userProfile', component: UserProfile },
     { path: '/map', component: GameMap },
     { path: '/games/:id', component: GameController },
+    { path: '/store', component: AvatarsStore },
     { path: '*', redirect: '/' },
   ],
 });

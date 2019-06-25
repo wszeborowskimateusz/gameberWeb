@@ -14,8 +14,8 @@
             <div class="achievements col-sm-12 col-lg-6 col-md-12 p-5 float-left">
                 <h2>Twoje osiągnięcia:</h2>
                 <a href="#" v-for="achievement in user.achievements"
-                    v-bind:key="achievement" :title="achievement.name">
-                    <img  :src="achievement.src"/>
+                    v-bind:key="achievement.name" :title="achievement.name">
+                    <img :src="achievement.src"/>
                 </a>
                 <div v-if="!user.achievements || user.achievements.length === 0">
                     <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>

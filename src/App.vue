@@ -24,6 +24,9 @@
           <li v-if="status.loggedIn" class="nav-item">
               <router-link class="nav-link" to="/map">Mapa</router-link>
           </li>
+          <li v-if="status.loggedIn" class="nav-item">
+              <router-link class="nav-link" to="/store">Sklep</router-link>
+          </li>
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
