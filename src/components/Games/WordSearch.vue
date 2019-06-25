@@ -1,6 +1,6 @@
 <template>
     <div class="wordSearch row">
-        <div class="puzzle col-6">
+        <div class="puzzle col-8 col-md-6">
             <div v-for="(row, x) in puzzle.grid" v-bind:key="row.length + x" >
                 <button class="puzzleButton btn btn-primary m-1"
                     v-on:click="pressLetter($event)"
@@ -10,12 +10,12 @@
                 </button>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-4 col-md-3">
             <div class="word border m-3" v-for="word in gameInfo.words" v-bind:key="word">
                 {{word}}
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-2 col-md-3">
             <button type="button" class="btn btn-primary"
                         v-on:click="checkAnswer()">
                         Sprawdź odpowiedź
