@@ -5,6 +5,13 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'WordGuessing',
+      gameInfo: {
+        img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
+        correctAnswer: 'seal',
+      },
+    },
+    {
       name: 'Crossword',
       gameInfo: {
         words: [
@@ -47,13 +54,6 @@ const defaultCategory = {
             name: 'Walrus',
           },
         ],
-      },
-    },
-    {
-      name: 'WordGuessing',
-      gameInfo: {
-        img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
-        correctAnswer: 'seal',
       },
     },
     {

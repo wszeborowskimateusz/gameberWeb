@@ -5,7 +5,7 @@
                 class="wordPickerImage rounded">
         </div>
         <div class="col-sm-12 col-md-6 my-auto">
-            <form>
+            <form @submit.prevent="checkAnswer">
                 <label for="userAnswer">Wpisz poniżej co widzisz na obrazku</label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="userAnswer"
@@ -43,7 +43,7 @@ export default {
     checkAnswer() {
       if (this.userAnswer.toUpperCase() === this.gameInfo.correctAnswer.toUpperCase()) {
         bootbox.correctAnswerAlert();
-        this.$parent.nextGame();
+        this.$parent.finishGame();
       } else {
         bootbox.incorrectAnswerAlert();
       }

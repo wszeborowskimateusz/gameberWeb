@@ -97,7 +97,7 @@ export default {
     checkAnswer() {
       if (this.selectedAnswer !== -1 && this.selectedAnswer === this.gameInfo.correctAnswer) {
         bootbox.correctAnswerAlert();
-        this.$parent.nextGame();
+        this.$parent.finishGame();
       } else {
         bootbox.incorrectAnswerAlert();
       }

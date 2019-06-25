@@ -156,7 +156,7 @@ export default {
 
       if (isCorrect) {
         bootbox.correctAnswerAlert();
-        this.$parent.nextGame();
+        this.$parent.finishGame();
       }
     },
   },

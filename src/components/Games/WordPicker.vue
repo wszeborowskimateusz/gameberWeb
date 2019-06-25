@@ -55,7 +55,7 @@ export default {
     checkAnswer(answerId) {
       if (answerId === this.gameInfo.correctAnswer) {
         bootbox.correctAnswerAlert();
-        this.$parent.nextGame();
+        this.$parent.finishGame();
       } else {
         bootbox.incorrectAnswerAlert();
       }

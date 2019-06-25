@@ -5,7 +5,7 @@
         </div>
         <div class="content">
             <img :src="category.categoryCountryIcon">
-            <h2 class="title pl-3 pr-3">Kategoria: {{this.category.categoryName}}</h2>
+            <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
             <img :src="category.categoryIcon">
             <div class="progress m-2">
                     <div class="progress-bar dynamic progress-bar-animated progress-bar-striped"
@@ -31,6 +31,8 @@
                         Poprzedni
                     </button>
                     <button type="button" class="m-3 btn btn-primary"
+                        :disabled="category.games[currentGameIndex]
+                          && category.games[currentGameIndex].isFinished === false"
                         v-on:click="nextGame()">
                         Następny
                         <img src="https://img.icons8.com/plasticine/30/000000/circled-chevron-right.png">
@@ -133,7 +135,17 @@ export default {
   methods: {
     fetchCategory() {
       gameControllerService.getCategoryData(this.user, this.categoryId)
-        .then((category) => { this.category = category; });
+        .then((category) => { this.category = category; })
+        /* eslint-disable no-param-reassign */
+        /* eslint-disable no-return-assign */
+        .then(() => this.category.games.forEach(game => game.isFinished = (game.name === 'WordLearning')))
+        /* eslint-enable no-param-reassign */
+        /* eslint-enable no-return-assign */
+        .then(() => this.$forceUpdate());
+    },
+    finishGame() {
+      this.category.games[this.currentGameIndex].isFinished = true;
+      this.nextGame();
     },
     nextGame() {
       if (this.currentGameIndex + 1 < this.category.games.length) {
