@@ -62,7 +62,6 @@
 .item__figure:hover {
      -webkit-transform: scale(1.05);
     transform: scale(1.05);
-    cursor: pointer;
 }
 
 figure{
