@@ -41,7 +41,10 @@
                                 </span>
                                 <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">
                                 <br>
-                                <button v-on:click="buyItem(item)" class="m-2 btn btn-primary">
+                                <button :class="user.numberOfCoins < item.price
+                                    ? 'button__disabled' : ''"
+                                v-on:click="buyItem(item)"
+                                class="item__buy__button m-2 btn btn-primary">
                                     Kup
                                     <img src="https://img.icons8.com/cotton/25/000000/buy-for-change.png">
                                 </button>
@@ -55,6 +58,15 @@
 </template>
 
 <style scoped>
+.button__disabled {
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    cursor: not-allowed;
+    box-shadow: none;
+    /* pointer-events: none; */
+}
+
 .item__image {
     max-width: 100%;
 }
@@ -83,7 +95,9 @@ figcaption{display:table-caption;caption-side:bottom}
 </style>
 
 <script>
+import { mapState } from 'vuex';
 import bootbox from '../utilities/bootbox';
+import tooltip from '../utilities/tippy';
 
 export default {
   data() {
@@ -145,8 +159,11 @@ export default {
     };
   },
   mounted() {
+    tooltip.addTooltip('.button__disabled',
+      'Niestety nie masz wystarczająco dużo monet');
   },
   computed: {
+    ...mapState('userProfile', ['user']),
     rowCount() {
       return Math.ceil(
         this.items[this.currentItemsCategory].length / this.itemsPerRow[this.currentItemsCategory],
@@ -158,16 +175,21 @@ export default {
   },
   methods: {
     buyItem(item) {
-      bootbox.confirmationDialog(`Czy na pewno chcesz kupić 
-          <span class="font-weight-bold">${item.name}</span>
-          za <span class="font-weight-bold">${item.price}</span> 
-          <img width="25" src="https://img.icons8.com/color/48/000000/coins.png"> ?`,
-      (bought) => {
-        if (bought) {
-          // TODO Handle buing an item
-          alert(`You have just bought item ${item.name}`);
-        }
-      });
+      if (item.price <= this.user.numberOfCoins) {
+        bootbox.confirmationDialog(`Czy na pewno chcesz kupić 
+                    <span class="font-weight-bold">${item.name}</span>
+                    za <span class="font-weight-bold">${item.price}</span> 
+                    <img width="25" src="https://img.icons8.com/color/48/000000/coins.png"> ?
+                    \n\nPozostanie ci 
+                    <span class="font-weight-bold">${this.user.numberOfCoins - item.price}</span>
+                    <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">`,
+        (bought) => {
+          if (bought) {
+            // TODO Handle buing an item
+            alert(`You have just bought item ${item.name}`);
+          }
+        });
+      }
     },
     changeItemsType(type) {
       this.currentItemsCategory = type;
