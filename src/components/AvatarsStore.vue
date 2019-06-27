@@ -18,12 +18,19 @@
             <div class="tab-pane show active"
                 id="#pills-items" role="tabpanel" aria-labelledby="pills-avatar-tab">
                 <div class="row" v-for="i in rowCount" v-bind:key="i">
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-3"
-                        v-for="item in items[currentItemsCategory].slice((i - 1) * itemsPerRow,
-                            i * itemsPerRow)"
+                    <div class="col-12"
+                        :class="currentItemsCategory === 0 ?
+                            ['col-lg-3', 'col-md-6', ' col-sm-6 ']
+                            : ['col-lg-6', 'col-md-12', ' col-sm-12']"
+                        v-for="item in items[currentItemsCategory].slice((i - 1)
+                            * itemsPerRow[currentItemsCategory],
+                            i * itemsPerRow[currentItemsCategory])"
                         v-bind:key="item.name">
                         <figure class="mx-auto item__figure">
-                            <img class="item__image" width="250" height="300" :src="item.img">
+                            <img v-if="currentItemsCategory === 0"
+                                class="item__image" width="250" height="300" :src="item.img">
+                            <img v-if="currentItemsCategory === 1"
+                                class="item__image" width="500" height="300" :src="item.img">
                             <figcaption class="imgCaption">
                                 <span class="font-weight-bold">
                                     {{item.name}}
@@ -81,7 +88,7 @@ figcaption{display:table-caption;caption-side:bottom}
 export default {
   data() {
     return {
-      itemsPerRow: 4,
+      itemsPerRow: [4, 2],
       avatars: [
         {
           id: 0,
@@ -141,7 +148,9 @@ export default {
   },
   computed: {
     rowCount() {
-      return Math.ceil(this.items[this.currentItemsCategory].length / this.itemsPerRow);
+      return Math.ceil(
+        this.items[this.currentItemsCategory].length / this.itemsPerRow[this.currentItemsCategory],
+      );
     },
     items() {
       return [this.avatars, this.backgroundImages];
