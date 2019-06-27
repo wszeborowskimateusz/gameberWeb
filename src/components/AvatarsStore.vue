@@ -84,6 +84,7 @@ figcaption{display:table-caption;caption-side:bottom}
 </style>
 
 <script>
+import bootbox from '../utilities/bootbox';
 
 export default {
   data() {
@@ -158,7 +159,16 @@ export default {
   },
   methods: {
     buyItem(item) {
-      alert(`You have just bought item ${item.name}`);
+      bootbox.confirmationDialog(`Czy na pewno chcesz kupić 
+          <span class="font-weight-bold">${item.name}</span>
+          za <span class="font-weight-bold">${item.price}</span> 
+          <img width="25" src="https://img.icons8.com/color/48/000000/coins.png"> ?`,
+      (bought) => {
+        if (bought) {
+          // TODO Handle buing an item
+          alert(`You have just bought item ${item.name}`);
+        }
+      });
     },
     changeItemsType(type) {
       this.currentItemsCategory = type;

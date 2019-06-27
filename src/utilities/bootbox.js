@@ -22,4 +22,11 @@ export default {
       centerVertical: true,
     });
   },
+  confirmationDialog(message, callback) {
+    bootbox.confirm({
+      message,
+      callback,
+      centerVertical: true,
+    });
+  },
 };
