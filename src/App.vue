@@ -37,10 +37,11 @@
           </li>
           <li class="nav-item">
             <!--Here we can add a link to a strore in the future-->
-            <a href="#" class="nav-link">
+            <router-link to="/store" name="store"
+                class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">
               {{user.numberOfCoins}}
-            </a>
+            </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/userProfile" name="profil"
@@ -104,7 +105,7 @@ export default {
     };
   },
   mounted() {
-
+    this.getUserData();
   },
   computed: {
     ...mapState('users', ['status']),
@@ -112,6 +113,7 @@ export default {
   },
   methods: {
     ...mapActions('users', ['logout']),
+    ...mapActions('userProfile', ['getUserData']),
   },
 };
 </script>

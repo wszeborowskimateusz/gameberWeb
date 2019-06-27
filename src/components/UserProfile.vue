@@ -97,7 +97,7 @@
 
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -109,10 +109,8 @@ export default {
     ...mapState('userProfile', ['user']),
   },
   mounted() {
-    this.getUserData();
   },
   methods: {
-    ...mapActions('userProfile', ['getUserData']),
     addNewAvatar() {
       console.log('This is new avatar');
     },
