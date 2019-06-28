@@ -1,5 +1,5 @@
 <template>
-    <div class="userProfile col-12">
+    <div v-if="user.avatars" class="userProfile col-12">
         <div class="profil col-12"
             :style="{'background-image' :
             'url(' + user.backgroundImages[user.backgroundImageId].img +')'}">
@@ -10,7 +10,7 @@
                     <img width="250" class="avatar__image__img"
                         :src="user.avatars[user.avatarId].img"/>
                     <button class="image_badge btn btn-default" onclick="this.blur();"
-                            v-on:click="addNewAvatar()">
+                            data-toggle="modal" data-target="#avatarModal">
                         <img width="70" src="https://img.icons8.com/color/96/000000/plus-2-math.png"/>
                     </button>
                     <h1>{{user.username}}</h1>
@@ -28,7 +28,8 @@
                 </div>
             </div>
             <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
-                <button class="btn btn-primary" v-on:click="changeBackgroundImage()">
+                <button class="btn btn-primary"
+                data-toggle="modal" data-target="#backgroundImagesModal">
                     Zmień zdjęcie w tle
                     <img width="25" src="https://img.icons8.com/clouds/100/000000/picture.png">
                 </button>
@@ -46,10 +47,125 @@
                 </div>
             </div>
         </div>
+        <!-- Background Images Change modal -->
+        <div class="modal fade" id="backgroundImagesModal" tabindex="-1"
+            role="dialog" aria-labelledby="backgroundImagesModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="backgroundImagesModalTitle">
+                            Wybierz nowe zdjęcie w tle
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span v-if="!user || user.backgroundImages.length === 0">
+                            Niestety nie masz żadnych zdjęć profilowych
+                        </span>
+                    <div class="row">
+                        <div class="col-12" v-for="(image, index) in user.backgroundImages"
+                                v-bind:key="image.id">
+                                <input type="radio" v-model="backgroundImageIdToChange"
+                                    name="rGroup" :value="index" :id="index">
+                                <label class="radioLabel" :for="index">
+                                    <img width="300" height="200" :src="image.img">
+                                    <br>
+                                    <span class="font-weight-bold">
+                                        {{image.name}}
+                                    </span>
+                                </label>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <router-link to="/store" data-dismiss="modal" >
+                            Zakup więcej obrazków
+                        </router-link>
+                        <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal"
+                            v-on:click="reverseImageChange()">Anuluj</button>
+                        <button v-if="user && user.backgroundImages.length > 0"
+                            type="button" class="btn btn-primary"
+                            data-dismiss="modal"
+                            v-on:click="changeBackgroundImage()">Zapisz zmiany</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avatar Change modal -->
+        <div class="modal fade" id="avatarModal" tabindex="-1"
+            role="dialog" aria-labelledby="avatarModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="avatarModalTitle">
+                            Wybierz swój nowy avatar
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span v-if="!user || user.avatars.length === 0">
+                            Niestety nie masz żadnych avatarów
+                        </span>
+                    <div class="row">
+                        <div class="col-12" v-for="(avatar, index) in user.avatars"
+                                v-bind:key="avatar.id">
+                                <input type="radio" v-model="avatarIdToChange" name="rGroup"
+                                    :value="index" :id="avatar.name + index">
+                                <label class="radioLabel" :for="avatar.name + index">
+                                    <img class="avatar_modal__img"
+                                        width="300" height="300" :src="avatar.img">
+                                    <br>
+                                    <span class="font-weight-bold">
+                                        {{avatar.name}}
+                                    </span>
+                                </label>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <router-link to="/store" data-dismiss="modal" >
+                            Zakup więcej avatarów
+                        </router-link>
+                        <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal"
+                            v-on:click="reverseAvatarChange()">Anuluj</button>
+                        <button v-if="user && user.backgroundImages.length > 0"
+                            type="button" class="btn btn-primary"
+                            data-dismiss="modal"
+                            v-on:click="changeAvatar()">Zapisz zmiany</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.avatar_modal__img {
+    border-radius: 50%;
+}
+
+input[type=radio] {
+    display: none;
+}
+
+input[type=radio]:checked + .radioLabel{
+  box-shadow: 3px 3px 15px #666;
+  border-color:#427696;
+  background: #427696;
+  color: #fff;
+  cursor: pointer;
+  zoom: 1;
+  filter: alpha(opacity=100);
+  opacity: 1;
+}
+
 h1,
 h2,
 h3 {
@@ -76,7 +192,7 @@ mix-blend-mode: difference;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-  filter: blur(5px);
+    filter: blur(5px);
     -webkit-filter: blur(5px);
     position: fixed;
     top: 0;
@@ -89,9 +205,9 @@ mix-blend-mode: difference;
 }
 
 .profile__content {
-       width: 100%;
+    width: 100%;
     height: 100%;
-     position: absolute;;
+    position: absolute;;
     top: 0px;
     left: 0px;
     z-index:1000;
@@ -113,22 +229,21 @@ mix-blend-mode: difference;
 }
 
 .progress {
-  position: relative;
+    position: relative;
 }
 
 .progress-bar-title {
-  position: absolute;
-  text-align: center;
-  line-height: 20px;
-  overflow: hidden;
-  color: #000;
-  right: 0;
-  left: 0;
-  top: 0;
+    position: absolute;
+    text-align: center;
+    line-height: 20px;
+    overflow: hidden;
+    color: #000;
+    right: 0;
+    left: 0;
+    top: 0;
 }
 
 </style>
-
 
 <script>
 import { mapState } from 'vuex';
@@ -136,20 +251,36 @@ import { mapState } from 'vuex';
 export default {
   data() {
     return {
-
+      backgroundImageIdToChange: 0,
+      avatarIdToChange: 0,
     };
   },
   computed: {
     ...mapState('userProfile', ['user']),
   },
   mounted() {
+    this.backgroundImageIdToChange = this.user.backgroundImageId;
+    this.avatarIdToChange = this.user.avatarId;
+    this.$forceUpdate();
+  },
+  updated() {
   },
   methods: {
-    addNewAvatar() {
-      console.log('This is new avatar');
+    changeAvatar() {
+      // TODO Sens a request to a server to save changes
+      this.user.avatarId = this.avatarIdToChange;
+    },
+    reverseAvatarChange() {
+      this.avatarIdToChange = this.user.avatarId;
+      this.$forceUpdate();
     },
     changeBackgroundImage() {
-
+      // TODO Sens a request to a server to save changes
+      this.user.backgroundImageId = this.backgroundImageIdToChange;
+    },
+    reverseImageChange() {
+      this.backgroundImageIdToChange = this.user.backgroundImageId;
+      this.$forceUpdate();
     },
   },
 };
