@@ -42,8 +42,10 @@
                                 </span>
                                 <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">
                                 <br>
-                                <button :class="user.numberOfCoins < item.price
-                                    ? 'button__disabled' : ''"
+                                <button :class="[user.numberOfCoins < item.price
+                                    ? 'button__disabled_no_coins' : '',
+                                    doesUserHaveItem(item) ? 'button__disabled_already_has' : ''
+                                    ]"
                                 v-on:click="buyItem(item)"
                                 class="item__buy__button m-2 btn btn-primary">
                                     Kup
@@ -59,13 +61,13 @@
 </template>
 
 <style scoped>
-.button__disabled {
+.button__disabled_no_coins,
+.button__disabled_already_has {
     opacity: 0.65;
     filter: alpha(opacity=65);
     -webkit-box-shadow: none;
     cursor: not-allowed;
     box-shadow: none;
-    /* pointer-events: none; */
 }
 
 .items__row {
@@ -85,7 +87,7 @@
 }
 
 .item__figure:hover {
-     -webkit-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
     transform: scale(1.05);
 }
 
@@ -121,7 +123,7 @@ export default {
           id: 0,
           name: 'Przebiegły zgredek',
           img: 'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
-          price: 50,
+          price: 150,
         },
         {
           id: 1,
@@ -183,8 +185,10 @@ export default {
       currentItemsCategory: 0,
     };
   },
-  mounted() {
-    tooltip.addTooltip('.button__disabled',
+  updated() {
+    tooltip.addTooltip('.button__disabled_already_has',
+      'Posiadasz już ten przedmiot');
+    tooltip.addTooltip('.button__disabled_no_coins',
       'Niestety nie masz wystarczająco dużo monet');
   },
   computed: {
@@ -218,6 +222,23 @@ export default {
     },
     changeItemsType(type) {
       this.currentItemsCategory = type;
+    },
+    doesUserHaveItem(item) {
+      let answer = false;
+      console.log(this.user);
+      if (this.user && this.user.avatars && this.user.backgroundImages) {
+        this.user.avatars.forEach((avatar) => {
+          if (avatar.name === item.name && avatar.id === item.id) answer = true;
+        });
+
+        if (!answer) {
+          this.user.backgroundImages.forEach((image) => {
+            if (image.name === item.name && image.id === item.id) answer = true;
+          });
+        }
+      }
+
+      return answer;
     },
   },
 };
