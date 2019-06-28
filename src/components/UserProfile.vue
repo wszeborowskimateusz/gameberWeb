@@ -1,9 +1,14 @@
 <template>
-    <div class="profil col-12" :style="{'background-image' : 'url(' + user.backgroundImage +')'}">
-        <div class="row">
+    <div class="userProfile col-12">
+        <div class="profil col-12"
+            :style="{'background-image' :
+            'url(' + user.backgroundImages[user.backgroundImageId].img +')'}">
+        </div>
+        <div class="row profile__content">
             <div class="avatar  col-sm-12 col-lg-3 col-md-12 p-4">
                 <div class="avatar__image">
-                    <img width="250" :src="user.avatar_url"/>
+                    <img width="250" class="avatar__image__img"
+                        :src="user.avatars[user.avatarId].img"/>
                     <button class="image_badge btn btn-default" onclick="this.blur();"
                             v-on:click="addNewAvatar()">
                         <img width="70" src="https://img.icons8.com/color/96/000000/plus-2-math.png"/>
@@ -45,6 +50,11 @@
 </template>
 
 <style scoped>
+h1,
+h2,
+h3 {
+mix-blend-mode: difference;
+}
 
 .bottom {
     position : absolute;
@@ -52,24 +62,48 @@
     width: 95%;
 }
 
-.right {
-    position : absolute;
-    right   : 0;
-    top: 0;
-}
-
 .dynamic {
     width: var(--width);
 }
+
+.userProfile {
+    height: 80%;
+    width: 100%;
+}
+
 .profil {
-    height: auto;
-    min-height: 550px;
-    color: #EDCDC3;
+    color: #fff;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  filter: blur(5px);
+    -webkit-filter: blur(5px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+}
+
+.profile__content {
+       width: 100%;
+    height: 100%;
+     position: absolute;;
+    top: 0px;
+    left: 0px;
+    z-index:1000;
 }
 
 .avatar__image {
     position: relative;
     display: block;
+}
+
+.avatar__image__img {
+    border-radius: 50%;
 }
 
 .image_badge {

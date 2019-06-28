@@ -72,6 +72,8 @@
 <style>
 body {
     background-color: #9DCADF;
+    width: 100%;
+    height: 100vh;
 }
 
 #app {
@@ -80,7 +82,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
 }
+
+.container {
+  height: 100vh;
+}
+
+.row {
+  height: 100vh;
+}
+
 #nav {
   margin-bottom: 2em;
   background-color: #F4E5DD;

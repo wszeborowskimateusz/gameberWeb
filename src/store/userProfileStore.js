@@ -4,9 +4,39 @@ import toasts from '../utilities/toasts';
 const userToken = JSON.parse(localStorage.getItem('user'));
 const userDefaultState = {
   user: {
-    avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png',
+    // This is an index in the avatars table
+    avatarId: 0,
+    avatars: [
+      {
+        id: 0,
+        name: 'Przebiegły zgredek',
+        img: 'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
+        price: '50',
+      },
+      {
+        id: 3,
+        name: 'Straszny ork',
+        img: 'https://www.lastlivingcity.com/wp-content/uploads/2018/05/ea47aebe7edcdf32b192efa147066753.jpg',
+        price: '125',
+      },
+    ],
     username: 'No name',
-    backgroundImage: 'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
+    // This is an index in the backgroundImages table
+    backgroundImageId: 1,
+    backgroundImages: [
+      {
+        id: 1,
+        name: 'Wesoły kasztan',
+        img: 'http://3.bp.blogspot.com/-con7HiBmjKE/UGiL2UH1MSI/AAAAAAAAG1o/-TH09TZULK4/s1600/IMG_4845a.jpg',
+        price: '70',
+      },
+      {
+        id: 4,
+        name: 'Smutny Deszcz',
+        img: 'https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
+        price: 120,
+      },
+    ],
     level: 1,
     experiencePoints: 19,
     pointsToAchieveNewLevel: 100,
