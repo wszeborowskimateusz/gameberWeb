@@ -2,14 +2,14 @@
     <div v-if="user.avatars" class="userProfile col-12">
         <div class="profil col-12"
             :style="{'background-image' :
-            'url(' + user.backgroundImages[user.backgroundImageId].img +')'}">
+            'url(' + pickedImage.img +')'}">
         </div>
         <div class="profile__container">
         <div class="row profile__content">
             <div class="avatar  col-sm-12 col-lg-3 col-md-12 p-4">
                 <div class="avatar__image">
                     <img width="250" class="avatar__image__img"
-                        :src="user.avatars[user.avatarId].img"/>
+                        :src="pickedAvatar.img"/>
                     <button class="image_badge btn btn-default" onclick="this.blur();"
                             data-toggle="modal" data-target="#avatarModal">
                         <img width="70" src="https://img.icons8.com/color/96/000000/plus-2-math.png"/>
@@ -70,7 +70,7 @@
                         <div class="col-12" v-for="(image, index) in user.backgroundImages"
                                 v-bind:key="image.id">
                                 <input type="radio" v-model="backgroundImageIdToChange"
-                                    name="rGroup" :value="index" :id="index">
+                                    name="rGroup" :value="image.id" :id="index">
                                 <label class="radioLabel" :for="index">
                                     <img width="300" height="200" :src="image.img">
                                     <br>
@@ -91,7 +91,7 @@
                         <button v-if="user && user.backgroundImages.length > 0"
                             type="button" class="btn btn-primary"
                             data-dismiss="modal"
-                            v-on:click="changeBackgroundImage()">Zapisz zmiany</button>
+                            v-on:click="exchangeBackgroundImage()">Zapisz zmiany</button>
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@
                         <div class="col-12" v-for="(avatar, index) in user.avatars"
                                 v-bind:key="avatar.id">
                                 <input type="radio" v-model="avatarIdToChange" name="rGroup"
-                                    :value="index" :id="avatar.name + index">
+                                    :value="avatar.id" :id="avatar.name + index">
                                 <label class="radioLabel" :for="avatar.name + index">
                                     <img class="avatar_modal__img"
                                         width="300" height="300" :src="avatar.img">
@@ -140,7 +140,7 @@
                         <button v-if="user && user.backgroundImages.length > 0"
                             type="button" class="btn btn-primary"
                             data-dismiss="modal"
-                            v-on:click="changeAvatar()">Zapisz zmiany</button>
+                            v-on:click="exchangeAvatar()">Zapisz zmiany</button>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@ input[type=radio]:checked + .radioLabel{
 </style>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -254,6 +254,28 @@ export default {
   },
   computed: {
     ...mapState('userProfile', ['user']),
+    pickedAvatar() {
+      let result = null;
+      this.user.avatars.forEach((avatar) => {
+        if (avatar.id === this.user.avatarId) {
+          result = avatar;
+          return false;
+        }
+        return true;
+      });
+      return result;
+    },
+    pickedImage() {
+      let result = null;
+      this.user.backgroundImages.forEach((image) => {
+        if (image.id === this.user.backgroundImageId) {
+          result = image;
+          return false;
+        }
+        return true;
+      });
+      return result;
+    },
   },
   mounted() {
     this.backgroundImageIdToChange = this.user.backgroundImageId;
@@ -263,17 +285,20 @@ export default {
   updated() {
   },
   methods: {
-    changeAvatar() {
+    ...mapActions('userProfile', ['changeAvatar', 'changeBackgroundImage']),
+    exchangeAvatar() {
       // TODO Send a request to a server to save changes
-      this.user.avatarId = this.avatarIdToChange;
+      this.changeAvatar(this.avatarIdToChange);
+      // this.user.avatarId = this.avatarIdToChange;
     },
     reverseAvatarChange() {
       this.avatarIdToChange = this.user.avatarId;
       this.$forceUpdate();
     },
-    changeBackgroundImage() {
+    exchangeBackgroundImage() {
       // TODO Send a request to a server to save changes
-      this.user.backgroundImageId = this.backgroundImageIdToChange;
+      this.changeBackgroundImage(this.backgroundImageIdToChange);
+    //   this.user.backgroundImageId = this.backgroundImageIdToChange;
     },
     reverseImageChange() {
       this.backgroundImageIdToChange = this.user.backgroundImageId;

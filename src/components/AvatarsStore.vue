@@ -225,7 +225,6 @@ export default {
     },
     doesUserHaveItem(item) {
       let answer = false;
-      console.log(this.user);
       if (this.user && this.user.avatars && this.user.backgroundImages) {
         this.user.avatars.forEach((avatar) => {
           if (avatar.name === item.name && avatar.id === item.id) answer = true;

@@ -4,8 +4,7 @@ import toasts from '../utilities/toasts';
 const userToken = JSON.parse(localStorage.getItem('user'));
 const userDefaultState = {
   user: {
-    // This is an index in the avatars table
-    avatarId: 0,
+    avatarId: 3,
     avatars: [
       {
         id: 0,
@@ -21,8 +20,7 @@ const userDefaultState = {
       },
     ],
     username: 'No name',
-    // This is an index in the backgroundImages table
-    backgroundImageId: 1,
+    backgroundImageId: 4,
     backgroundImages: [
       {
         id: 1,
@@ -64,6 +62,30 @@ const actions = {
         },
       );
   },
+  changeAvatar({ commit }, avatarId) {
+    userProfileService.changeAvatar(userToken, avatarId)
+      .then(
+        () => {
+          toasts.successToast('Pomyślnie zmieniono avatar');
+          commit('changingAvatarSuccess', avatarId);
+        },
+        () => {
+          toasts.errorToast('Nie udało się zmienić avatara. Spróbuj jeszcze raz');
+        },
+      );
+  },
+  changeBackgroundImage({ commit }, imageId) {
+    userProfileService.changeBackgroundImage(userToken, imageId)
+      .then(
+        () => {
+          toasts.successToast('Pomyślnie zmieniono zdjęcie w tle');
+          commit('changingBackgroundImageSuccess', imageId);
+        },
+        () => {
+          toasts.errorToast('Nie udało się zmienić zdjęcia w tle. Spróbuj jeszcze raz');
+        },
+      );
+  },
 };
 
 /* eslint-disable no-param-reassign */
@@ -73,6 +95,16 @@ const mutations = {
   },
   gettingDataFailure(state) {
     state.user = userDefaultState.user;
+  },
+  changingAvatarSuccess(state, avatarId) {
+    if (state.user) {
+      state.user.avatarId = avatarId;
+    }
+  },
+  changingBackgroundImageSuccess(state, imageId) {
+    if (state.user) {
+      state.user.backgroundImageId = imageId;
+    }
   },
 };
 /* eslint-enable no-param-reassign */
