@@ -267,7 +267,7 @@ export default {
   },
   methods: {
     changeAvatar() {
-      // TODO Sens a request to a server to save changes
+      // TODO Send a request to a server to save changes
       this.user.avatarId = this.avatarIdToChange;
     },
     reverseAvatarChange() {
@@ -275,7 +275,7 @@ export default {
       this.$forceUpdate();
     },
     changeBackgroundImage() {
-      // TODO Sens a request to a server to save changes
+      // TODO Send a request to a server to save changes
       this.user.backgroundImageId = this.backgroundImageIdToChange;
     },
     reverseImageChange() {
