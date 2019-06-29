@@ -86,6 +86,30 @@ const actions = {
         },
       );
   },
+  buyAvatar({ commit }, avatar) {
+    userProfileService.buyAvatar(userToken, avatar)
+      .then(
+        () => {
+          toasts.successToast('Pomyślnie zakupiono avatar');
+          commit('buyingAvatarSuccess', avatar);
+        },
+        () => {
+          toasts.errorToast('Nie udało się zakupić avatara. Spróbuj jeszcze raz');
+        },
+      );
+  },
+  buyBackgroundImage({ commit }, image) {
+    userProfileService.buyBackgroundImage(userToken, image)
+      .then(
+        () => {
+          toasts.successToast('Pomyślnie zakupiono zdjęcie w tle');
+          commit('buyingBackgroundImageSuccess', image);
+        },
+        () => {
+          toasts.errorToast('Nie udało się zakupić zdjęcia w tle. Spróbuj jeszcze raz');
+        },
+      );
+  },
 };
 
 /* eslint-disable no-param-reassign */
@@ -104,6 +128,16 @@ const mutations = {
   changingBackgroundImageSuccess(state, imageId) {
     if (state.user) {
       state.user.backgroundImageId = imageId;
+    }
+  },
+  buyingAvatarSuccess(state, avatar) {
+    if (state.user && state.user.avatars) {
+      state.user.avatars.push(avatar);
+    }
+  },
+  buyingBackgroundImageSuccess(state, image) {
+    if (state.user && state.user.backgroundImages) {
+      state.user.backgroundImages.push(image);
     }
   },
 };

@@ -110,7 +110,7 @@ figcaption{display:table-caption;caption-side:bottom}
 </style>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import bootbox from '../utilities/bootbox';
 import tooltip from '../utilities/tippy';
 
@@ -203,6 +203,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('userProfile', ['buyAvatar', 'buyBackgroundImage']),
     buyItem(item) {
       if (item.price <= this.user.numberOfCoins) {
         bootbox.confirmationDialog(`Czy na pewno chcesz kupić 
@@ -214,8 +215,11 @@ export default {
                     <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">`,
         (bought) => {
           if (bought) {
-            // TODO Handle buing an item
-            alert(`You have just bought item ${item.name}`);
+            if (this.currentItemsCategory === 0) {
+              this.buyAvatar(item);
+            } else if (this.currentItemsCategory === 1) {
+              this.buyBackgroundImage(item);
+            }
           }
         });
       }

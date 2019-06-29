@@ -14,4 +14,12 @@ export default {
     const url = `${config.apiUrl}/users/profile/change-image`;
     return requestSender.sendPostRequest(url, imageId, token);
   },
+  buyAvatar(token, avatar) {
+    const url = `${config.apiUrl}/users/shop/avatars/buy`;
+    return requestSender.sendPostRequest(url, avatar, token);
+  },
+  buyBackgroundImage(token, image) {
+    const url = `${config.apiUrl}/users/shop/images/buy`;
+    return requestSender.sendPostRequest(url, image, token);
+  },
 };
