@@ -4,6 +4,7 @@
             :style="{'background-image' :
             'url(' + user.backgroundImages[user.backgroundImageId].img +')'}">
         </div>
+        <div class="profile__container">
         <div class="row profile__content">
             <div class="avatar  col-sm-12 col-lg-3 col-md-12 p-4">
                 <div class="avatar__image">
@@ -35,7 +36,7 @@
                 </button>
             </div>
         </div>
-        <div class="bottom mx-auto p-5">
+        <div class="bottom mx-auto p-5 progress-bar-content">
             <h3>Poziom {{user.level}}</h3>
             <div class="progress">
                 <div class="progress-bar dynamic progress-bar-animated progress-bar-striped bg-info"
@@ -46,6 +47,7 @@
                     {{user.experiencePoints}} / {{user.pointsToAchieveNewLevel}}
                 </div>
             </div>
+        </div>
         </div>
         <!-- Background Images Change modal -->
         <div class="modal fade" id="backgroundImagesModal" tabindex="-1"
@@ -166,12 +168,6 @@ input[type=radio]:checked + .radioLabel{
   opacity: 1;
 }
 
-h1,
-h2,
-h3 {
-mix-blend-mode: difference;
-}
-
 .bottom {
     position : absolute;
     bottom   : 0;
@@ -204,13 +200,14 @@ mix-blend-mode: difference;
     height: 100%;
 }
 
-.profile__content {
+.profile__container {
     width: 100%;
     height: 100%;
-    position: absolute;;
+    position: absolute;
     top: 0px;
     left: 0px;
     z-index:1000;
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .avatar__image {
