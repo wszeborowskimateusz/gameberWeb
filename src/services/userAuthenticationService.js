@@ -5,9 +5,9 @@ function logout() {
   localStorage.removeItem('user');
 }
 
-function login(username, password) {
+function login(login, password) {
   const url = `${config.apiUrl}/users/signin`;
-  return requestSender.sendPostRequest(url, { username, password })
+  return requestSender.sendPostRequest(url, { login, password })
     .then((user) => {
       if (user.jwtToken) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
