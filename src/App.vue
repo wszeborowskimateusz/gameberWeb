@@ -67,6 +67,7 @@
     </div>
     <footer class="fixed-bottom">
       Strona stworzona przez studentów Politechinki Gdańskiej jako projekt inżynierski.
+      <router-link to="/about"> O nas</router-link>.
       App icons by <a href="https://icons8.com">icons8</a>.
     </footer>
   </div>
