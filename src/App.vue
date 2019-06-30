@@ -58,7 +58,6 @@
         </ul>
       </div>
     </nav>
-
     <div class="container">
         <div class="row">
             <!--<div class="col-sm-6 offset-sm-3">-->
@@ -66,10 +65,26 @@
             <!--</div>-->
         </div>
     </div>
+    <footer class="fixed-bottom">
+      Strona stworzona przez studentów Politechinki Gdańskiej jako projekt inżynierski.
+      App icons by <a href="https://icons8.com">icons8</a>.
+    </footer>
   </div>
 </template>
 
 <style>
+footer {
+  height: 25px;
+  width: 100%;
+  color: #2c3e50;
+  background-color: #F4E5DD;
+}
+
+footer a {
+  font-weight: bold;
+  color: #427696;
+}
+
 body {
     background-color: #9DCADF;
     width: 100%;
