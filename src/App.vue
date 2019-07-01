@@ -21,6 +21,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/about">O nas</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/ranking">Ranking graczy</router-link>
+          </li>
           <li v-if="status.loggedIn" class="nav-item">
               <router-link class="nav-link" to="/map">Mapa</router-link>
           </li>
