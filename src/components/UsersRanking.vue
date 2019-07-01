@@ -1,7 +1,7 @@
 <template>
     <div class="ranking__container col-12">
         <div class="btn-group special mb-2" role="group" aria-label="Basic example">
-            <button v-for="type in rankingTypes" v-bind:key="type"
+            <button v-for="type in rankingTypes" v-bind:key="type.pol"
                 type="button" class="btn btn-primary" v-on:click="changeRanging(type)">
                 {{type.pl}}
             </button>
@@ -24,7 +24,7 @@
                         <img class="ranking__entry__image" :src="user.img" width="100" height="100">
                     </td>
                     <td>
-                        <a :href="user.url">
+                        <a :href="'/users/' + user.userId">
                             {{user.name}}
                         </a>
                     </td>
@@ -65,89 +65,13 @@
 </style>
 
 <script>
+import { mapState } from 'vuex';
+import usersRankingService from '../services/usersRankingService';
+
 export default {
   data() {
     return {
-      rankings: {
-        overall: [
-          {
-            name: 'Jon Snow',
-            url: '/users/jon-snow',
-            img: 'https://cdn.vox-cdn.com/thumbor/o2AXRjdoyonKroOEsxQjYWvtG-U=/99x0:1179x810/1200x800/filters:focal(99x0:1179x810)/cdn.vox-cdn.com/uploads/chorus_image/image/46094226/Jon_snow.0.jpg',
-            level: 10,
-            // Here it is an overall amount of EP of a user
-            experiencePoints: 18594,
-          },
-          {
-            name: 'Bran Stark',
-            url: '/users/bran-stark',
-            img: 'https://cdn.galleries.smcloud.net/t/galleries/gf-TtgZ-Jadm-fKft_gra-o-tron-664x442-nocrop.jpg',
-            level: 5,
-            // Here it is an overall amount of EP of a user
-            experiencePoints: 15594,
-          },
-          {
-            name: 'Arya Stark',
-            url: '/users/arya-stark',
-            img: 'https://gfx.radiozet.pl/var/radiozet/storage/images/rozrywka/filmy-i-telewizja/gra-o-tron-sezon-8-maisie-william-w-scenie-seksu.-arya-stark-nie-jest-za-mloda/1213534-1-pol-PL/Gra-o-Tron-sezon-8-Arya-Stark-w-odwaznej-scenie-seksu.-Producenci-przesadzili_article.png',
-            level: 3,
-            // Here it is an overall amount of EP of a user
-            experiencePoints: 11235,
-          },
-        ],
-        daily: [
-          {
-            name: 'Jon Snow',
-            url: '/users/jon-snow',
-            img: 'https://cdn.vox-cdn.com/thumbor/o2AXRjdoyonKroOEsxQjYWvtG-U=/99x0:1179x810/1200x800/filters:focal(99x0:1179x810)/cdn.vox-cdn.com/uploads/chorus_image/image/46094226/Jon_snow.0.jpg',
-            level: 10,
-            // Here it is an amount of EP of a user gained today
-            experiencePoints: 200,
-          },
-          {
-            name: 'Arya Stark',
-            url: '/users/arya-stark',
-            img: 'https://gfx.radiozet.pl/var/radiozet/storage/images/rozrywka/filmy-i-telewizja/gra-o-tron-sezon-8-maisie-william-w-scenie-seksu.-arya-stark-nie-jest-za-mloda/1213534-1-pol-PL/Gra-o-Tron-sezon-8-Arya-Stark-w-odwaznej-scenie-seksu.-Producenci-przesadzili_article.png',
-            level: 10,
-            // Here it is an amount of EP of a user gained today
-            experiencePoints: 150,
-          },
-          {
-            name: 'Bran Stark',
-            url: '/users/bran-stark',
-            img: 'https://cdn.galleries.smcloud.net/t/galleries/gf-TtgZ-Jadm-fKft_gra-o-tron-664x442-nocrop.jpg',
-            level: 10,
-            // Here it is an amount of EP of a user gained today
-            experiencePoints: 100,
-          },
-        ],
-        monthly: [
-          {
-            name: 'Bran Stark',
-            url: '/users/bran-stark',
-            img: 'https://cdn.galleries.smcloud.net/t/galleries/gf-TtgZ-Jadm-fKft_gra-o-tron-664x442-nocrop.jpg',
-            level: 10,
-            // Here it is an amount of EP of a user gained this month
-            experiencePoints: 1256,
-          },
-          {
-            name: 'Arya Stark',
-            url: '/users/arya-stark',
-            img: 'https://gfx.radiozet.pl/var/radiozet/storage/images/rozrywka/filmy-i-telewizja/gra-o-tron-sezon-8-maisie-william-w-scenie-seksu.-arya-stark-nie-jest-za-mloda/1213534-1-pol-PL/Gra-o-Tron-sezon-8-Arya-Stark-w-odwaznej-scenie-seksu.-Producenci-przesadzili_article.png',
-            level: 10,
-            // Here it is an amount of EP of a user gained this month
-            experiencePoints: 1126,
-          },
-          {
-            name: 'Jon Snow',
-            url: '/users/jon-snow',
-            img: 'https://cdn.vox-cdn.com/thumbor/o2AXRjdoyonKroOEsxQjYWvtG-U=/99x0:1179x810/1200x800/filters:focal(99x0:1179x810)/cdn.vox-cdn.com/uploads/chorus_image/image/46094226/Jon_snow.0.jpg',
-            level: 10,
-            // Here it is an amount of EP of a user gained this month
-            experiencePoints: 1098,
-          },
-        ],
-      },
+      rankings: {},
       pickedRanking: 'overall',
       rankingTypes: [
         { eng: 'overall', pl: 'Całościowy' },
@@ -155,9 +79,20 @@ export default {
         { eng: 'monthly', pl: 'Miesięczny' }],
     };
   },
+  computed: {
+    ...mapState('users', ['user']),
+  },
+  created() {
+    this.fetchRankings();
+  },
   methods: {
     changeRanging(type) {
       this.pickedRanking = type.eng;
+    },
+    fetchRankings() {
+      usersRankingService.getUsersRanking(this.user)
+        .then((rankings) => { this.rankings = rankings; })
+        .then(() => this.$forceUpdate());
     },
   },
 };
