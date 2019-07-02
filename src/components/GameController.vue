@@ -152,6 +152,7 @@ export default {
         this.currentGameIndex += 1;
       } else {
         // TODO Handle user finishing category
+        console.log('YUPIKAJEJ MADAFAKA');
       }
     },
     prevGame() {

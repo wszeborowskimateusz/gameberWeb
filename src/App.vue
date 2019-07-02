@@ -62,7 +62,7 @@
       </div>
     </nav>
     <div class="container">
-        <div class="row">
+        <div class="row container__row">
             <!--<div class="col-sm-6 offset-sm-3">-->
                 <router-view></router-view>
             <!--</div>-->
@@ -108,7 +108,7 @@ body {
   height: 100vh;
 }
 
-.row {
+.container__row {
   height: 100vh;
 }
 
