@@ -108,6 +108,7 @@ const defaultCategory = {
   categoryIcon: 'https://img.icons8.com/color/48/000000/seal.png',
 };
 
+
 export default {
   async getCategoryData(token, categoryId) {
     const url = `${config.apiUrl}/games/categories/${categoryId}`;
@@ -121,5 +122,9 @@ export default {
       );
 
     return result;
+  },
+  finishCategory(token, categoryId) {
+    const url = `${config.apiUrl}/games/category/finish`;
+    return requestSender.sendPostRequest(url, categoryId, token);
   },
 };

@@ -1,5 +1,8 @@
 import userProfileService from '../services/userProfileService';
+import gameControllerService from '../services/gameControllerService';
 import toasts from '../utilities/toasts';
+import bootbox from '../utilities/bootbox';
+import router from '../router';
 
 const userToken = JSON.parse(localStorage.getItem('user'));
 const userDefaultState = {
@@ -48,6 +51,36 @@ const userDefaultState = {
   },
 };
 const userState = { user: {} };
+
+
+function formatMessage(rewards, categoryName) {
+  let message = `Gratulacje! Ukończyłeś właśnie kategorię: "${categoryName}" Twoje nagrody to:<br><br>`;
+  if (rewards.achievements) {
+    rewards.achievements.forEach((achievement) => {
+      message += `<img width="25" src="https://img.icons8.com/doodle/48/000000/first-place-ribbon.png"> ${
+        achievement.name}<br>`;
+    });
+  }
+  if (rewards.coins) {
+    message += `<img width="25" src="https://img.icons8.com/color/48/000000/coins.png"> ${
+      rewards.coins}<br>`;
+  }
+  if (rewards.experiencePoints) {
+    message += `<img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png"> ${
+      rewards.experiencePoints}<br>`;
+  }
+  return message;
+}
+
+const defaultCategoryRewards = {
+  achievements: [
+    { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
+    { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
+  ],
+  coins: 20,
+  experiencePoints: 30,
+};
+
 
 const actions = {
   getUserData({ commit }) {
@@ -107,6 +140,22 @@ const actions = {
         },
         () => {
           toasts.errorToast('Nie udało się zakupić zdjęcia w tle. Spróbuj jeszcze raz');
+        },
+      );
+  },
+  getCategoryRewards({ dispatch }, { categoryId, categoryName }) {
+    gameControllerService.finishCategory(categoryId)
+      .then(
+        (rewards) => {
+          bootbox.alert(formatMessage(rewards, categoryName));
+          dispatch('getUserData');
+          router.push('/map');
+        },
+        () => {
+          toasts.errorToast('Niestety nie udało się ukończyć kategorii. Wystąpił problem z serwerem');
+          bootbox.alert(formatMessage(defaultCategoryRewards, categoryName));
+          dispatch('getUserData');
+          router.push('/map');
         },
       );
   },

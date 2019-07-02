@@ -92,7 +92,7 @@
 </style>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import WordLearning from './Games/WordLearning.vue';
 import WordPicker from './Games/WordPicker.vue';
 import WordGuessing from './Games/WordGuessing.vue';
@@ -133,6 +133,7 @@ export default {
     Crossword,
   },
   methods: {
+    ...mapActions('userProfile', ['getCategoryRewards']),
     fetchCategory() {
       gameControllerService.getCategoryData(this.user, this.categoryId)
         .then((category) => { this.category = category; })
@@ -151,8 +152,9 @@ export default {
       if (this.currentGameIndex + 1 < this.category.games.length) {
         this.currentGameIndex += 1;
       } else {
-        // TODO Handle user finishing category
-        console.log('YUPIKAJEJ MADAFAKA');
+        this.getCategoryRewards(
+          { categoryId: this.categoryId, categoryName: this.category.categoryName },
+        );
       }
     },
     prevGame() {

@@ -43,10 +43,6 @@
   height: 10vh;
 }
 
-.possibleAnswer {
-
-}
-
 .answers input[type=radio] {
     display: none;
 }
