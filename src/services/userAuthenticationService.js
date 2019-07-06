@@ -5,9 +5,9 @@ function logout() {
   localStorage.removeItem('user');
 }
 
-function login(login, password) {
-  const url = `${config.apiUrl}/users/signin`;
-  return requestSender.sendPostRequest(url, { login, password })
+function login(username, password) {
+  const url = `${config.apiUrl}/accounts/signin`;
+  return requestSender.sendPostRequest(url, { login: username, password })
     .then((user) => {
       if (user.jwtToken) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
@@ -18,7 +18,7 @@ function login(login, password) {
 }
 
 function register(user) {
-  const url = `${config.apiUrl}/users/signup`;
+  const url = `${config.apiUrl}/accounts/signup`;
   return requestSender.sendPostRequest(url, user);
 }
 
