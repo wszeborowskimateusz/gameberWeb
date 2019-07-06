@@ -8,6 +8,7 @@ import GameMap from './components/GameMap.vue';
 import GameController from './components/GameController.vue';
 import AvatarsStore from './components/AvatarsStore.vue';
 import UsersRanking from './components/UsersRanking.vue';
+import Translator from './components/Translator.vue';
 import Toasts from './utilities/toasts';
 
 Vue.use(Router);
@@ -29,6 +30,7 @@ const router = new Router({
     { path: '/games/:id', component: GameController },
     { path: '/store', component: AvatarsStore },
     { path: '/ranking', component: UsersRanking },
+    { path: '/translator', component: Translator },
     { path: '*', redirect: '/' },
   ],
 });
