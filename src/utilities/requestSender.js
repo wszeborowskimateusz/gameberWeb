@@ -46,4 +46,20 @@ export default {
     return fetch(url, requestOptions)
       .then(response => handleResponse(response));
   },
+  sendGetRequestWithoutAuthorization(url) {
+    const requestOptions = { method: 'GET' };
+
+    return fetch(`${url}`, requestOptions)
+      .then(response => handleResponse(response));
+  },
+  sendPostRequestWithoutAuthorization(url, body) {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    };
+
+    return fetch(`${url}`, requestOptions)
+      .then(response => handleResponse(response));
+  },
 };
