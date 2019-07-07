@@ -95,7 +95,11 @@ footer a {
 body {
     background-color: #9DCADF;
     width: 100%;
-    height: 100vh;
+    height: 100%;
+}
+
+html {
+  height: 100%;
 }
 
 #app {
@@ -104,15 +108,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100vh;
+  height: 100%;
 }
 
 .container {
-  height: 100vh;
+  height: 100%;
 }
 
 .container__row {
-  height: 100vh;
+  height: 100%;
+  overflow: auto;
 }
 
 #nav {

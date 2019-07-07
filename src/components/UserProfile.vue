@@ -5,7 +5,7 @@
       :style="{'background-image' :
             'url(' + pickedImage.img +')'}"
     ></div>
-    <router-view :key="$route.path"></router-view>
+    <div class="scrollbar_remover">
     <div class="profile__container">
       <div class="row profile__content">
         <div class="avatar col-sm-12 col-lg-3 col-md-12 p-4">
@@ -52,13 +52,17 @@
               src="https://img.icons8.com/clouds/100/000000/picture.png"
             />
           </button>
-          <button v-else class="btn btn-primary">
+          <button v-else-if="!user.isFriend" class="btn btn-primary">
             Dodaj do znajomych
             <img src="https://img.icons8.com/dusk/50/000000/add-user-male.png" />
           </button>
+          <button v-else class="btn btn-primary">
+              Wyślij wiadomość
+              <img src="https://img.icons8.com/dusk/64/000000/send-mass-email.png">
+          </button>
         </div>
       </div>
-      <div class="bottom mx-auto p-5 progress-bar-content">
+      <div class="col-12 pt-3 mx-auto p-5 progress-bar-content">
         <h3>Poziom {{user.level}}</h3>
         <div class="progress">
           <div
@@ -74,6 +78,7 @@
           >{{user.experiencePoints}} / {{user.pointsToAchieveNewLevel}}</div>
         </div>
       </div>
+    </div>
     </div>
     <!-- Background Images Change modal -->
     <div
@@ -232,6 +237,12 @@ input[type="radio"]:checked + .radioLabel {
   width: 100%;
 }
 
+.scrollbar_remover {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 .profil {
   color: #fff;
   background-position: center;
@@ -250,6 +261,10 @@ input[type="radio"]:checked + .radioLabel {
 }
 
 .profile__container {
+  padding-right: 17px;
+  box-sizing: content-box;
+  overflow-y: scroll;
+  overflow-x: hidden;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -338,6 +353,8 @@ export default {
     if (this.isOurOwnProfile) this.user = this.userFromStore;
     else {
       // TODO Get user's data
+      this.user = this.userFromStore;
+      this.user.isFriend = true;
     }
     this.$forceUpdate();
   },
@@ -345,18 +362,14 @@ export default {
   methods: {
     ...mapActions('userProfile', ['changeAvatar', 'changeBackgroundImage']),
     exchangeAvatar() {
-      // TODO Send a request to a server to save changes
       this.changeAvatar(this.avatarIdToChange);
-      // this.user.avatarId = this.avatarIdToChange;
     },
     reverseAvatarChange() {
       this.avatarIdToChange = this.user.avatarId;
       this.$forceUpdate();
     },
     exchangeBackgroundImage() {
-      // TODO Send a request to a server to save changes
       this.changeBackgroundImage(this.backgroundImageIdToChange);
-      //   this.user.backgroundImageId = this.backgroundImageIdToChange;
     },
     reverseImageChange() {
       this.backgroundImageIdToChange = this.user.backgroundImageId;
