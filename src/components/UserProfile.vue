@@ -52,11 +52,11 @@
               src="https://img.icons8.com/clouds/100/000000/picture.png"
             />
           </button>
-          <button v-else-if="!user.isFriend" class="btn btn-primary">
+          <button v-else-if="!user.isFriend" class="btn btn-primary" v-on:click="addToFriends()">
             Dodaj do znajomych
             <img src="https://img.icons8.com/dusk/50/000000/add-user-male.png" />
           </button>
-          <button v-else class="btn btn-primary">
+          <button v-else class="btn btn-primary" v-on:click="sendMessage()">
               Wyślij wiadomość
               <img src="https://img.icons8.com/dusk/64/000000/send-mass-email.png">
           </button>
@@ -374,6 +374,12 @@ export default {
     reverseImageChange() {
       this.backgroundImageIdToChange = this.user.backgroundImageId;
       this.$forceUpdate();
+    },
+    addToFriends() {
+      // TODO implement me
+    },
+    sendMessage() {
+      // TODO implement me
     },
   },
 };
