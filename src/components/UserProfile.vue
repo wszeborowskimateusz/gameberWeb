@@ -307,6 +307,7 @@ input[type="radio"]:checked + .radioLabel {
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import otherUsersProfileService from '../services/otherUsersProfileService';
 
 export default {
   data() {
@@ -318,7 +319,7 @@ export default {
     };
   },
   computed: {
-    // ...mapState("userProfile", ["user"]),
+    ...mapState('users', { userToken: 'user' }),
     ...mapState('userProfile', { userFromStore: 'user' }),
     pickedAvatar() {
       let result = null;
@@ -352,13 +353,12 @@ export default {
     this.avatarIdToChange = this.user.avatarId;
     if (this.isOurOwnProfile) this.user = this.userFromStore;
     else {
-      // TODO Get user's data
-      this.user = this.userFromStore;
-      this.user.isFriend = true;
+      otherUsersProfileService.getUser(this.userToken, this.userId)
+        .then((user) => { this.user = user; })
+        .then(() => this.$forceUpdate());
     }
     this.$forceUpdate();
   },
-  updated() {},
   methods: {
     ...mapActions('userProfile', ['changeAvatar', 'changeBackgroundImage']),
     exchangeAvatar() {
