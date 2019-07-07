@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user.avatars" class="userProfile col-12">
+  <div v-if="(user && user.avatars)" class="userProfile col-12">
     <div
       class="profil col-12"
       :style="{'background-image' :
@@ -199,6 +199,12 @@
         </div>
       </div>
     </div>
+  </div>
+  <div v-else class="col-12">
+    <h1 class="mb-5">Nie znaleziono użytkownika o wskazanym identyfikatorze</h1>
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png">
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png">
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png">
   </div>
 </template>
 

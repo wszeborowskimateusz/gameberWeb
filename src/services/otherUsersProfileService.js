@@ -46,6 +46,7 @@ export default {
       results => results,
       () => {
         toast.errorToast('Nie udało się pobrać informacji o użytkowniku');
+        // FIXME remove this later
         return defaultUser;
       },
     );
