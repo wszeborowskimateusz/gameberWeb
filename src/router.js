@@ -25,7 +25,7 @@ const router = new Router({
     },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
-    { path: '/userProfile', component: UserProfile },
+    { path: '/user-profile', component: UserProfile },
     { path: '/map', component: GameMap },
     { path: '/games/:id', component: GameController },
     { path: '/store', component: AvatarsStore },

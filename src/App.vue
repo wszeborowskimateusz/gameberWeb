@@ -50,7 +50,7 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/userProfile" name="profil"
+            <router-link to="/user-profile" name="profil"
                 class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/nolan/2x/user.png"/>
               Profil
