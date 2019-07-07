@@ -67,7 +67,7 @@
     <div class="container">
         <div class="row container__row">
             <!--<div class="col-sm-6 offset-sm-3">-->
-                <router-view></router-view>
+                <router-view :key="$route.path"></router-view>
             <!--</div>-->
         </div>
     </div>

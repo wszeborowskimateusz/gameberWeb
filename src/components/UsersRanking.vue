@@ -24,9 +24,9 @@
                         <img class="ranking__entry__image" :src="user.img" width="100" height="100">
                     </td>
                     <td>
-                        <a :href="'/users/' + user.userId">
+                        <router-link :to="'/users/' + user.userId">
                             {{user.name}}
-                        </a>
+                        </router-link>
                     </td>
                     <td>
                         {{user.experiencePoints}}
