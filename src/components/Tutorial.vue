@@ -3,7 +3,7 @@
     <carousel class="tutorial__carousel" :perPage="1">
       <slide v-for="phase in phases" v-bind:key="phase.title">
         <div>
-          <img class="m-2" height="450vh" :src="getImgUrl(phase.img)" />
+          <img class="mt-4" height="450vh" :src="getImgUrl(phase.img)" />
         </div>
       </slide>
     </carousel>
