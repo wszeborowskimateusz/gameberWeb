@@ -9,7 +9,6 @@ import am4themesAnimated from '@amcharts/amcharts4/themes/animated';
 import am4chartsGeodataWorld from '@amcharts/amcharts4-geodata/worldLow';
 
 // Globals that should be on server
-
 const allCountries = [
   'IN', 'AU', 'CA', 'BR', 'US', 'SW', 'DE', 'PL',
 ];
@@ -18,7 +17,9 @@ const unlockedCountries = [
   'PL', 'CA',
 ];
 
-const latlong = {
+
+// Gloobals for map
+const countriesLatlon = {
   AD: { latitude: 42.5, longitude: 1.5 },
   AE: { latitude: 24, longitude: 54 },
   AF: { latitude: 33, longitude: 65 },
@@ -261,10 +262,22 @@ const latlong = {
   ZW: { latitude: -20, longitude: 30 },
 };
 
-const categoriesData = [
-  { countryId: 'PL', name: 'Zwierzeta', color: 'yellow' },
-];
+const circleRadius = 20;
 
+function addLatlonToCategories(categories, radius, latlon) {
+  const c = categories;
+  if (c.length === 1) {
+    c[0].latitude = latlon.latitude;
+    c[0].longitude = latlon.longitude;
+    return c;
+  }
+
+  for (let i = 0; i < c.length; i += 1) {
+    c[i].latitude = latlon.latitude + i * radius;
+    c[i].longitude = latlon.longitude;
+  }
+  return c;
+}
 
 export default {
   name: 'GameMap',
@@ -301,7 +314,7 @@ export default {
     let currentCategoriesSeries = null;
     unlockedCountriesSeries.mapPolygons.template.events.on('hit',
       (ev) => {
-        // Delete last displayes category if there is
+        // Delete last displayed category if there is
         if (currentCategoriesSeries) {
           map.series.removeIndex(
             map.series.indexOf(currentCategoriesSeries),
@@ -323,15 +336,20 @@ export default {
 
         const countryId = ev.target.dataItem.dataContext.id;
         // console.log('clicked on: ', countryId);
+        // PLEASE MISTER SERVER CAN YOU GET ME THE CATEGORIES FOR GIVEN COUNTRY?
+        // Server -> HERE YOU ARE
+        let categories = [
+          { name: 'Animals', color: 'yellow' },
+          { name: 'Greetings', color: 'blue' },
+          { name: 'Local food', color: 'orange' },
+          { name: 'Weather', color: 'green' },
+        ];
 
-        // Show country categories
-        const categoryData = categoriesData.find(i => i.countryId === countryId); // Get country data
+        categories = addLatlonToCategories(categories, 30, countriesLatlon[countryId]);
 
-        categoryData.latitude = latlong[countryId].latitude; // Add map position
-        categoryData.longitude = latlong[countryId].longitude;
-
+        // Initial categories images setup
         currentCategoriesSeries = map.series.push(new am4maps.MapImageSeries());
-        currentCategoriesSeries.data = categoriesData;
+        currentCategoriesSeries.data = categories;
         currentCategoriesSeries.dataFields.value = 'name';
         currentCategoriesSeries.alwaysShowTooltip = true; // <---- why is this not working ?!
 
@@ -342,13 +360,25 @@ export default {
         imageTemplate.clickable = true;
         imageTemplate.contextMenuDisabled = true;
 
-        const circle = imageTemplate.createChild(am4core.Circle);
-        circle.fillOpacity = 0.7;
-        circle.fill = am4core.color(categoryData.color);
-        // circle.dx = 230;
-        // circle.dy = 230;
-        circle.radius = 10;
-        circle.tooltipText = '{name}';
+        // Show country categories
+        // const categoryData = categoriesData.find(i => i.countryId === countryId); // Get country data
+        // categories.latitude = countriesLatlon[countryId].latitude; // Add map position
+        // categories.longitude = countriesLatlon[countryId].longitude;
+
+        // let latlon;
+        // latlon.latitude = countriesLatlon[countryId].latitude;
+        // latlon.longitude = countriesLatlon[countryId].longitude;
+
+        // categoriesLatlon = getCirclesLocations(categories.length, 30, latlon);
+
+        for (let i = 0; i < categories.length; i += 1) {
+          const circle = imageTemplate.createChild(am4core.Circle);
+          circle.fill = am4core.color(categories[i].color);
+          circle.dx = i * 30;
+          // circle.dy = 230;
+          circle.radius = circleRadius;
+          circle.tooltipText = '{name}';
+        }
       },
       this);
 
