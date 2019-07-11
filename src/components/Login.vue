@@ -22,8 +22,14 @@
                 <button class="btn btn-primary">Login</button>
             </div>
         </form>
+        <div class="mt-5 g-signin2" data-theme="dark" data-width="450"
+          data-height="50" data-longtitle="true"></div>
     </div>
 </template>
+
+<style scoped>
+
+</style>
 
 <script>
 import { mapState, mapActions } from 'vuex';
