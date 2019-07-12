@@ -1,34 +1,65 @@
 <template>
-    <div class="login col-sm-6 offset-sm-3">
-        <h2>Login</h2>
-        <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-                <label for="username">Nazwa użytkownika</label>
-                <input type="text" v-model="username" name="username" class="form-control"
-                    :class="{ 'is-invalid': submitted && !username }" />
-                <div v-show="submitted && !username" class="invalid-feedback">
-                    Nazwa użytkownika jest konieczna
-                </div>
-            </div>
-            <div class="form-group">
-                <label htmlFor="password">Hasło</label>
-                <input type="password" v-model="password" name="password" class="form-control"
-                    :class="{ 'is-invalid': submitted && !password }" />
-                <div v-show="submitted && !password" class="invalid-feedback">
-                    Hasło jest konieczne
-                </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary">Login</button>
-            </div>
-        </form>
-        <div class="mt-5 g-signin2" data-theme="dark" data-width="450"
-          data-height="50" data-longtitle="true"></div>
+  <div class="login col-sm-6 offset-sm-3">
+    <h2>Login</h2>
+    <form @submit.prevent="handleSubmit">
+      <div class="form-group">
+        <label for="username">Nazwa użytkownika</label>
+        <input
+          type="text"
+          v-model="username"
+          name="username"
+          class="form-control"
+          :class="{ 'is-invalid': submitted && !username }"
+        />
+        <div
+          v-show="submitted && !username"
+          class="invalid-feedback"
+        >Nazwa użytkownika jest konieczna</div>
+      </div>
+      <div class="form-group">
+        <label for="password">Hasło</label>
+        <input
+          type="password"
+          v-model="password"
+          name="password"
+          class="form-control"
+          :class="{ 'is-invalid': submitted && !password }"
+        />
+        <div v-show="submitted && !password" class="invalid-feedback">Hasło jest konieczne</div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Login</button>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-6">
+        <button v-on:click="loginWithGoogle()" class="btn btn-light">
+          <img
+            width="20px"
+            alt="Google &quot;G&quot; Logo"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+          />
+          Login with Google
+        </button>
+      </div>
+      <div class="col-6">
+        <button v-on:click="loginWithFacebook()" class="btn fb__button">
+          <img
+            width="20px"
+            src="https://www.facebook.com/images/fb_icon_325x325.png"
+          />
+          Login with Facebook
+        </button>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>
-
+.fb__button {
+  background-color: #3b5998;
+  color: white;
+}
 </style>
 
 <script>
@@ -59,6 +90,19 @@ export default {
       if (username && password) {
         this.login({ username, password });
       }
+    },
+    loginWithGoogle() {
+      this.$gAuth
+        .getAuthCode()
+        .then((authCode) => {
+          console.log(authCode);
+        })
+        .catch((error) => {
+          console.log(`failed: ${error}`);
+        });
+    },
+    loginWithFacebook() {
+
     },
   },
 };

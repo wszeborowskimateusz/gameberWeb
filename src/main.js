@@ -20,7 +20,7 @@ bootbox.setLocale('pl');
 Vue.config.productionTip = false;
 
 const gauthOption = {
-  clientId: `${config.googleClientId}.apps.googleusercontent.com`,
+  clientId: `${config.googleClientId}`,
   scope: 'profile email',
   prompt: 'select_account',
 };
