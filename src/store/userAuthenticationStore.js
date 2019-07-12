@@ -22,6 +22,20 @@ const actions = {
         },
       );
   },
+  loginWithGoogle({ commit }, { authCode }) {
+    userService.loginWithGoogle(authCode)
+      .then(
+        (user) => {
+          commit('loginSuccess', user);
+          router.push('/');
+          toasts.successToast('Witaj z powrotem!');
+        },
+        (error) => {
+          toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
+          commit('loginFailure', error);
+        },
+      );
+  },
   logout({ commit }) {
     userService.logout();
     toasts.successToast('Pomyślnie wylogowano się');

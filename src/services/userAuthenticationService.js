@@ -17,6 +17,18 @@ function login(username, password) {
     });
 }
 
+function loginWithGoogle(authCode) {
+  const url = `${config.apiUrl}/accounts/signin/google`;
+  return requestSender.sendPostRequest(url, { authCode })
+    .then((user) => {
+      if (user.jwtToken) {
+        localStorage.setItem('user', JSON.stringify(user.jwtToken));
+      } else return Promise.reject(new Error("No token provided in server's response"));
+
+      return user;
+    });
+}
+
 function register(user) {
   const url = `${config.apiUrl}/accounts/signup`;
   return requestSender.sendPostRequest(url, user);
@@ -27,4 +39,5 @@ export default {
   login,
   logout,
   register,
+  loginWithGoogle,
 };

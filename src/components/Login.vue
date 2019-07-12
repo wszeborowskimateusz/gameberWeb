@@ -33,7 +33,7 @@
     </form>
     <div class="row">
       <div class="col-6">
-        <button v-on:click="loginWithGoogle()" class="btn btn-light">
+        <button v-on:click="loginWithGoogleOnClick()" class="btn btn-light">
           <img
             width="20px"
             alt="Google &quot;G&quot; Logo"
@@ -43,7 +43,7 @@
         </button>
       </div>
       <div class="col-6">
-        <button v-on:click="loginWithFacebook()" class="btn fb__button">
+        <button v-on:click="loginWithFacebookOnClick()" class="btn fb__button">
           <img
             width="20px"
             src="https://www.facebook.com/images/fb_icon_325x325.png"
@@ -83,7 +83,7 @@ export default {
     // this.logout();
   },
   methods: {
-    ...mapActions('users', ['login', 'logout']),
+    ...mapActions('users', ['login', 'logout', 'loginWithGoogle']),
     handleSubmit() {
       this.submitted = true;
       const { username, password } = this;
@@ -91,17 +91,17 @@ export default {
         this.login({ username, password });
       }
     },
-    loginWithGoogle() {
+    loginWithGoogleOnClick() {
       this.$gAuth
         .getAuthCode()
         .then((authCode) => {
-          console.log(authCode);
+          this.loginWithGoogle(authCode);
         })
         .catch((error) => {
           console.log(`failed: ${error}`);
         });
     },
-    loginWithFacebook() {
+    loginWithFacebookOnClick() {
 
     },
   },
