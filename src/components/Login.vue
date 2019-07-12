@@ -31,6 +31,10 @@
         <button class="btn btn-primary">Login</button>
       </div>
     </form>
+    <div class="m-4">
+    Nie masz jeszcze konta ? Utwórz je poprzez portale społecznościowe, bądź załóż je
+    <router-link to="/register">tutaj</router-link>
+    </div>
     <div class="row">
       <div class="col-6">
         <button v-on:click="loginWithGoogleOnClick()" class="btn btn-light">
@@ -43,27 +47,19 @@
         </button>
       </div>
       <div class="col-6">
-        <button v-on:click="loginWithFacebookOnClick()" class="btn fb__button">
-          <img
-            width="20px"
-            src="https://www.facebook.com/images/fb_icon_325x325.png"
-          />
-          Login with Facebook
-        </button>
+        <v-facebook-login :app-id="fb_app_id"></v-facebook-login>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.fb__button {
-  background-color: #3b5998;
-  color: white;
-}
 </style>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import { VFBLogin as VFacebookLogin } from 'vue-facebook-login-component';
+import config from '../../config';
 
 export default {
   name: 'login',
@@ -73,7 +69,11 @@ export default {
       password: '',
       submitted: false,
       button_pressed: false,
+      fb_app_id: config.facebookAppId,
     };
+  },
+  components: {
+    VFacebookLogin,
   },
   computed: {
     ...mapState('users', ['status']),
@@ -102,7 +102,6 @@ export default {
         });
     },
     loginWithFacebookOnClick() {
-
     },
   },
 };
