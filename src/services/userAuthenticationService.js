@@ -6,7 +6,8 @@ function logout() {
 }
 
 function login(username, password) {
-  const url = `${config.apiUrl}/accounts/signin`;
+  // const url = `${config.apiUrl}/accounts/signin`;
+  const url = `${config.apiUrl}/users/signin`;
   return requestSender.sendPostRequest(url, { login: username, password })
     .then((user) => {
       if (user.jwtToken) {

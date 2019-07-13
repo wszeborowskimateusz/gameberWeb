@@ -5,6 +5,39 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'StoryGame',
+      gameInfo: {
+        stories: [
+          {
+            img: 'https://www.hakaimagazine.com/wp-content/uploads/header-polar-bear-conflict.jpg',
+            storyEnglish: 'There was a bear called Ben',
+            sound: 'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
+            storyPolish: 'Był sobie niedźwiedź o imieniu Ben',
+          }, {
+            img: 'https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2018/09/931/524/PolarBeariStock.jpg?ve=1&tl=1',
+            storyEnglish: 'Ben was a white polar bear',
+            sound: '',
+            storyPolish: 'Ben był białym niedźwiedziem polarnym',
+          }, {
+            img: 'https://images.unsplash.com/photo-1553425300-8bd56360f8eb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80',
+            storyEnglish: 'Ben had a brother named John',
+            sound: '',
+            storyPolish: 'Ben miał brata Johna',
+          }, {
+            img: 'http://www.skolaiimages.com/journal/wp-content/uploads/2012/10/12_oct15608.jpg',
+            storyEnglish: 'Ben and John liked to play with each other',
+            sound: '',
+            storyPolish: 'Ben i John lubili się ze sobą bawić',
+          }, {
+            img: 'https://www.wwf.org.uk/sites/default/files/styles/social_share_image/public/2016-12/Original_WW22791.jpg?itok=Ouo7tsEJ',
+            storyEnglish: 'Ben and John were best friends',
+            sound: '',
+            storyPolish: 'Ben i John to byli swoi najlepsi przyjaciele',
+          },
+        ],
+      },
+    },
+    {
       name: 'WordGuessing',
       gameInfo: {
         img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
