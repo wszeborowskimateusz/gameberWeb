@@ -164,7 +164,7 @@ const actions = {
 /* eslint-disable no-param-reassign */
 const mutations = {
   gettingDataSuccess(state, user) {
-    state.user = user;
+    state.user = user.user;
   },
   gettingDataFailure(state) {
     state.user = userDefaultState.user;
