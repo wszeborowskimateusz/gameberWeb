@@ -5,6 +5,11 @@ import Login from './components/Login.vue';
 import Register from './components/Register.vue';
 import UserProfile from './components/UserProfile.vue';
 import GameMap from './components/GameMap.vue';
+import GameController from './components/GameController.vue';
+import AvatarsStore from './components/AvatarsStore.vue';
+import UsersRanking from './components/UsersRanking.vue';
+import Translator from './components/Translator.vue';
+import Tutorial from './components/Tutorial.vue';
 import Toasts from './utilities/toasts';
 
 Vue.use(Router);
@@ -21,8 +26,14 @@ const router = new Router({
     },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
-    { path: '/userProfile', component: UserProfile },
+    { path: '/user-profile', component: UserProfile },
+    { path: '/users/:id', component: UserProfile },
     { path: '/map', component: GameMap },
+    { path: '/games/:id', component: GameController },
+    { path: '/store', component: AvatarsStore },
+    { path: '/ranking', component: UsersRanking },
+    { path: '/translator', component: Translator },
+    { path: '/tutorial', component: Tutorial },
     { path: '*', redirect: '/' },
   ],
 });
@@ -30,7 +41,7 @@ const router = new Router({
 // Prevent accessing restricted pages if not logged in
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/', '/about', '/map'];
+  const publicPages = ['/login', '/register', '/', '/about', '/ranking'];
   const authRequired = !publicPages.includes(to.path);
 
   // See if there is a JWT in local storage

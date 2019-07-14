@@ -21,8 +21,17 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/about">O nas</router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="status.loggedIn" class="nav-item">
+            <router-link class="nav-link" to="/ranking">Ranking</router-link>
+          </li>
+          <li v-if="status.loggedIn" class="nav-item">
               <router-link class="nav-link" to="/map">Mapa</router-link>
+          </li>
+          <li v-if="status.loggedIn" class="nav-item">
+              <router-link class="nav-link" to="/store">Sklep</router-link>
+          </li>
+          <li v-if="status.loggedIn" class="nav-item">
+              <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
@@ -34,13 +43,14 @@
           </li>
           <li class="nav-item">
             <!--Here we can add a link to a strore in the future-->
-            <a href="#" class="nav-link">
+            <router-link to="/store" name="store"
+                class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">
               {{user.numberOfCoins}}
-            </a>
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/userProfile" name="profil"
+            <router-link to="/user-profile" name="profil"
                 class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/nolan/2x/user.png"/>
               Profil
@@ -54,20 +64,42 @@
         </ul>
       </div>
     </nav>
-
     <div class="container">
-        <div class="row">
+        <div class="row container__row">
             <!--<div class="col-sm-6 offset-sm-3">-->
-                <router-view></router-view>
+                <router-view :key="$route.path"></router-view>
             <!--</div>-->
         </div>
     </div>
+    <footer class="fixed-bottom">
+      Strona stworzona przez studentów Politechniki Gdańskiej jako projekt inżynierski.
+      <router-link to="/about"> O nas</router-link>.
+      App icons by <a href="https://icons8.com">icons8</a>.
+    </footer>
   </div>
 </template>
 
 <style>
+footer {
+  height: 25px;
+  width: 100%;
+  color: #2c3e50;
+  background-color: #F4E5DD;
+}
+
+footer a {
+  font-weight: bold;
+  color: #427696;
+}
+
 body {
     background-color: #9DCADF;
+    width: 100%;
+    height: 100%;
+}
+
+html {
+  height: 100%;
 }
 
 #app {
@@ -76,7 +108,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
 }
+
+.container {
+  height: 100%;
+}
+
+.container__row {
+  height: 100%;
+  overflow: auto;
+}
+
 #nav {
   margin-bottom: 2em;
   background-color: #F4E5DD;
@@ -100,12 +143,16 @@ export default {
     return {
     };
   },
+  mounted() {
+    this.getUserData();
+  },
   computed: {
     ...mapState('users', ['status']),
     ...mapState('userProfile', ['user']),
   },
   methods: {
     ...mapActions('users', ['logout']),
+    ...mapActions('userProfile', ['getUserData']),
   },
 };
 </script>

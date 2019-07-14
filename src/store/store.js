@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import users from './user_authentication_store';
-import userProfile from './user_profile_store';
+import users from './userAuthenticationStore';
+import userProfile from './userProfileStore';
 
 Vue.use(Vuex);
 

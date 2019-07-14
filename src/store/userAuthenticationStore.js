@@ -1,4 +1,4 @@
-import userService from '../services/user_authentication';
+import userService from '../services/userAuthenticationService';
 import router from '../router';
 import toasts from '../utilities/toasts';
 
@@ -15,6 +15,20 @@ const actions = {
           commit('loginSuccess', user);
           router.push('/');
           toasts.successToast(`Witaj z powrotem ${username}`);
+        },
+        (error) => {
+          toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
+          commit('loginFailure', error);
+        },
+      );
+  },
+  loginWithGoogle({ commit }, { authCode }) {
+    userService.loginWithGoogle(authCode)
+      .then(
+        (user) => {
+          commit('loginSuccess', user);
+          router.push('/');
+          toasts.successToast('Witaj z powrotem!');
         },
         (error) => {
           toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
