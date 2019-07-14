@@ -321,10 +321,15 @@ export default {
       backgroundImageIdToChange: 0,
       avatarIdToChange: 0,
       userId: this.$route.params.id,
-      user: {},
+      otherUser: {},
     };
   },
   computed: {
+    user() {
+      if (this.isOurOwnProfile) return this.userFromStore;
+
+      return this.otherUser;
+    },
     ...mapState('users', { userToken: 'user' }),
     ...mapState('userProfile', { userFromStore: 'user' }),
     pickedAvatar() {
@@ -357,13 +362,10 @@ export default {
   mounted() {
     this.backgroundImageIdToChange = this.user.backgroundImageId;
     this.avatarIdToChange = this.user.avatarId;
-    if (this.isOurOwnProfile) this.user = this.userFromStore;
-    else {
+    if (!this.isOurOwnProfile) {
       otherUsersProfileService.getUser(this.userToken, this.userId)
-        .then((user) => { this.user = user; })
-        .then(() => this.$forceUpdate());
+        .then((user) => { this.otherUser = user; });
     }
-    this.$forceUpdate();
   },
   methods: {
     ...mapActions('userProfile', ['changeAvatar', 'changeBackgroundImage']),
