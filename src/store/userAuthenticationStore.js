@@ -9,6 +9,7 @@ const userState = userToken
 
 const actions = {
   login({ commit }, { username, password }) {
+    commit('loginInProgress');
     userService.login(username, password)
       .then(
         (user) => {
@@ -43,6 +44,7 @@ const actions = {
     commit('logout');
   },
   register({ commit }, user) {
+    commit('registerInProgress');
     userService.register(user)
       .then(
         (userResponse) => {
@@ -64,6 +66,10 @@ const mutations = {
     state.status = { loggedIn: true };
     state.user = user;
   },
+  loginInProgress(state) {
+    state.status = { loginInProgress: true };
+    state.user = null;
+  },
   loginFailure(state) {
     state.status = {};
     state.user = null;
@@ -74,6 +80,9 @@ const mutations = {
   },
   registerSuccess(state) {
     state.status = {};
+  },
+  registerInProgress(state) {
+    state.status = { registerInProgress: true };
   },
   registerFailure(state) {
     state.status = {};

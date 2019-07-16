@@ -50,6 +50,9 @@
         <v-facebook-login :app-id="fb_app_id"></v-facebook-login>
       </div>
     </div>
+    <div v-if="status.loginInProgress" class="d-flex justify-content-center">
+          <cube-spin class="m-2"></cube-spin>
+    </div>
   </div>
 </template>
 
@@ -59,6 +62,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import { VFBLogin as VFacebookLogin } from 'vue-facebook-login-component';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import config from '../../config';
 
 export default {
@@ -73,6 +77,7 @@ export default {
     };
   },
   components: {
+    CubeSpin,
     VFacebookLogin,
   },
   computed: {
