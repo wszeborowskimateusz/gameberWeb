@@ -384,9 +384,11 @@ export default {
       this.$forceUpdate();
     },
     addToFriends() {
+      // const userToAddId = this.userId;
       // TODO implement me
     },
     sendMessage() {
+      // const userToSendMessageToId = this.userId;
       // TODO implement me
     },
   },

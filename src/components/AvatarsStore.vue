@@ -1,5 +1,5 @@
 <template>
-    <div class="store col-12">
+    <div class="store col-12 mb-5">
         <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="pills-avatar-tab"

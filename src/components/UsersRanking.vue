@@ -75,8 +75,9 @@ export default {
       pickedRanking: 'overall',
       rankingTypes: [
         { eng: 'overall', pl: 'Całościowy' },
+        { eng: 'monthly', pl: 'Miesięczny' },
         { eng: 'daily', pl: 'Codzienny' },
-        { eng: 'monthly', pl: 'Miesięczny' }],
+      ],
     };
   },
   computed: {
