@@ -6,79 +6,79 @@
             'url(' + pickedImage.img +')'}"
     ></div>
     <div class="scrollbar_remover">
-    <div class="profile__container">
-      <div class="row profile__content">
-        <div class="avatar col-sm-12 col-lg-3 col-md-12 p-4">
-          <div class="avatar__image">
-            <img width="250" class="avatar__image__img" :src="pickedAvatar.img" />
+      <div class="profile__container">
+        <div class="row profile__content">
+          <div class="avatar col-sm-12 col-lg-3 col-md-12 p-4">
+            <div class="avatar__image">
+              <img width="250" class="avatar__image__img" :src="pickedAvatar.img" />
+              <button
+                v-if="isOurOwnProfile"
+                class="image_badge btn btn-default"
+                onclick="this.blur();"
+                data-toggle="modal"
+                data-target="#avatarModal"
+              >
+                <img width="70" src="https://img.icons8.com/color/96/000000/plus-2-math.png" />
+              </button>
+              <h1>{{user.username}}</h1>
+            </div>
+          </div>
+          <div class="achievements col-sm-12 col-lg-6 col-md-12 p-5 float-left">
+            <h2 v-if="isOurOwnProfile">Twoje osiągnięcia:</h2>
+            <h2 v-else>Osiągnięcia</h2>
+            <a
+              href="#"
+              v-for="achievement in user.achievements"
+              v-bind:key="achievement.name"
+              :title="achievement.name"
+            >
+              <img :src="achievement.src" />
+            </a>
+            <div v-if="!user.achievements || user.achievements.length === 0">
+              <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
+              <img src="https://img.icons8.com/ios/100/000000/empty-set-filled.png" />
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
             <button
               v-if="isOurOwnProfile"
-              class="image_badge btn btn-default"
-              onclick="this.blur();"
+              class="btn btn-primary"
               data-toggle="modal"
-              data-target="#avatarModal"
+              data-target="#backgroundImagesModal"
             >
-              <img width="70" src="https://img.icons8.com/color/96/000000/plus-2-math.png" />
+              Zmień zdjęcie w tle
+              <img
+                width="25"
+                src="https://img.icons8.com/clouds/100/000000/picture.png"
+              />
             </button>
-            <h1>{{user.username}}</h1>
-          </div>
-        </div>
-        <div class="achievements col-sm-12 col-lg-6 col-md-12 p-5 float-left">
-          <h2 v-if="isOurOwnProfile">Twoje osiągnięcia:</h2>
-          <h2 v-else>Osiągnięcia</h2>
-          <a
-            href="#"
-            v-for="achievement in user.achievements"
-            v-bind:key="achievement.name"
-            :title="achievement.name"
-          >
-            <img :src="achievement.src" />
-          </a>
-          <div v-if="!user.achievements || user.achievements.length === 0">
-            <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
-            <img src="https://img.icons8.com/ios/100/000000/empty-set-filled.png" />
-          </div>
-        </div>
-        <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
-          <button
-            v-if="isOurOwnProfile"
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#backgroundImagesModal"
-          >
-            Zmień zdjęcie w tle
-            <img
-              width="25"
-              src="https://img.icons8.com/clouds/100/000000/picture.png"
-            />
-          </button>
-          <button v-else-if="!user.isFriend" class="btn btn-primary" v-on:click="addToFriends()">
-            Dodaj do znajomych
-            <img src="https://img.icons8.com/dusk/50/000000/add-user-male.png" />
-          </button>
-          <button v-else class="btn btn-primary" v-on:click="sendMessage()">
+            <button v-else-if="!user.isFriend" class="btn btn-primary" v-on:click="addToFriends()">
+              Dodaj do znajomych
+              <img src="https://img.icons8.com/dusk/50/000000/add-user-male.png" />
+            </button>
+            <button v-else class="btn btn-primary" v-on:click="sendMessage()">
               Wyślij wiadomość
-              <img src="https://img.icons8.com/dusk/64/000000/send-mass-email.png">
-          </button>
+              <img src="https://img.icons8.com/dusk/64/000000/send-mass-email.png" />
+            </button>
+          </div>
+        </div>
+        <div class="col-12 pt-3 mx-auto p-5 progress-bar-content">
+          <h3>Poziom {{user.level}}</h3>
+          <div class="progress">
+            <div
+              class="progress-bar dynamic progress-bar-animated progress-bar-striped bg-info"
+              :style="{ width: user.experiencePoints + '%' }"
+              role="progressbar"
+              :aria-valuenow="user.experiencePoints"
+              aria-valuemin="0"
+              :aria-valuemax="user.pointsToAchieveNewLevel"
+            ></div>
+            <div
+              class="progress-bar-title bar-title"
+            >{{user.experiencePoints}} / {{user.pointsToAchieveNewLevel}}</div>
+          </div>
         </div>
       </div>
-      <div class="col-12 pt-3 mx-auto p-5 progress-bar-content">
-        <h3>Poziom {{user.level}}</h3>
-        <div class="progress">
-          <div
-            class="progress-bar dynamic progress-bar-animated progress-bar-striped bg-info"
-            :style="{ width: user.experiencePoints + '%' }"
-            role="progressbar"
-            :aria-valuenow="user.experiencePoints"
-            aria-valuemin="0"
-            :aria-valuemax="user.pointsToAchieveNewLevel"
-          ></div>
-          <div
-            class="progress-bar-title bar-title"
-          >{{user.experiencePoints}} / {{user.pointsToAchieveNewLevel}}</div>
-        </div>
-      </div>
-    </div>
     </div>
     <!-- Background Images Change modal -->
     <div
@@ -161,7 +161,7 @@
           </div>
           <div class="modal-body">
             <span v-if="!user || user.avatars.length === 0">
-                Niestety nie masz żadnych avatarów
+              Niestety nie masz żadnych avatarów
             </span>
             <div class="row">
               <div class="col-12" v-for="(avatar, index) in user.avatars" v-bind:key="avatar.id">
@@ -202,9 +202,9 @@
   </div>
   <div v-else class="col-12">
     <h1 class="mb-5">Nie znaleziono użytkownika o wskazanym identyfikatorze</h1>
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png">
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png">
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png">
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
   </div>
 </template>
 
@@ -244,9 +244,9 @@ input[type="radio"]:checked + .radioLabel {
 }
 
 .scrollbar_remover {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .profil {
@@ -314,6 +314,7 @@ input[type="radio"]:checked + .radioLabel {
 <script>
 import { mapState, mapActions } from 'vuex';
 import otherUsersProfileService from '../services/otherUsersProfileService';
+import usersInteractionsService from '../services/usersInteractionsService';
 
 export default {
   data() {
@@ -363,8 +364,11 @@ export default {
     this.backgroundImageIdToChange = this.user.backgroundImageId;
     this.avatarIdToChange = this.user.avatarId;
     if (!this.isOurOwnProfile) {
-      otherUsersProfileService.getUser(this.userToken, this.userId)
-        .then((user) => { this.otherUser = user; });
+      otherUsersProfileService
+        .getUser(this.userToken, this.userId)
+        .then((user) => {
+          this.otherUser = user;
+        });
     }
   },
   methods: {
@@ -384,8 +388,8 @@ export default {
       this.$forceUpdate();
     },
     addToFriends() {
-      // const userToAddId = this.userId;
-      // TODO implement me
+      const userToAddId = this.userId;
+      usersInteractionsService.sendFriendshipRequest(this.userToken, userToAddId);
     },
     sendMessage() {
       // const userToSendMessageToId = this.userId;
