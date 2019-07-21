@@ -13,11 +13,11 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div v-if="status.loggedIn" class="w-25 d-none d-lg-block">
+      <!-- <div v-if="status.loggedIn" class="w-25 d-none d-lg-block"> -->
         <!--empty spacer-->
-      </div>
+      <!-- </div> -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav justify-content-center d-flex flex-fill">
+        <ul class="navbar-nav  d-flex flex-fill">
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Strona Główna</router-link>
           </li>
@@ -48,16 +48,25 @@
             </a>
           </li>
           <li class="nav-item">
-            <!--Here we can add a link to a strore in the future-->
             <router-link to="/store" name="store" class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/color/48/000000/coins.png" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
           <li class="nav-item">
+            <router-link to="/notifications" class="nav-link rounded-circle">
+              <notification-bell
+                :size="25"
+                :count="amountOfUnReadNotifications"
+                counterBackgroundColor="#fa323c"
+                icon="https://img.icons8.com/dusk/64/000000/appointment-reminders.png"
+              />
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link to="/user-profile" name="profil" class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/nolan/2x/user.png" />
-              Profil
+              {{user.username}}
             </router-link>
           </li>
           <li class="nav-item">
@@ -142,6 +151,7 @@ html {
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import NotificationBell from 'vue-notification-bell';
 
 export default {
   data() {
@@ -149,14 +159,23 @@ export default {
   },
   mounted() {
     this.getUserData();
+    this.getAllNotifications();
   },
   computed: {
     ...mapState('users', ['status']),
     ...mapState('userProfile', ['user']),
+    ...mapState('notificationsStore', ['notifications']),
+    amountOfUnReadNotifications() {
+      return this.notifications.filter(x => !x.isRead).length;
+    },
   },
   methods: {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
+    ...mapActions('notificationsStore', ['getAllNotifications']),
+  },
+  components: {
+    NotificationBell,
   },
 };
 </script>

@@ -10,6 +10,7 @@ import AvatarsStore from './components/AvatarsStore.vue';
 import UsersRanking from './components/UsersRanking.vue';
 import Translator from './components/Translator.vue';
 import Tutorial from './components/Tutorial.vue';
+import Notifications from './components/Notifications.vue';
 import Toasts from './utilities/toasts';
 
 Vue.use(Router);
@@ -31,6 +32,7 @@ const router = new Router({
     { path: '/map', component: GameMap },
     { path: '/games/:id', component: GameController },
     { path: '/store', component: AvatarsStore },
+    { path: '/notifications', component: Notifications },
     { path: '/ranking', component: UsersRanking },
     { path: '/translator', component: Translator },
     { path: '/tutorial', component: Tutorial },

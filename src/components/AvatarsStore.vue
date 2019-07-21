@@ -133,7 +133,6 @@ export default {
   created() {
     this.fetchAvatars();
     this.fetchBackgroundImages();
-    console.log(this.backgroundImages);
   },
   computed: {
     ...mapState('userProfile', ['user']),
