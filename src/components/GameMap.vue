@@ -8,16 +8,42 @@ import * as am4maps from '@amcharts/amcharts4/maps';
 import am4themesAnimated from '@amcharts/amcharts4/themes/animated';
 import am4chartsGeodataWorld from '@amcharts/amcharts4-geodata/worldLow';
 import { pointsToPath } from '@amcharts/amcharts4/.internal/core/rendering/Path';
+import { lab } from 'd3';
 
 // Globals that should be on server
 const allCountries = [
-  'IN', 'AU', 'CA', 'BR', 'US', 'SW', 'DE', 'PL',
+  'IN', 'AU', 'BR', 'US', 'SW', 'DE', 'PL',
 ];
 
+// List of players unlocked countries
 const unlockedCountries = [
-  'PL', 'CA',
+  'PL', 'FR', 'IT'
 ];
 
+// Categories data
+const countryCategories = {
+  'PL': [
+    { name: 'Animals', color: 'yellow' },
+    { name: 'Greetings', color: 'blue' },
+    { name: 'Local food', color: 'orange' },
+    { name: 'Weather', color: 'green' },
+    { name: 'Poles', color: 'white' }
+  ],
+  'FR': [
+    { name: 'Animals', color: 'yellow' },
+    { name: 'Greetings', color: 'blue' },
+    { name: 'Local food', color: 'orange' },
+    { name: 'Weather', color: 'green' },
+    { name: 'Poles', color: 'white' }
+  ],
+  'IT': [
+    { name: 'Animals', color: 'yellow' },
+    { name: 'Greetings', color: 'blue' },
+    { name: 'Local food', color: 'orange' },
+    { name: 'Weather', color: 'green' },
+    { name: 'Poles', color: 'white' }
+  ],
+};
 
 // Gloobals for map
 const countriesLatlon = {
@@ -263,8 +289,17 @@ const countriesLatlon = {
   ZW: { latitude: -20, longitude: 30 },
 };
 
-const circleRadius = 20;
+const lockedCountryFillColor = 'black';
+const unlockedCountryFillColor = 'red';
 
+const circleRadius = 2;
+const circleDistanceFromCenter = 4;
+
+const labelFontSize = circleRadius / 3;
+const labelDxOffset = 0.8;
+const labelDyOffset = 0.1;
+
+const categoriesShowZoomLevel = 10;
 
 function getCirclePoints(num_points, radius, x, y) {
   if (num_points <= 1) return [[x, y]];
@@ -294,6 +329,7 @@ export default {
 
     map.geodata = am4chartsGeodataWorld;
     map.projection = new am4maps.projections.Miller();
+    map.maxPanOut = 0;
 
     // Paint all countries in the world to gray to make map shape
     const worldSeries = map.series.push(new am4maps.MapPolygonSeries());
@@ -304,98 +340,109 @@ export default {
     const allCountriesSeries = map.series.push(new am4maps.MapPolygonSeries());
     allCountriesSeries.useGeodata = true;
     allCountriesSeries.include = allCountries;
-    allCountriesSeries.mapPolygons.template.fill = 'black';
+    allCountriesSeries.mapPolygons.template.fill = lockedCountryFillColor
 
     // Unlocked countries
     const unlockedCountriesSeries = map.series.push(new am4maps.MapPolygonSeries());
     unlockedCountriesSeries.useGeodata = true;
     unlockedCountriesSeries.include = unlockedCountries;
-    unlockedCountriesSeries.mapPolygons.template.fill = 'red';
+    unlockedCountriesSeries.mapPolygons.template.fill = unlockedCountryFillColor;
 
-    // Map zooming
+
+    // Zomming to selected countries
     let lastSelected = null;
-    let currentCategoriesSeries = null;
-    let countryDefaultZoomLevel = null;
     unlockedCountriesSeries.mapPolygons.template.events.on('hit',
       (ev) => {
-        // Delete last displayed category if there is
-        if (currentCategoriesSeries) {
-          map.series.removeIndex(
-            map.series.indexOf(currentCategoriesSeries),
-          );
-          currentCategoriesSeries = null;
-        }
-
-        // Zoom to selected country or reset zoom
+        // Reset zoom if already zoomed to country
         if (lastSelected == ev.target) {
           ev.target.series.chart.goHome();
           lastSelected = null;
-          countryDefaultZoomLevel = null;
           return;
         }
 
         ev.target.series.chart.zoomToMapObject(ev.target);
-        countryDefaultZoomLevel = map.zoomLevel;
         lastSelected = ev.target;
 
-
         const countryId = ev.target.dataItem.dataContext.id;
-        // console.log('clicked on: ', countryId);
-        // PLEASE MISTER SERVER CAN YOU GET ME THE CATEGORIES FOR GIVEN COUNTRY?
-        // Server -> HERE YOU ARE
-        const categories = [
-          { name: 'Animals', color: 'yellow' },
-          { name: 'Greetings', color: 'blue' },
-          { name: 'Local food', color: 'orange' },
-          { name: 'Weather', color: 'green' },
-          { name: 'Poles', color: 'black' },
-        ];
+        console.log('clicked on: ', countryId);
+      },
+      this);
 
-        // Initial categories images setup
-        currentCategoriesSeries = map.series.push(new am4maps.MapImageSeries());
-        currentCategoriesSeries.data = categories;
-        currentCategoriesSeries.dataFields.value = 'name';
-        currentCategoriesSeries.alwaysShowTooltip = true; // <---- why is this not working ?!
+    // Initial categories images setup
 
-        const imageTemplate = currentCategoriesSeries.mapImages.template;
-        imageTemplate.propertyFields.latitude = 'latitude';
-        imageTemplate.propertyFields.longitude = 'longitude';
-        imageTemplate.nonScaling = true;
-        imageTemplate.clickable = true;
-        imageTemplate.contextMenuDisabled = true;
+    let categoriesSeries = new am4maps.MapImageSeries()
+    // categoriesSeries.data = categories;
+    categoriesSeries.dataFields.value = 'name';
+    categoriesSeries.hidden = true;
+    map.series.push(categoriesSeries);
+    // categoriesSeries.alwaysShowTooltip = true; // <---- why is this not working ?!
 
-        // Get circles positions
+    let categoriesTemplate = categoriesSeries.mapImages.template;
+    categoriesTemplate.propertyFields.latitude = 'latitude';
+    categoriesTemplate.propertyFields.longitude = 'longitude';
+    categoriesTemplate.nonScaling = false;
+    categoriesTemplate.clickable = true;
+    categoriesTemplate.contextMenuDisabled = true;
+
+    // Enlarge circle on hover
+    categoriesTemplate.events.on('over',
+      (ev) => {
+        console.log('over circle');
+        ev.radius = 200;
+    });
+
+    // Draw circles
+    unlockedCountries.forEach(countryId => {
+      let categories = countryCategories[countryId];
+      if (categories != null)
+      {
+        categoriesSeries.addData(categories);
+        
+
         const countryPos = countriesLatlon[countryId];
-        const points = getCirclePoints(categories.length, 50, 0, 0);
+        const points = getCirclePoints(categories.length, circleDistanceFromCenter, 0, 0);
 
         for (let i = 0; i < categories.length; i += 1) {
           categories[i].latitude = countryPos.latitude;
           categories[i].longitude = countryPos.longitude;
-          const circle = imageTemplate.createChild(am4core.Circle);
+          const circle = categoriesTemplate.createChild(am4core.Circle);
+
+
+
+          const label = categoriesTemplate.createChild(am4core.Label);
           circle.fill = am4core.color(categories[i].color);
           circle.dx = points[i][0];
           circle.dy = points[i][1];
           circle.radius = circleRadius;
-          circle.tooltipText = '{name}';
+          circle.verticalCenter = 'middle';
+          circle.horizontalCenter = 'middle';
+          // circle.tooltipText = '{name}';
+          label.dx = circle.dx + labelDxOffset;
+          label.dy = circle.dy + labelDyOffset;
+          label.fontSize = labelFontSize;
+          label.fontWeight = 'bold';
+          label.fontFamily = 'Arial';
+          label.horizontalCenter = 'middle';
+          label.verticalCenter = 'middle';
+          label.text = categories[i].name;
         }
-      },
-      this);
+      }
+    });
 
-    // Additional map controls
-    // Zoom control
-    map.zoomControl = new am4maps.ZoomControl();
 
     map.events.on('zoomlevelchanged',
       (ev) => {
-        console.log('map zoomlevel: ', map.zoomLevel);
-        console.log('countryDefaultZoomlevel: ', countryDefaultZoomLevel);
-        if (countryDefaultZoomLevel != null && map.zoomLevel < countryDefaultZoomLevel) {
-          // Delete last displayed category if there is
-          if (currentCategoriesSeries) {
-            map.series.removeIndex(
-              map.series.indexOf(currentCategoriesSeries),
-            );
-            currentCategoriesSeries = null;
+        if (categoriesTemplate != null)
+        {
+          if (map.zoomLevel > categoriesShowZoomLevel && categoriesSeries.isHidden)
+          {          
+            console.log('Show categories.');
+            categoriesSeries.show(); 
+          }
+          else if (map.zoomLevel <= categoriesShowZoomLevel && !categoriesSeries.isHidden)
+          {
+            console.log('Hide categories.');
+            categoriesSeries.hide();
           }
         }
       });
