@@ -58,6 +58,7 @@
               <notification-bell
                 :size="25"
                 :count="amountOfUnReadNotifications"
+                counterBackgroundColor="#fa323c"
                 icon="https://img.icons8.com/dusk/64/000000/appointment-reminders.png"
               />
             </router-link>

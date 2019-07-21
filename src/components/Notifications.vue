@@ -42,7 +42,7 @@
             class="btn btn_default notification__remove_button"
             v-on:click="onRemoveNotification(notification.id)"
           >
-            <img width="35" height="35" src="https://img.icons8.com/dusk/64/000000/delete-sign.png" />
+            <img width="35" height="35" src="https://img.icons8.com/cotton/64/000000/delete-sign--v2.png" />
           </button>
           <button
             v-if="!notification.isRead"
@@ -87,7 +87,7 @@
                 <img
                   width="35"
                   height="35"
-                  src="https://img.icons8.com/officel/80/000000/delete-sign.png"
+                  src="https://img.icons8.com/plasticine/100/000000/delete-sign.png"
                 />
               </button>
             </div>
