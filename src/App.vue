@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav id="nav" class="navbar navbar-default navbar-expand-lg sticky-top">
+    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top">
       <button
         class="navbar-toggler navbar-light"
         type="button"
@@ -14,10 +14,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <!-- <div v-if="status.loggedIn" class="w-25 d-none d-lg-block"> -->
-        <!--empty spacer-->
+      <!--empty spacer-->
       <!-- </div> -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav  d-flex flex-fill">
+        <ul class="navbar-nav d-flex flex-fill">
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Strona Główna</router-link>
           </li>
@@ -56,6 +56,7 @@
           <li class="nav-item">
             <router-link to="/notifications" class="nav-link rounded-circle">
               <notification-bell
+                class="justify-content-center d-flex"
                 :size="25"
                 :count="amountOfUnReadNotifications"
                 counterBackgroundColor="#fa323c"
@@ -69,11 +70,22 @@
               {{user.username}}
             </router-link>
           </li>
+
           <li class="nav-item">
             <button class="btn btn-info ml-3" @click="logout()">
               <i class="fas fa-sign-out-alt"></i> Wyloguj się
             </button>
           </li>
+          <autocomplete
+            class="ml-3 h-25"
+
+            :search="search"
+            placeholder="Szukaj znajomych"
+            aria-label="Szukaj znajomych"
+            :get-result-value="getResultValue"
+            @submit="handleSubmit"
+            auto-select
+          ></autocomplete>
         </ul>
       </div>
     </nav>
@@ -152,6 +164,8 @@ html {
 <script>
 import { mapState, mapActions } from 'vuex';
 import NotificationBell from 'vue-notification-bell';
+import Autocomplete from '@trevoreyre/autocomplete-vue';
+import searchService from './services/searchService';
 
 export default {
   data() {
@@ -173,9 +187,21 @@ export default {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
     ...mapActions('notificationsStore', ['getAllNotifications']),
+    search(input) {
+      if (input.length < 1) return [];
+      return searchService.searchForUsers(this.$store.state.users.user, input);
+    },
+    getResultValue(result) {
+      return `${result.userName}`;
+    },
+
+    handleSubmit(result) {
+      this.$router.push(`/users/${result.userId}`);
+    },
   },
   components: {
     NotificationBell,
+    Autocomplete,
   },
 };
 </script>
