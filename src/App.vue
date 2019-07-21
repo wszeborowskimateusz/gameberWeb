@@ -48,10 +48,14 @@
             </a>
           </li>
           <li class="nav-item">
-            <!--Here we can add a link to a strore in the future-->
             <router-link to="/store" name="store" class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/color/48/000000/coins.png" />
               {{user.numberOfCoins}}
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/notifications" class="nav-link rounded-circle">
+              <img width="25" src="https://img.icons8.com/dusk/64/000000/appointment-reminders.png">
             </router-link>
           </li>
           <li class="nav-item">
