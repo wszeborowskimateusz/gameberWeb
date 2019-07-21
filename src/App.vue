@@ -55,7 +55,11 @@
           </li>
           <li class="nav-item">
             <router-link to="/notifications" class="nav-link rounded-circle">
-              <notification-bell size="25" :count="notificationsAmount" icon="https://img.icons8.com/dusk/64/000000/appointment-reminders.png"/>
+              <notification-bell
+                :size="25"
+                :count="amountOfUnReadNotifications"
+                icon="https://img.icons8.com/dusk/64/000000/appointment-reminders.png"
+              />
             </router-link>
           </li>
           <li class="nav-item">
@@ -150,20 +154,24 @@ import NotificationBell from 'vue-notification-bell';
 
 export default {
   data() {
-    return {
-      notificationsAmount: 2,
-    };
+    return {};
   },
   mounted() {
     this.getUserData();
+    this.getAllNotifications();
   },
   computed: {
     ...mapState('users', ['status']),
     ...mapState('userProfile', ['user']),
+    ...mapState('notificationsStore', ['notifications']),
+    amountOfUnReadNotifications() {
+      return this.notifications.filter(x => !x.isRead).length;
+    },
   },
   methods: {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
+    ...mapActions('notificationsStore', ['getAllNotifications']),
   },
   components: {
     NotificationBell,

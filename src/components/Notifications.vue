@@ -40,7 +40,7 @@
         >
           <button
             class="btn btn_default notification__remove_button"
-            v-on:click="removeNotification(notification.id)"
+            v-on:click="onRemoveNotification(notification.id)"
           >
             <img width="35" height="35" src="https://img.icons8.com/dusk/64/000000/delete-sign.png" />
           </button>
@@ -57,7 +57,7 @@
           </button>
           <p class="pt-3 font-weight-bold">{{notification.title}}</p>
           <div class="row m-3">
-            <div class="col-12 col-lg-2">
+            <div class="col-12 col-xl-2">
               <img
                 width="150"
                 height="150"
@@ -65,7 +65,7 @@
                 :src="notification.img"
               />
             </div>
-            <div class="col-10">
+            <div class="col-12 col-xl-10">
               <p class="m-4 text-left">{{notification.description}}</p>
               <p class="m-4 text-left">
                 Nazwa:
@@ -135,56 +135,19 @@
 </style>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
   data() {
     return {
       pickedNotificationsStatus: 0,
-      notifications: [
-        {
-          id: 1,
-          type: 'friendship_request',
-          img:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSouJh0Vvrn9GWzoyrv4IqVh4SbDH3OIeftIf5yzLqj4YjmLOkr',
-          title: 'Zaproszenie do znajomych',
-          name: 'Szymon35',
-          description:
-            'Otrzymałeś właśnie zaproszenie do grona znajomych od użytkownika Szymon35',
-          isRead: false,
-        },
-        {
-          id: 2,
-          type: 'achievement_receive',
-          img: 'https://img.icons8.com/dusk/100/000000/prize.png',
-          title: 'Otrzymałeś osiągnięcie',
-          name: 'Nagroda',
-          description: 'Otrzymałeś właśnie osiągnięcie',
-          isRead: false,
-        },
-        {
-          id: 3,
-          type: 'friendship_accepted',
-          img:
-            'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
-          title: 'Zaproszenie zaakceptowane',
-          name: 'ZwariowanyMarcin15',
-          description:
-            'Twoje zaproszenie zostało potwierdzone przez użytkownika ',
-          isRead: true,
-        },
-        {
-          id: 4,
-          type: 'message_received',
-          img:
-            'https://www.lastlivingcity.com/wp-content/uploads/2018/05/ea47aebe7edcdf32b192efa147066753.jpg',
-          title: 'Otrzymałeś wiadomość',
-          name: 'Szymon35',
-          description: 'Otrzymałeś właśnie zaproszenie do grona znajomych',
-          isRead: true,
-        },
-      ],
     };
   },
+  mounted() {
+    this.getAllNotifications();
+  },
   computed: {
+    ...mapState('notificationsStore', ['notifications']),
     amountOfReadNotifications() {
       return this.notifications.filter(x => x.isRead).length;
     },
@@ -202,6 +165,11 @@ export default {
     },
   },
   methods: {
+    ...mapActions('notificationsStore', [
+      'getAllNotifications',
+      'markNotificationAsRead',
+      'removeNotification',
+    ]),
     FilteredNotifications(type) {
       return this.notifications.filter(x => x.type === type);
     },
@@ -209,10 +177,10 @@ export default {
       this.pickedNotificationsStatus = status;
     },
     markAsRead(id) {
-      this.notifications.find(x => x.id === id).isRead = true;
+      this.markNotificationAsRead(id);
     },
-    removeNotification(id) {
-      this.notifications = this.notifications.filter(x => x.id !== id);
+    onRemoveNotification(id) {
+      this.removeNotification(id);
     },
   },
 };
