@@ -6,6 +6,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store/store';
 import config from '../config';
+import '@trevoreyre/autocomplete-vue/dist/style.css';
 
 require('bootstrap');
 window.wordsearch = require('wordsearch');
