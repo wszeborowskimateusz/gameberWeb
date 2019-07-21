@@ -55,7 +55,7 @@
           </li>
           <li class="nav-item">
             <router-link to="/notifications" class="nav-link rounded-circle">
-              <img width="25" src="https://img.icons8.com/dusk/64/000000/appointment-reminders.png">
+              <notification-bell size="25" :count="notificationsAmount" icon="https://img.icons8.com/dusk/64/000000/appointment-reminders.png"/>
             </router-link>
           </li>
           <li class="nav-item">
@@ -146,10 +146,13 @@ html {
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import NotificationBell from 'vue-notification-bell';
 
 export default {
   data() {
-    return {};
+    return {
+      notificationsAmount: 2,
+    };
   },
   mounted() {
     this.getUserData();
@@ -161,6 +164,9 @@ export default {
   methods: {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
+  },
+  components: {
+    NotificationBell,
   },
 };
 </script>

@@ -11,7 +11,7 @@
           aria-controls="pills-items"
           aria-selected="true"
           v-on:click="changePickedNotificationStatus(0)"
-        >Nieprzeczytane ({{amountOfNotReadNotifications}})</a>
+        >Nieprzeczytane ({{amountOfUnReadNotifications}})</a>
       </li>
       <li class="nav-item">
         <a
@@ -188,17 +188,17 @@ export default {
     amountOfReadNotifications() {
       return this.notifications.filter(x => x.isRead).length;
     },
-    amountOfNotReadNotifications() {
+    amountOfUnReadNotifications() {
       return this.notifications.filter(x => !x.isRead).length;
     },
     ReadNotifications() {
       return this.notifications.filter(x => x.isRead);
     },
-    NotReadNotifications() {
+    UnReadNotifications() {
       return this.notifications.filter(x => !x.isRead);
     },
     NotificationsStatus() {
-      return [this.NotReadNotifications, this.ReadNotifications];
+      return [this.UnReadNotifications, this.ReadNotifications];
     },
   },
   methods: {
