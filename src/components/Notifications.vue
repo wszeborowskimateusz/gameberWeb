@@ -38,11 +38,20 @@
           v-bind:key="notification.id"
           class="notification__tile m-3"
         >
+            <img
+                class="m-2 notification__icon"
+                width="35"
+                :src="getNotificationIcon(notification.type)"
+            />
           <button
             class="btn btn_default notification__remove_button"
             v-on:click="onRemoveNotification(notification.id)"
           >
-            <img width="35" height="35" src="https://img.icons8.com/cotton/64/000000/delete-sign--v2.png" />
+            <img
+                width="35"
+                height="35"
+                src="https://img.icons8.com/cotton/64/000000/delete-sign--v2.png"
+            />
           </button>
           <button
             v-if="!notification.isRead"
@@ -77,6 +86,7 @@
               class="d-flex justify-content-center w-100 m-2"
             >
               <button class="btn btn_default mr-5">
+                  Potwierdź
                 <img
                   width="35"
                   height="35"
@@ -84,6 +94,7 @@
                 />
               </button>
               <button class="btn btn_default ml-5">
+                  Odrzuć
                 <img
                   width="35"
                   height="35"
@@ -99,6 +110,12 @@
 </template>
 
 <style scoped>
+.notification__icon {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
 .notification__image {
   border-radius: 50%;
 }
@@ -181,6 +198,20 @@ export default {
     },
     onRemoveNotification(id) {
       this.removeNotification(id);
+    },
+    getNotificationIcon(notificationType) {
+      switch (notificationType) {
+        case 'friendship_request':
+          return 'https://img.icons8.com/dusk/50/000000/add-user-male.png';
+        case 'achievement_receive':
+          return 'https://img.icons8.com/dusk/64/000000/diploma.png';
+        case 'friendship_accepted':
+          return 'https://img.icons8.com/dusk/64/000000/friends.png';
+        case 'message_received':
+          return 'https://img.icons8.com/dusk/64/000000/new-message.png';
+        default:
+          return 'https://img.icons8.com/plasticine/100/000000/appointment-reminders.png';
+      }
     },
   },
 };

@@ -13,11 +13,11 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div v-if="status.loggedIn" class="w-25 d-none d-lg-block">
+      <!-- <div v-if="status.loggedIn" class="w-25 d-none d-lg-block"> -->
         <!--empty spacer-->
-      </div>
+      <!-- </div> -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav justify-content-center d-flex flex-fill">
+        <ul class="navbar-nav  d-flex flex-fill">
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Strona Główna</router-link>
           </li>
@@ -66,7 +66,7 @@
           <li class="nav-item">
             <router-link to="/user-profile" name="profil" class="nav-link rounded-circle">
               <img width="25" src="https://img.icons8.com/nolan/2x/user.png" />
-              Profil
+              {{user.username}}
             </router-link>
           </li>
           <li class="nav-item">
