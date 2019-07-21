@@ -21,21 +21,27 @@
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Strona Główna</router-link>
           </li>
+          <li v-if="!status.loggedIn" class="divider-vertical"></li>
           <li v-if="!status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
+          <li v-if="!status.loggedIn" class="divider-vertical"></li>
           <li v-if="!status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/register">Zarejestruj się</router-link>
           </li>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
           <li v-if="status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/ranking">Ranking</router-link>
           </li>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
           <li v-if="status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/map">Mapa</router-link>
           </li>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
           <li v-if="status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/store">Sklep</router-link>
           </li>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
           <li v-if="status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
@@ -70,7 +76,6 @@
               {{user.username}}
             </router-link>
           </li>
-
           <li class="nav-item">
             <button class="btn btn-info ml-3" @click="logout()">
               <i class="fas fa-sign-out-alt"></i> Wyloguj się
@@ -78,7 +83,6 @@
           </li>
           <autocomplete
             class="ml-3 h-25"
-
             :search="search"
             placeholder="Szukaj znajomych"
             aria-label="Szukaj znajomych"
@@ -106,6 +110,18 @@
 </template>
 
 <style>
+.navbar .divider-vertical {
+  height: 30px;
+  margin: 0 9px;
+  border-right: 1px solid #847d88;
+}
+
+@media (max-width: 1200px) {
+  .navbar .divider-vertical {
+    display: none;
+  }
+}
+
 footer {
   height: 25px;
   width: 100%;
