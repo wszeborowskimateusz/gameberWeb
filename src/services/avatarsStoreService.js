@@ -81,7 +81,7 @@ export default {
         },
       );
 
-    return result.avatars;
+    return result;
   },
   async getBackgroundImagesSupply(token) {
     const url = `${config.apiUrl}/shop/images`;
@@ -94,6 +94,6 @@ export default {
         },
       );
 
-    return result.backgroundImages;
+    return result;
   },
 };
