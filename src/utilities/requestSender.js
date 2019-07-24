@@ -40,7 +40,7 @@ export default {
     };
 
     if (token) {
-      requestOptions.headers = { Authorization: `Bearer ${token}` };
+      requestOptions.headers.Authorization = `Bearer ${token}`;
     }
 
     return fetch(url, requestOptions)
