@@ -111,7 +111,7 @@
 
 <style>
 .navbar .divider-vertical {
-  height: 30px;
+  height: 40px;
   margin: 0 9px;
   border-right: 1px solid #847d88;
 }
