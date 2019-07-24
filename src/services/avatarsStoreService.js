@@ -74,7 +74,7 @@ export default {
     const url = `${config.apiUrl}/shop/avatars`;
     const result = await requestSender.sendGetRequest(token, url)
       .then(
-        avatars => avatars,
+        avatars => avatars.avatars,
         () => {
           toasts.errorToast('Niestety nie udało się wczytać avatarów. Spróbuj odświeżyć stronę.');
           return defaultStoreSupply.avatars;
@@ -87,7 +87,7 @@ export default {
     const url = `${config.apiUrl}/shop/images`;
     const result = await requestSender.sendGetRequest(token, url)
       .then(
-        images => images,
+        images => images.images,
         () => {
           toasts.errorToast('Niestety nie udało się wczytać zdjęć w tle. Spróbuj odświeżyć stronę.');
           return defaultStoreSupply.backgroundImages;

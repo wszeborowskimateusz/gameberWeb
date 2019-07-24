@@ -172,6 +172,7 @@ export default {
         this.currentGameIndex += 1;
       } else {
         this.getCategoryRewards({
+          token: this.user,
           categoryId: this.categoryId,
           categoryName: this.category.categoryName,
         });

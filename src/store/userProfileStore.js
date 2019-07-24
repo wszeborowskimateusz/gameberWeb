@@ -96,7 +96,7 @@ const actions = {
       );
   },
   changeAvatar({ commit }, avatarId) {
-    userProfileService.changeAvatar(userToken, avatarId)
+    userProfileService.changeAvatar(userToken, { avatarId })
       .then(
         () => {
           toasts.successToast('Pomyślnie zmieniono avatar');
@@ -108,7 +108,7 @@ const actions = {
       );
   },
   changeBackgroundImage({ commit }, imageId) {
-    userProfileService.changeBackgroundImage(userToken, imageId)
+    userProfileService.changeBackgroundImage(userToken, { imageId })
       .then(
         () => {
           toasts.successToast('Pomyślnie zmieniono zdjęcie w tle');
@@ -143,8 +143,8 @@ const actions = {
         },
       );
   },
-  getCategoryRewards({ dispatch }, { categoryId, categoryName }) {
-    gameControllerService.finishCategory(categoryId)
+  getCategoryRewards({ dispatch }, { token, categoryId, categoryName }) {
+    gameControllerService.finishCategory(token, { categoryId })
       .then(
         (rewards) => {
           bootbox.alert(formatMessage(rewards, categoryName));
