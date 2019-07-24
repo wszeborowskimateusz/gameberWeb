@@ -87,7 +87,7 @@ export default {
     const url = `${config.apiUrl}/shop/images`;
     const result = await requestSender.sendGetRequest(token, url)
       .then(
-        images => images.images,
+        images => images.backgroundImages,
         () => {
           toasts.errorToast('Niestety nie udało się wczytać zdjęć w tle. Spróbuj odświeżyć stronę.');
           return defaultStoreSupply.backgroundImages;
