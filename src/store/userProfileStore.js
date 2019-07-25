@@ -4,7 +4,7 @@ import toasts from '../utilities/toasts';
 import bootbox from '../utilities/bootbox';
 import router from '../router';
 
-const userToken = JSON.parse(localStorage.getItem('user'));
+
 const userDefaultState = {
   user: {
     avatarId: 3,
@@ -84,6 +84,7 @@ const defaultCategoryRewards = {
 
 const actions = {
   getUserData({ commit }) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     userProfileService.getUserData(userToken)
       .then(
         (user) => {
@@ -96,6 +97,7 @@ const actions = {
       );
   },
   changeAvatar({ commit }, avatarId) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     userProfileService.changeAvatar(userToken, { avatarId })
       .then(
         () => {
@@ -108,6 +110,7 @@ const actions = {
       );
   },
   changeBackgroundImage({ commit }, imageId) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     userProfileService.changeBackgroundImage(userToken, { imageId })
       .then(
         () => {
@@ -119,30 +122,36 @@ const actions = {
         },
       );
   },
-  buyAvatar({ commit }, avatar) {
+  /* eslint-disable no-unused-vars */
+  buyAvatar({ commit, dispatch }, avatar) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     userProfileService.buyAvatar(userToken, avatar)
       .then(
         () => {
           toasts.successToast('Pomyślnie zakupiono avatar');
-          commit('buyingAvatarSuccess', avatar);
+          dispatch('getUserData');
+          // commit('buyingAvatarSuccess', avatar);
         },
         () => {
           toasts.errorToast('Nie udało się zakupić avatara. Spróbuj jeszcze raz');
         },
       );
   },
-  buyBackgroundImage({ commit }, image) {
+  buyBackgroundImage({ commit, dispatch }, image) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     userProfileService.buyBackgroundImage(userToken, image)
       .then(
         () => {
           toasts.successToast('Pomyślnie zakupiono zdjęcie w tle');
-          commit('buyingBackgroundImageSuccess', image);
+          dispatch('getUserData');
+          // commit('buyingBackgroundImageSuccess', image);
         },
         () => {
           toasts.errorToast('Nie udało się zakupić zdjęcia w tle. Spróbuj jeszcze raz');
         },
       );
   },
+  /* eslint-enable no-unused-vars */
   getCategoryRewards({ dispatch }, { token, categoryId, categoryName }) {
     gameControllerService.finishCategory(token, { categoryId })
       .then(

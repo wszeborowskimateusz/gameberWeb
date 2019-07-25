@@ -361,6 +361,7 @@ export default {
     },
   },
   mounted() {
+    this.getUserData();
     this.backgroundImageIdToChange = this.user.backgroundImageId;
     this.avatarIdToChange = this.user.avatarId;
     if (!this.isOurOwnProfile) {
@@ -370,9 +371,10 @@ export default {
           this.otherUser = user;
         });
     }
+    this.$forceUpdate();
   },
   methods: {
-    ...mapActions('userProfile', ['changeAvatar', 'changeBackgroundImage']),
+    ...mapActions('userProfile', ['changeAvatar', 'changeBackgroundImage', 'getUserData']),
     exchangeAvatar() {
       this.changeAvatar(this.avatarIdToChange);
     },

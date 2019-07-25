@@ -6,7 +6,6 @@ function logout() {
 }
 
 function login(username, password) {
-  // const url = `${config.apiUrl}/accounts/signin`;
   const url = `${config.apiUrl}/accounts/signin`;
   return requestSender.sendPostRequest(url, { login: username, password })
     .then((user) => {
@@ -14,7 +13,7 @@ function login(username, password) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
       } else return Promise.reject(new Error("No token provided in server's response"));
 
-      return user;
+      return user.jwtToken;
     });
 }
 
@@ -26,7 +25,7 @@ function loginWithGoogle(authCode) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
       } else return Promise.reject(new Error("No token provided in server's response"));
 
-      return user;
+      return user.jwtToken;
     });
 }
 

@@ -1,7 +1,6 @@
 import toasts from '../utilities/toasts';
 import notificationService from '../services/notificationsService';
 
-const userToken = JSON.parse(localStorage.getItem('user'));
 const defaultNotifications = [
   {
     id: 1,
@@ -51,6 +50,7 @@ const notificationsState = { notifications: [] };
 
 const actions = {
   getAllNotifications({ commit }) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     notificationService.getAllNotifications(userToken)
       .then(
         (user) => {
@@ -63,6 +63,7 @@ const actions = {
       );
   },
   markNotificationAsRead({ commit }, notificationId) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     notificationService.markNoificationAsRead(userToken, notificationId)
       .then(
         () => {
@@ -76,6 +77,7 @@ const actions = {
       );
   },
   removeNotification({ commit }, notificationId) {
+    const userToken = JSON.parse(localStorage.getItem('user'));
     notificationService.removeNotification(userToken, notificationId)
       .then(
         () => {

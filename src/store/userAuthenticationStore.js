@@ -8,13 +8,14 @@ const userState = userToken
   : { status: {}, user: null };
 
 const actions = {
-  login({ commit }, { username, password }) {
+  login({ commit, dispatch }, { username, password }) {
     commit('loginInProgress');
     userService.login(username, password)
       .then(
         (user) => {
           commit('loginSuccess', user);
           router.push('/');
+          dispatch('userProfile/getUserData', null, { root: true });
           toasts.successToast(`Witaj z powrotem ${username}`);
         },
         (error) => {
@@ -23,12 +24,13 @@ const actions = {
         },
       );
   },
-  loginWithGoogle({ commit }, { authCode }) {
+  loginWithGoogle({ commit, dispatch }, { authCode }) {
     userService.loginWithGoogle(authCode)
       .then(
         (user) => {
           commit('loginSuccess', user);
           router.push('/');
+          dispatch('userProfile/getUserData', null, { root: true });
           toasts.successToast('Witaj z powrotem!');
         },
         (error) => {
