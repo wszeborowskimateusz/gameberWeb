@@ -112,6 +112,16 @@ export default {
             isOurMessage: false,
             date: '2019-07-27T18:15:33.671Z',
           },
+          {
+            content: 'I was worrying about you',
+            isOurMessage: false,
+            date: '2019-07-27T18:17:33.671Z',
+          },
+          {
+            content: "I am all right bro, don't worry",
+            isOurMessage: true,
+            date: '2019-07-27T18:23:33.671Z',
+          },
         ],
       },
     };
@@ -130,11 +140,17 @@ export default {
       return result === null ? '' : result.img;
     },
   },
+  mounted() {
+    this.updateScrollPosition();
+  },
   updated() {
-    const scrollableContainer = document.querySelector('.messages__content');
-    scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+    this.updateScrollPosition();
   },
   methods: {
+    updateScrollPosition() {
+      const scrollableContainer = document.querySelector('.messages__content');
+      scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+    },
     convertIsoDateToString(IsoString) {
       const date = new Date(IsoString);
       return this.getTodaysDate(date);
