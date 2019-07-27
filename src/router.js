@@ -11,6 +11,7 @@ import UsersRanking from './components/UsersRanking.vue';
 import Translator from './components/Translator.vue';
 import Tutorial from './components/Tutorial.vue';
 import Notifications from './components/Notifications.vue';
+import Messages from './components/Messages.vue';
 import Toasts from './utilities/toasts';
 
 Vue.use(Router);
@@ -31,6 +32,7 @@ const router = new Router({
     { path: '/users/:id', component: UserProfile },
     { path: '/map', component: GameMap },
     { path: '/games/:id', component: GameController },
+    { path: '/messages/:id', component: Messages },
     { path: '/store', component: AvatarsStore },
     { path: '/notifications', component: Notifications },
     { path: '/ranking', component: UsersRanking },
