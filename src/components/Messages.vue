@@ -31,7 +31,7 @@
       <form @submit.prevent="handleMessageSending">
         <div class="row">
           <div class="ml-lg-5 ml-2 mt-3 col-9">
-            <input type="text" v-model="messageToSend" class="form-control" />
+            <input type="text" v-model="messageToSend" class="form-control" autofocus/>
           </div>
           <div class="col-2 mt-3">
             <button type="submit" class="btn btn-primary mb-2">

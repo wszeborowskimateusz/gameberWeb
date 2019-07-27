@@ -1,5 +1,5 @@
 <template>
-  <div class="store col-12 mb-5">
+  <div class="store col-12 mb-5" v-if="avatars || backgroundImages">
     <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
       <li class="nav-item">
         <a
@@ -82,6 +82,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div v-else>
+
   </div>
 </template>
 
