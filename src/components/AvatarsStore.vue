@@ -83,8 +83,8 @@
       </div>
     </div>
   </div>
-  <div v-else>
-
+  <div class="col-12" v-else>
+    <ErrorComponent message="Nie udało się wczytać zasobów sklepu" />
   </div>
 </template>
 
@@ -145,6 +145,7 @@ import { mapState, mapActions } from 'vuex';
 import bootbox from '../utilities/bootbox';
 import tooltip from '../utilities/tippy';
 import avatarsStoreService from '../services/avatarsStoreService';
+import ErrorComponent from './Error.vue';
 
 export default {
   data() {
@@ -240,6 +241,9 @@ export default {
         })
         .then(() => this.$forceUpdate());
     },
+  },
+  components: {
+    ErrorComponent,
   },
 };
 </script>
