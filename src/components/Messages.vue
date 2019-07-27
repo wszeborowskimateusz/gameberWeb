@@ -4,19 +4,22 @@
       <div class="messages__scrollable_container">
         <div
           class="messages_message m-5"
-          v-for="(message, index) in messages"
+          v-for="(message, index) in conversation.messages"
           v-bind:key="message.content + ' ' + index"
         >
           <div :class="[message.isOurMessage ? 'flex-row-reverse' : 'flex-row']" class="d-flex">
             <div>
               <img
                 class="rounded-circle m-3"
-                :src="[message.isOurMessage ? pickedAvatar: user.userAvatar]"
+                :src="[message.isOurMessage ? pickedAvatar: conversation.user.avatar]"
                 width="75"
               />
             </div>
-            <div :class="[message.isOurMessage ? 'our_message' : 'other_message']" class="p-3">
-              <p class="h5 p-2">{{message.content}}</p>
+            <div
+              :class="[message.isOurMessage ? 'our_message' : 'other_message']"
+              class="d-flex flex-column message__text p-3"
+            >
+              <p class="h5 align-middle">{{message.content}}</p>
               <p
                 :class="[message.isOurMessage ? ['text-light', 'text-left']
                                               : ['text-muted', 'text-right']]"
@@ -31,7 +34,7 @@
       <form @submit.prevent="handleMessageSending">
         <div class="row">
           <div class="ml-lg-5 ml-2 mt-3 col-9">
-            <input type="text" v-model="messageToSend" class="form-control" autofocus/>
+            <input type="text" v-model="messageToSend" class="form-control" autofocus />
           </div>
           <div class="col-2 mt-3">
             <button type="submit" class="btn btn-primary mb-2">
@@ -46,6 +49,10 @@
 </template>
 
 <style scoped>
+.message__text {
+  justify-content: space-between;
+}
+
 .date-text {
   font-size: 0.8em;
 }
@@ -93,14 +100,20 @@ export default {
     return {
       messageToSend: '',
       userId: this.$route.params.id,
-      user: {
-        userName: 'John',
-        userAvatar:
-          'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
+      conversation: {
+        user: {
+          userName: 'John',
+          avatar:
+            'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
+        },
+        messages: [
+          {
+            content: "Hey, how's goin",
+            date: '20.05.2019',
+            isOurMessage: false,
+          },
+        ],
       },
-      messages: [
-        { content: "Hey, how's goin", date: '20.05.2019', isOurMessage: false },
-      ],
     };
   },
   computed: {
@@ -132,7 +145,7 @@ export default {
     },
     handleMessageSending() {
       if (this.messageToSend !== '') {
-        this.messages.push({
+        this.conversation.messages.push({
           content: this.messageToSend,
           date: this.getTodaysDate(),
           isOurMessage: Math.random() >= 0.5,
