@@ -6,7 +6,7 @@ const defaultUser = {
   // We should only be able to see one avatar and one backgorund image of a user
   // avatarId and backgroundImageId should match
   // avatars[0].id and backgroundImages[0].id accordingly
-  isFriend: false,
+  isFriend: true,
   avatarId: 0,
   avatars: [
     {

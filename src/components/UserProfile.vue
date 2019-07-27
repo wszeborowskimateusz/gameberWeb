@@ -394,8 +394,8 @@ export default {
       usersInteractionsService.sendFriendshipRequest(this.userToken, userToAddId);
     },
     sendMessage() {
-      // const userToSendMessageToId = this.userId;
-      // TODO implement me
+      const userToSendMessageToId = this.userId;
+      this.$router.push(`/messages/${userToSendMessageToId}`);
     },
   },
 };
