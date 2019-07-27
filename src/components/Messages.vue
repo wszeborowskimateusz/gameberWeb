@@ -24,7 +24,7 @@
                 :class="[message.isOurMessage ? ['text-light', 'text-left']
                                               : ['text-muted', 'text-right']]"
                 class="date-text"
-              >{{message.date}}</p>
+              >{{convertIsoDateToString(message.date)}}</p>
             </div>
           </div>
         </div>
@@ -109,8 +109,8 @@ export default {
         messages: [
           {
             content: "Hey, how's goin",
-            date: '20.05.2019',
             isOurMessage: false,
+            date: '2019-07-27T18:15:33.671Z',
           },
         ],
       },
@@ -135,19 +135,24 @@ export default {
     scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
   },
   methods: {
-    getTodaysDate() {
-      const today = new Date();
-      const dd = String(today.getDate()).padStart(2, '0');
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const yyyy = today.getFullYear();
+    convertIsoDateToString(IsoString) {
+      const date = new Date(IsoString);
+      return this.getTodaysDate(date);
+    },
+    getTodaysDate(date) {
+      const dd = String(date.getDate()).padStart(2, '0');
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const yyyy = date.getFullYear();
+      const hh = String(date.getHours()).padStart(2, '0');
+      const mimi = String(date.getMinutes()).padStart(2, '0');
 
-      return `${dd}.${mm}.${yyyy}`;
+      return `${hh}:${mimi} (${dd}.${mm}.${yyyy})`;
     },
     handleMessageSending() {
       if (this.messageToSend !== '') {
         this.conversation.messages.push({
           content: this.messageToSend,
-          date: this.getTodaysDate(),
+          date: new Date().toISOString(),
           isOurMessage: Math.random() >= 0.5,
         });
         this.messageToSend = '';
