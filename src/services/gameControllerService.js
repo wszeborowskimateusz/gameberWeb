@@ -5,6 +5,14 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'PhraseLearning',
+      gameInfo: {
+        question: 'How are you ?',
+        words: ['I', 'all', 'am', 'right'],
+        correctOrder: ['I', 'am', 'all', 'right'],
+      },
+    },
+    {
       name: 'WordMatching',
       gameInfo: {
         isPhrase: true,

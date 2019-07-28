@@ -112,11 +112,13 @@ import WordMatching from './Games/WordMatching.vue';
 import WordSearch from './Games/WordSearch.vue';
 import Crossword from './Games/Crossword.vue';
 import StoryGame from './Games/StoryGame.vue';
+import PhraseLearning from './Games/PhraseLearning.vue';
 import gameControllerService from '../services/gameControllerService';
 
 export default {
   data() {
     return {
+      categoriesWithoutFinishing: ['WordLearning', 'StoryGame'],
       category: {
         games: [],
         categoryBackgroundImage: '',
@@ -145,6 +147,7 @@ export default {
     WordSearch,
     Crossword,
     StoryGame,
+    PhraseLearning,
   },
   methods: {
     ...mapActions('userProfile', ['getCategoryRewards']),
@@ -157,7 +160,7 @@ export default {
         /* eslint-disable no-param-reassign */
         /* eslint-disable no-return-assign */
         .then(() => this.category.games.forEach(
-          game => (game.isFinished = game.name === 'WordLearning' || game.name === 'StoryGame'),
+          game => (game.isFinished = this.categoriesWithoutFinishing.includes(game.name)),
         ))
         /* eslint-enable no-param-reassign */
         /* eslint-enable no-return-assign */
