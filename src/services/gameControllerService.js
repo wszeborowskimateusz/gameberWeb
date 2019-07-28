@@ -5,6 +5,32 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      name: 'WordMatching',
+      gameInfo: {
+        isPhrase: true,
+        polishName: 'Jak się masz ?',
+        correctAnswer: 'How are you ?',
+        answers: [
+          {
+            img: 'https://images.typeform.com/images/fxGsvvmE9wJZ/image/default',
+            name: 'How are you ?',
+          },
+          {
+            img: 'https://images-na.ssl-images-amazon.com/images/I/71dukCYi0aL._SX355_.jpg',
+            name: 'Where is a toilete ?',
+          },
+          {
+            img: 'https://static2.mytraintravel.com/local/cache-vignettes/L760xH505/netherlands-amsterdam_schipol_station-_c_wil_linssen_flickr-no_commercial_use-4642444031-08f3e.jpg',
+            name: 'How can I get to the train station ?',
+          },
+          {
+            img: 'https://static.wixstatic.com/media/384812_0ec71d8036a845d9bb9edbbe9bf73511~mv2.jpg',
+            name: 'Are you ok ?',
+          },
+        ],
+      },
+    },
+    {
       name: 'StoryGame',
       gameInfo: {
         stories: [
@@ -67,6 +93,7 @@ const defaultCategory = {
     {
       name: 'WordMatching',
       gameInfo: {
+        isPhrase: false,
         polishName: 'Pingwin',
         correctAnswer: 'Penguin',
         answers: [

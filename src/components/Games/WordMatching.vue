@@ -3,8 +3,11 @@
         <div class="game__info col-12">
             <div class="row">
                 <div class="col-6 text-center offset-3">
-                    <span class="title">
+                    <span class="title" v-if="!gameInfo.isPhrase">
                         Które z tych słów oznacza "{{gameInfo.polishName}}" ?
+                    </span>
+                    <span class="title" v-else>
+                        Która z tych fraz oznacza "{{gameInfo.polishName}}" ?
                     </span>
                 </div>
                 <div class="col-3 text-right">
