@@ -11,6 +11,7 @@ const defaultNotifications = [
     name: 'Szymon35',
     description:
         'Otrzymałeś właśnie zaproszenie do grona znajomych od użytkownika Szymon35',
+    userId: 5,
     isRead: false,
   },
   {

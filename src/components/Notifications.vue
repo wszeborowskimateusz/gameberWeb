@@ -38,19 +38,19 @@
           v-bind:key="notification.id"
           class="notification__tile m-3"
         >
-            <img
-                class="m-2 notification__icon"
-                width="35"
-                :src="getNotificationIcon(notification.type)"
-            />
+          <img
+            class="m-2 notification__icon"
+            width="35"
+            :src="getNotificationIcon(notification.type)"
+          />
           <button
             class="btn btn_default notification__remove_button"
             v-on:click="onRemoveNotification(notification.id)"
           >
             <img
-                width="35"
-                height="35"
-                src="https://img.icons8.com/cotton/64/000000/delete-sign--v2.png"
+              width="35"
+              height="35"
+              src="https://img.icons8.com/cotton/64/000000/delete-sign--v2.png"
             />
           </button>
           <button
@@ -68,8 +68,7 @@
           <div class="row m-3">
             <div class="col-12 col-xl-2">
               <img
-                width="150"
-                height="150"
+                width="150" height="150"
                 class="m-3 notification__image"
                 :src="notification.img"
               />
@@ -85,16 +84,22 @@
               v-if="notification.type === 'friendship_request'"
               class="d-flex justify-content-center w-100 m-2"
             >
-              <button class="btn btn_default mr-5">
-                  Potwierdź
+              <button
+                class="btn btn_default mr-5"
+                v-on:click="acceptFriendshipInvitation(notification.userId)"
+              >
+                Potwierdź
                 <img
                   width="35"
                   height="35"
                   src="https://img.icons8.com/dusk/64/000000/approval.png"
                 />
               </button>
-              <button class="btn btn_default ml-5">
-                  Odrzuć
+              <button
+                class="btn btn_default ml-5"
+                v-on:click="declineFriendshipInvitation(notification.userId)"
+              >
+                Odrzuć
                 <img
                   width="35"
                   height="35"
@@ -111,9 +116,9 @@
 
 <style scoped>
 .notification__icon {
-    position: absolute;
-    left: 5px;
-    top: 5px;
+  position: absolute;
+  left: 5px;
+  top: 5px;
 }
 
 .notification__image {
@@ -212,6 +217,14 @@ export default {
         default:
           return 'https://img.icons8.com/plasticine/100/000000/appointment-reminders.png';
       }
+    },
+    acceptFriendshipInvitation(userId) {
+      // TODO: Implement me
+      console.log(userId.toString());
+    },
+    declineFriendshipInvitation(userId) {
+      // TODO: Implement me
+      console.log(userId.toString());
     },
   },
 };
