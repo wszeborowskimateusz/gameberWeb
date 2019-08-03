@@ -5,6 +5,11 @@
 https://www.design-seeds.com/wander/wanderlust/color-journey-2/
 ```
 
+## Icons
+```
+https://icons8.com/icons
+```
+
 ## Project setup
 ```
 npm install
@@ -30,15 +35,7 @@ npm run test
 npm run lint
 ```
 
-### Run your end-to-end tests
-```
-npm run test:e2e
-```
-
 ### Run your unit tests
 ```
 npm run test:unit
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
