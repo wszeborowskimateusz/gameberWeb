@@ -63,6 +63,8 @@ export default {
   },
   methods: {
     playSound(sound) {
+      /* eslint-disable no-undef */
+      responsiveVoice.speak('Hello World');
       if (sound) {
         const audio = new Audio(sound);
         audio.play();
