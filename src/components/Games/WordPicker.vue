@@ -7,13 +7,8 @@
         <div class="col-12">
             <button class="btn btn-primary m-3"
                 v-for="(answer, answerId) in gameInfo.answers" v-bind:key="answer"
-                v-on:click="checkAnswer(answerId)">
+                v-on:click="checkAnswer(answerId, answer)">
                     {{answer}}
-            </button>
-        </div>
-        <div v-if="gameInfo.sound" class="col-12">
-            <button class="btn" v-on:click="playSound(gameInfo.sound)">
-                <img src="https://img.icons8.com/nolan/64/000000/medium-volume.png">
             </button>
         </div>
     </div>
@@ -39,21 +34,18 @@ export default {
     gameInfo: Object,
   },
   mounted() {
-    this.playSound(this.gameInfo.sound);
     tooltip.addTooltip('.wordPickerImage', `${this.gameInfo.answers[this.gameInfo.correctAnswer]}`);
-  },
-  updated() {
-    this.playSound(this.gameInfo.sound);
   },
   methods: {
     playSound(sound) {
       if (sound) {
-        const audio = new Audio(sound);
-        audio.play();
+        /* eslint-disable no-undef */
+        responsiveVoice.speak(sound);
       }
     },
-    checkAnswer(answerId) {
+    checkAnswer(answerId, answer) {
       if (answerId === this.gameInfo.correctAnswer) {
+        this.playSound(answer);
         bootbox.correctAnswerAlert();
         this.$parent.finishGame();
       } else {

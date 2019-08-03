@@ -11,9 +11,9 @@
               </span>
             </h2>
         </div>
-        <div v-if="gameInfo.sound" class="col-12">
-            <button class="btn" v-on:click="playSound(gameInfo.sound)">
-                <img src="https://img.icons8.com/nolan/64/000000/medium-volume.png">
+        <div class="col-12">
+            <button class="btn" v-on:click="playSound(gameInfo.englishName)">
+                <img src="https://img.icons8.com/dusk/64/000000/medium-volume.png" />
             </button>
         </div>
     </div>
@@ -46,8 +46,8 @@ export default {
   methods: {
     playSound(sound) {
       if (sound) {
-        const audio = new Audio(sound);
-        audio.play();
+        /* eslint-disable no-undef */
+        responsiveVoice.speak(sound);
       }
     },
   },

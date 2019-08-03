@@ -45,27 +45,22 @@ const defaultCategory = {
           {
             img: 'https://www.hakaimagazine.com/wp-content/uploads/header-polar-bear-conflict.jpg',
             storyEnglish: 'There was a bear called Ben',
-            sound: 'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
             storyPolish: 'Był sobie niedźwiedź o imieniu Ben',
           }, {
             img: 'https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2018/09/931/524/PolarBeariStock.jpg?ve=1&tl=1',
             storyEnglish: 'Ben was a white polar bear',
-            sound: '',
             storyPolish: 'Ben był białym niedźwiedziem polarnym',
           }, {
             img: 'https://images.unsplash.com/photo-1553425300-8bd56360f8eb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80',
             storyEnglish: 'Ben had a brother named John',
-            sound: '',
             storyPolish: 'Ben miał brata Johna',
           }, {
             img: 'http://www.skolaiimages.com/journal/wp-content/uploads/2012/10/12_oct15608.jpg',
             storyEnglish: 'Ben and John liked to play with each other',
-            sound: '',
             storyPolish: 'Ben i John lubili się ze sobą bawić',
           }, {
             img: 'https://www.wwf.org.uk/sites/default/files/styles/social_share_image/public/2016-12/Original_WW22791.jpg?itok=Ouo7tsEJ',
             storyEnglish: 'Ben and John were best friends',
-            sound: '',
             storyPolish: 'Ben i John to byli swoi najlepsi przyjaciele',
           },
         ],
@@ -130,7 +125,6 @@ const defaultCategory = {
         img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
         correctAnswer: 0,
         answers: ['Seal', 'Bear', 'Penguin', 'Water'],
-        sound: 'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
       },
     },
     {
@@ -139,7 +133,6 @@ const defaultCategory = {
         polishName: 'Foka',
         englishName: 'Seal',
         img: 'http://bi.gazeta.pl/im/3/11672/z11672953IER,Foka-grenlandzka.jpg',
-        sound: '',
       },
     },
     {
@@ -148,7 +141,6 @@ const defaultCategory = {
         polishName: 'Niedźwiedź polarny',
         englishName: 'Polar bear',
         img: 'https://vignette.wikia.nocookie.net/harrypotter/images/2/25/POLAR.jpg/revision/latest?cb=20160925151133&path-prefix=pl',
-        sound: 'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
       },
     },
     {
@@ -157,7 +149,6 @@ const defaultCategory = {
         polishName: 'Mors',
         englishName: 'Walrus',
         img: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Pacific_Walrus_-_Bull_%288247646168%29.jpg',
-        sound: '',
       },
     },
     {
@@ -166,7 +157,6 @@ const defaultCategory = {
         polishName: 'Wilk',
         englishName: 'Wolf',
         img: 'https://4.bp.blogspot.com/-aGeDdmUSRiM/WJJKJa_-sMI/AAAAAAABITI/Du7ATdHn8NUH1cP35IGSgNJ_jBeBppx1gCLcB/s1600/ScreenShot8509.jpg',
-        sound: '',
       },
     },
   ],

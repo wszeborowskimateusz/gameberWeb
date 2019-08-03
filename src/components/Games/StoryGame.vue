@@ -8,7 +8,7 @@
             <div class="slide__text p-3">
               <p class="english__text">{{story.storyEnglish}}</p>
               <p>{{story.storyPolish}}</p>
-              <button class="btn" v-on:click="playSound(story.sound)">
+              <button class="btn" v-on:click="playSound(story.storyEnglish)">
                 <img src="https://img.icons8.com/dusk/64/000000/medium-volume.png" />
               </button>
             </div>
@@ -63,11 +63,9 @@ export default {
   },
   methods: {
     playSound(sound) {
-      /* eslint-disable no-undef */
-      responsiveVoice.speak('Hello World');
       if (sound) {
-        const audio = new Audio(sound);
-        audio.play();
+        /* eslint-disable no-undef */
+        responsiveVoice.speak(sound);
       }
     },
   },

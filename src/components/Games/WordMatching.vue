@@ -22,7 +22,7 @@
             <div class="col-6 possibleAnswer mb-1" v-for="answer in gameInfo.answers"
                  v-bind:key="answer.name">
                 <input type="radio" v-model="selectedAnswer" name="rGroup"
-                    :value="answer.name" :id="answer.name">
+                    :value="answer.name" :id="answer.name" v-on:click="playSound(answer.name)">
                 <label class="radioLabel" :for="answer.name">
                     <div class="m-2">
                         <img width="130" height="85" v-bind:src="answer.img" class="rounded">
@@ -101,6 +101,12 @@ export default {
     gameInfo: Object,
   },
   methods: {
+    playSound(sound) {
+      if (sound) {
+        /* eslint-disable no-undef */
+        responsiveVoice.speak(sound);
+      }
+    },
     checkAnswer() {
       if (this.selectedAnswer !== -1 && this.selectedAnswer === this.gameInfo.correctAnswer) {
         bootbox.correctAnswerAlert();

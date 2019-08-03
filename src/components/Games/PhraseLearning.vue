@@ -87,9 +87,17 @@ export default {
     gameInfo: Object,
   },
   methods: {
+    playSound(sound) {
+      if (sound) {
+        /* eslint-disable no-undef */
+        responsiveVoice.speak(sound);
+      }
+    },
     selectWord(word, wordIndex) {
       this.selectedWords.push(word);
       this.wordsToSelect.splice(wordIndex, 1);
+
+      this.playSound(word);
 
       if (this.gameInfo.correctOrder.length === this.selectedWords.length) {
         this.checkAnswer();

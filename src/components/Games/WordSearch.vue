@@ -95,6 +95,12 @@ export default {
     this.wordsToSearch = this.gameInfo.words.slice();
   },
   methods: {
+    playSound(sound) {
+      if (sound) {
+        /* eslint-disable no-undef */
+        responsiveVoice.speak(sound);
+      }
+    },
     pressLetter(event) {
       $(event.target).toggleClass('puzzleButton puzzleButtonMarked');
     },
@@ -140,9 +146,11 @@ export default {
 
         // Remove a found word from a list of words to find
         if (this.wordsToSearch.includes(wordFromBegining)) {
+          this.playSound(wordFromBegining);
           const index = this.wordsToSearch.indexOf(wordFromBegining);
           if (index !== -1) { this.wordsToSearch.splice(index, 1); }
         } else {
+          this.playSound(wordFromEnd);
           const index = this.wordsToSearch.indexOf(wordFromEnd);
           if (index !== -1) { this.wordsToSearch.splice(index, 1); }
         }

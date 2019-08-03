@@ -40,8 +40,15 @@ export default {
     gameInfo: Object,
   },
   methods: {
+    playSound(sound) {
+      if (sound) {
+        /* eslint-disable no-undef */
+        responsiveVoice.speak(sound);
+      }
+    },
     checkAnswer() {
       if (this.userAnswer.toUpperCase() === this.gameInfo.correctAnswer.toUpperCase()) {
+        this.playSound(this.userAnswer);
         bootbox.correctAnswerAlert();
         this.$parent.finishGame();
       } else {
