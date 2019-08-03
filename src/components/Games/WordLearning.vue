@@ -13,7 +13,7 @@
         </div>
         <div class="col-12">
             <button class="btn" v-on:click="playSound(gameInfo.englishName)">
-                <img src="https://img.icons8.com/dusk/64/000000/medium-volume.png" />
+                <img src="https://img.icons8.com/dusk/48/000000/medium-volume.png" />
             </button>
         </div>
     </div>
