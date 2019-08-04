@@ -27,6 +27,10 @@ const gauthOption = {
 };
 Vue.use(GAuth, gauthOption);
 
+// Speaker
+/* eslint-disable no-undef */
+responsiveVoice.setDefaultVoice('UK English Male');
+
 new Vue({
   router,
   store,
