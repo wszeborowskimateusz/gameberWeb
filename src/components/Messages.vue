@@ -34,7 +34,8 @@
       <form @submit.prevent="handleMessageSending">
         <div class="row">
           <div class="ml-lg-5 ml-2 mt-3 col-9">
-            <input type="text" v-model="messageToSend" class="form-control" autofocus />
+            <input @focus="onFieldFocus"
+              type="text" v-model="messageToSend" class="form-control" autofocus />
           </div>
           <div class="col-2 mt-3">
             <button type="submit" class="btn btn-primary mb-2">
@@ -98,6 +99,7 @@ import { mapState } from 'vuex';
 export default {
   data() {
     return {
+      wasMessageSend: true,
       messageToSend: '',
       userId: this.$route.params.id,
       conversation: {
@@ -130,26 +132,68 @@ export default {
     ...mapState('userProfile', { userFromStore: 'user' }),
     pickedAvatar() {
       let result = null;
-      this.userFromStore.avatars.forEach((avatar) => {
-        if (avatar.id === this.userFromStore.avatarId) {
-          result = avatar;
-          return false;
-        }
-        return true;
-      });
+      if (
+        this.userFromStore.avatars !== null
+        && this.userFromStore.avatars !== undefined
+      ) {
+        this.userFromStore.avatars.forEach((avatar) => {
+          if (avatar.id === this.userFromStore.avatarId) {
+            result = avatar;
+            return false;
+          }
+          return true;
+        });
+      }
+
       return result === null ? '' : result.img;
     },
   },
   mounted() {
+    const scrollableContainer = document.querySelector('.messages__content');
+    if (scrollableContainer !== null && scrollableContainer !== undefined) {
+      scrollableContainer.onscroll = this.scroll;
+    }
+
     this.updateScrollPosition();
   },
   updated() {
-    this.updateScrollPosition();
+    if (this.wasMessageSend) {
+      this.updateScrollPosition();
+    }
   },
   methods: {
+    onFieldFocus() {
+      this.wasMessageSend = true;
+      this.updateScrollPosition();
+    },
+    scroll() {
+      const scrollableContainer = document.querySelector('.messages__content');
+      if (scrollableContainer.scrollTop === 0) {
+        this.conversation.messages.unshift({
+          content: "Hey, how's goin",
+          isOurMessage: false,
+          date: '2019-07-27T18:15:33.671Z',
+        });
+        this.conversation.messages.unshift({
+          content: "Hey, how's goin",
+          isOurMessage: false,
+          date: '2019-07-27T18:15:33.671Z',
+        });
+        this.setScrollPositionToJustBelowTop();
+        this.wasMessageSend = false;
+      }
+    },
+    setScrollPositionToJustBelowTop() {
+      const scrollableContainer = document.querySelector('.messages__content');
+      if (scrollableContainer !== null) {
+        scrollableContainer.scrollTop = 10;
+      }
+    },
     updateScrollPosition() {
       const scrollableContainer = document.querySelector('.messages__content');
-      scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+      if (scrollableContainer !== null) {
+        scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+      }
     },
     convertIsoDateToString(IsoString) {
       const date = new Date(IsoString);
@@ -166,6 +210,7 @@ export default {
     },
     handleMessageSending() {
       if (this.messageToSend !== '') {
+        this.wasMessageSend = true;
         this.conversation.messages.push({
           content: this.messageToSend,
           date: new Date().toISOString(),
