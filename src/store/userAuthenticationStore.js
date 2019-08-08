@@ -1,4 +1,4 @@
-import userService from '../services/user_authentication';
+import userService from '../services/userAuthenticationService';
 import router from '../router';
 import toasts from '../utilities/toasts';
 
@@ -8,13 +8,30 @@ const userState = userToken
   : { status: {}, user: null };
 
 const actions = {
-  login({ commit }, { username, password }) {
+  login({ commit, dispatch }, { username, password }) {
+    commit('loginInProgress');
     userService.login(username, password)
       .then(
         (user) => {
           commit('loginSuccess', user);
           router.push('/');
+          dispatch('userProfile/getUserData', null, { root: true });
           toasts.successToast(`Witaj z powrotem ${username}`);
+        },
+        (error) => {
+          toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
+          commit('loginFailure', error);
+        },
+      );
+  },
+  loginWithGoogle({ commit, dispatch }, { authCode }) {
+    userService.loginWithGoogle(authCode)
+      .then(
+        (user) => {
+          commit('loginSuccess', user);
+          router.push('/');
+          dispatch('userProfile/getUserData', null, { root: true });
+          toasts.successToast('Witaj z powrotem!');
         },
         (error) => {
           toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
@@ -29,6 +46,7 @@ const actions = {
     commit('logout');
   },
   register({ commit }, user) {
+    commit('registerInProgress');
     userService.register(user)
       .then(
         (userResponse) => {
@@ -50,6 +68,10 @@ const mutations = {
     state.status = { loggedIn: true };
     state.user = user;
   },
+  loginInProgress(state) {
+    state.status = { loginInProgress: true };
+    state.user = null;
+  },
   loginFailure(state) {
     state.status = {};
     state.user = null;
@@ -60,6 +82,9 @@ const mutations = {
   },
   registerSuccess(state) {
     state.status = {};
+  },
+  registerInProgress(state) {
+    state.status = { registerInProgress: true };
   },
   registerFailure(state) {
     state.status = {};

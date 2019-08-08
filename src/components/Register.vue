@@ -33,11 +33,15 @@
                 <router-link to="/login" class="btn btn-link">Anuluj</router-link>
             </div>
         </form>
+        <div v-if="status.registerInProgress" class="d-flex justify-content-center">
+          <cube-spin class="m-2"></cube-spin>
+        </div>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
 export default {
   name: 'register',
@@ -64,6 +68,9 @@ export default {
         }
       });
     },
+  },
+  components: {
+    CubeSpin,
   },
 };
 </script>

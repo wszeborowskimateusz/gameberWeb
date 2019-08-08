@@ -1,85 +1,170 @@
 <template>
   <div id="app">
-    <nav id="nav" class="navbar navbar-default navbar-expand-lg sticky-top">
-      <button class="navbar-toggler navbar-light" type="button"
-        data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false"
-        aria-label="Toggle navigation" id="dataToggler">
+    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top">
+      <button
+        class="navbar-toggler navbar-light"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        id="dataToggler"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
+      <!-- <div v-if="status.loggedIn" class="w-25 d-none d-lg-block"> -->
+      <!--empty spacer-->
+      <!-- </div> -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav d-flex flex-fill">
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Strona Główna</router-link>
           </li>
+          <li v-if="!status.loggedIn" class="divider-vertical"></li>
           <li v-if="!status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
+          <li v-if="!status.loggedIn" class="divider-vertical"></li>
           <li v-if="!status.loggedIn" class="nav-item">
             <router-link class="nav-link" to="/register">Zarejestruj się</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/about">O nas</router-link>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
+          <li v-if="status.loggedIn" class="nav-item">
+            <router-link class="nav-link" to="/ranking">Ranking</router-link>
           </li>
-          <li class="nav-item">
-              <router-link class="nav-link" to="/map">Mapa</router-link>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
+          <li v-if="status.loggedIn" class="nav-item">
+            <router-link class="nav-link" to="/map">Mapa</router-link>
+          </li>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
+          <li v-if="status.loggedIn" class="nav-item">
+            <router-link class="nav-link" to="/store">Sklep</router-link>
+          </li>
+          <li v-if="status.loggedIn" class="divider-vertical"></li>
+          <li v-if="status.loggedIn" class="nav-item">
+            <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png">
+              <img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png" />
               {{user.level}}
             </a>
           </li>
           <li class="nav-item">
-            <!--Here we can add a link to a strore in the future-->
-            <a href="#" class="nav-link">
-              <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">
+            <router-link to="/store" name="store" class="nav-link rounded-circle">
+              <img width="25" src="https://img.icons8.com/color/48/000000/coins.png" />
               {{user.numberOfCoins}}
-            </a>
-          </li>
-          <li class="nav-item">
-            <router-link to="/userProfile" name="profil"
-                class="nav-link rounded-circle">
-              <img width="25" src="https://img.icons8.com/nolan/2x/user.png"/>
-              Profil
             </router-link>
           </li>
           <li class="nav-item">
-            <button class="btn btn-info" @click="logout()">
+            <router-link to="/notifications" class="nav-link rounded-circle">
+              <notification-bell
+                class="justify-content-center d-flex"
+                :size="25"
+                :count="amountOfUnReadNotifications"
+                counterBackgroundColor="#fa323c"
+                icon="https://img.icons8.com/dusk/64/000000/appointment-reminders.png"
+              />
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/user-profile" name="profil" class="nav-link rounded-circle">
+              <img width="25" src="https://img.icons8.com/nolan/2x/user.png" />
+              {{user.username}}
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-info ml-3" @click="logout()">
               <i class="fas fa-sign-out-alt"></i> Wyloguj się
             </button>
           </li>
+          <autocomplete
+            class="ml-3 h-25"
+            :search="search"
+            placeholder="Szukaj znajomych"
+            aria-label="Szukaj znajomych"
+            :get-result-value="getResultValue"
+            @submit="handleSubmit"
+            auto-select
+          ></autocomplete>
         </ul>
       </div>
     </nav>
-
     <div class="container">
-        <div class="row">
-            <!--<div class="col-sm-6 offset-sm-3">-->
-                <router-view></router-view>
-            <!--</div>-->
-        </div>
+      <div class="row container__row">
+        <!--<div class="col-sm-6 offset-sm-3">-->
+        <router-view :key="$route.path"></router-view>
+        <!--</div>-->
+      </div>
     </div>
+    <footer class="fixed-bottom">
+      Strona stworzona przez studentów Politechniki Gdańskiej jako projekt inżynierski.
+      <router-link to="/about">O nas</router-link>.
+      App icons by
+      <a href="https://icons8.com">icons8</a>.
+    </footer>
   </div>
 </template>
 
 <style>
+.navbar .divider-vertical {
+  height: 40px;
+  margin: 0 9px;
+  border-right: 1px solid #847d88;
+}
+
+@media (max-width: 1200px) {
+  .navbar .divider-vertical {
+    display: none;
+  }
+}
+
+footer {
+  height: 25px;
+  width: 100%;
+  color: #2c3e50;
+  background-color: #f4e5dd;
+}
+
+footer a {
+  font-weight: bold;
+  color: #427696;
+}
+
 body {
-    background-color: #9DCADF;
+  background-color: #9dcadf;
+  width: 100%;
+  height: 100%;
+}
+
+html {
+  height: 100%;
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
 }
+
+.container {
+  height: 100%;
+}
+
+.container__row {
+  height: 100%;
+  overflow: auto;
+}
+
 #nav {
   margin-bottom: 2em;
-  background-color: #F4E5DD;
+  background-color: #f4e5dd;
 }
 
 #nav a {
@@ -88,24 +173,51 @@ body {
 }
 
 #nav a.router-link-exact-active {
-  color: #847D88
+  color: #847d88;
 }
 </style>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import NotificationBell from 'vue-notification-bell';
+import Autocomplete from '@trevoreyre/autocomplete-vue';
+import searchService from './services/searchService';
 
 export default {
   data() {
-    return {
-    };
+    return {};
+  },
+  mounted() {
+    this.getUserData();
+    this.getAllNotifications();
   },
   computed: {
     ...mapState('users', ['status']),
     ...mapState('userProfile', ['user']),
+    ...mapState('notificationsStore', ['notifications']),
+    amountOfUnReadNotifications() {
+      return this.notifications.filter(x => !x.isRead).length;
+    },
   },
   methods: {
     ...mapActions('users', ['logout']),
+    ...mapActions('userProfile', ['getUserData']),
+    ...mapActions('notificationsStore', ['getAllNotifications']),
+    search(input) {
+      if (input.length < 1) return [];
+      return searchService.searchForUsers(this.$store.state.users.user, input);
+    },
+    getResultValue(result) {
+      return `${result.userName}`;
+    },
+
+    handleSubmit(result) {
+      this.$router.push(`/users/${result.userId}`);
+    },
+  },
+  components: {
+    NotificationBell,
+    Autocomplete,
   },
 };
 </script>
