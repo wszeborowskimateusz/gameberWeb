@@ -2,7 +2,7 @@
   <div class="messages__container col-12">
     <div class="messages__content">
       <div class="messages__scrollable_container">
-        <div v-if="isLoading === true" class="d-flex justify-content-center">
+        <div v-if="isLoading || isConversationLoading" class="d-flex justify-content-center">
           <cube-spin class="m-2"></cube-spin>
         </div>
         <div
@@ -104,43 +104,27 @@
 <script>
 import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-import { setTimeout } from 'timers';
+import messagesService from '../services/messagesService';
 
 export default {
   data() {
     return {
+      isConversationLoading: false,
+      messagesPerRequest: 10,
+      lastImageOffset: 0,
       isLoading: false,
       wasMessageSend: true,
       messageToSend: '',
       userId: this.$route.params.id,
       conversation: {
-        user: {
-          userName: 'John',
-          avatar:
-            'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
-        },
-        messages: [
-          {
-            content: "Hey, how's goin",
-            isOurMessage: false,
-            date: '2019-07-27T18:15:33.671Z',
-          },
-          {
-            content: 'I was worrying about you',
-            isOurMessage: false,
-            date: '2019-07-27T18:17:33.671Z',
-          },
-          {
-            content: "I am all right bro, don't worry",
-            isOurMessage: true,
-            date: '2019-07-27T18:23:33.671Z',
-          },
-        ],
+        user: {},
+        messages: [],
       },
     };
   },
   computed: {
     ...mapState('userProfile', { userFromStore: 'user' }),
+    ...mapState('users', ['user']),
     pickedAvatar() {
       let result = null;
       if (
@@ -165,7 +149,11 @@ export default {
       scrollableContainer.onscroll = this.scroll;
     }
 
+    this.isConversationLoading = true;
     this.updateScrollPosition();
+    this.getConversationUser();
+    this.getMessages(this.messagesPerRequest, 0);
+    this.lastImageOffset += this.messagesPerRequest;
   },
   updated() {
     if (this.wasMessageSend) {
@@ -173,6 +161,26 @@ export default {
     }
   },
   methods: {
+    getMessages(limit, offset) {
+      messagesService
+        .getMessages(this.user, this.userId, limit, offset)
+        .then((messages) => {
+          this.conversation.messages.unshift(...messages);
+
+          this.setScrollPositionToJustBelowTop();
+          this.isLoading = false;
+          this.isConversationLoading = false;
+        })
+        .then(() => this.$forceUpdate());
+    },
+    getConversationUser() {
+      messagesService
+        .getConversationUser(this.user, this.userId)
+        .then((conversationUser) => {
+          this.conversation.user = conversationUser;
+        })
+        .then(() => this.$forceUpdate());
+    },
     onFieldFocus() {
       this.wasMessageSend = true;
       this.updateScrollPosition();
@@ -183,20 +191,9 @@ export default {
       if (scrollableContainer.scrollTop === 0) {
         this.isLoading = true;
         this.wasMessageSend = false;
-        setTimeout(() => {
-          this.conversation.messages.unshift({
-            content: "Hey, how's goin",
-            isOurMessage: false,
-            date: '2019-07-27T18:15:33.671Z',
-          });
-          this.conversation.messages.unshift({
-            content: "Hey, how's goin",
-            isOurMessage: false,
-            date: '2019-07-27T18:15:33.671Z',
-          });
-          this.setScrollPositionToJustBelowTop();
-          this.isLoading = false;
-        }, 3000);
+
+        this.getMessages(this.messagesPerRequest, this.lastImageOffset);
+        this.lastImageOffset += this.messagesPerRequest;
       }
     },
     setScrollPositionToJustBelowTop() {
