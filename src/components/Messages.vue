@@ -2,6 +2,9 @@
   <div class="messages__container col-12">
     <div class="messages__content">
       <div class="messages__scrollable_container">
+        <div v-if="isLoading === true" class="d-flex justify-content-center">
+          <cube-spin class="m-2"></cube-spin>
+        </div>
         <div
           class="messages_message m-5"
           v-for="(message, index) in conversation.messages"
@@ -34,8 +37,13 @@
       <form @submit.prevent="handleMessageSending">
         <div class="row">
           <div class="ml-lg-5 ml-2 mt-3 col-9">
-            <input @focus="onFieldFocus"
-              type="text" v-model="messageToSend" class="form-control" autofocus />
+            <input
+              @focus="onFieldFocus"
+              type="text"
+              v-model="messageToSend"
+              class="form-control"
+              autofocus
+            />
           </div>
           <div class="col-2 mt-3">
             <button type="submit" class="btn btn-primary mb-2">
@@ -95,10 +103,13 @@
 
 <script>
 import { mapState } from 'vuex';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
+import { setTimeout } from 'timers';
 
 export default {
   data() {
     return {
+      isLoading: false,
       wasMessageSend: true,
       messageToSend: '',
       userId: this.$route.params.id,
@@ -168,19 +179,24 @@ export default {
     },
     scroll() {
       const scrollableContainer = document.querySelector('.messages__content');
+
       if (scrollableContainer.scrollTop === 0) {
-        this.conversation.messages.unshift({
-          content: "Hey, how's goin",
-          isOurMessage: false,
-          date: '2019-07-27T18:15:33.671Z',
-        });
-        this.conversation.messages.unshift({
-          content: "Hey, how's goin",
-          isOurMessage: false,
-          date: '2019-07-27T18:15:33.671Z',
-        });
-        this.setScrollPositionToJustBelowTop();
+        this.isLoading = true;
         this.wasMessageSend = false;
+        setTimeout(() => {
+          this.conversation.messages.unshift({
+            content: "Hey, how's goin",
+            isOurMessage: false,
+            date: '2019-07-27T18:15:33.671Z',
+          });
+          this.conversation.messages.unshift({
+            content: "Hey, how's goin",
+            isOurMessage: false,
+            date: '2019-07-27T18:15:33.671Z',
+          });
+          this.setScrollPositionToJustBelowTop();
+          this.isLoading = false;
+        }, 3000);
       }
     },
     setScrollPositionToJustBelowTop() {
@@ -219,6 +235,9 @@ export default {
         this.messageToSend = '';
       }
     },
+  },
+  components: {
+    CubeSpin,
   },
 };
 </script>
