@@ -109,6 +109,7 @@ import messagesService from '../services/messagesService';
 export default {
   data() {
     return {
+      areAllMessagesLoaded: false,
       isConversationLoading: false,
       messagesPerRequest: 10,
       lastImageOffset: 0,
@@ -165,6 +166,10 @@ export default {
       messagesService
         .getMessages(this.user, this.userId, limit, offset)
         .then((messages) => {
+          if (messages.length === 0) {
+            this.areAllMessagesLoaded = true;
+          }
+
           this.conversation.messages.unshift(...messages);
 
           this.setScrollPositionToJustBelowTop();
@@ -188,7 +193,10 @@ export default {
     scroll() {
       const scrollableContainer = document.querySelector('.messages__content');
 
-      if (scrollableContainer.scrollTop === 0) {
+      if (
+        scrollableContainer.scrollTop === 0
+        && this.areAllMessagesLoaded === false
+      ) {
         this.isLoading = true;
         this.wasMessageSend = false;
 

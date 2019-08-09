@@ -48,6 +48,27 @@ export default {
       () => {
         toast.errorToast('Nie udało się pobrać konwersacji');
         // FIXME remove this later
+        if (offset > 10) {
+          return [];
+        } if (offset > 0) {
+          return [
+            {
+              content: 'I am not bob',
+              isOurMessage: true,
+              date: '2019-07-27T18:15:33.671Z',
+            },
+            {
+              content: 'And i am not 8',
+              isOurMessage: true,
+              date: '2019-07-27T18:17:33.671Z',
+            },
+            {
+              content: 'I am 10',
+              isOurMessage: true,
+              date: '2019-07-27T18:23:33.671Z',
+            },
+          ];
+        }
         return defaultConversation.messages;
       },
     );
