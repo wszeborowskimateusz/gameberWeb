@@ -2,7 +2,8 @@
   <div v-if="isLoading" class="col-12 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div class="notifications__container col-12" v-else>
+  <div v-else-if="notifications != null && notifications.length > 0"
+    class="notifications__container col-12" >
     <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
       <li class="nav-item">
         <a
@@ -114,6 +115,12 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="col-12" v-else>
+    <p class="h1">Niestety nie masz żadnych powiadomień</p>
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
   </div>
 </template>
 

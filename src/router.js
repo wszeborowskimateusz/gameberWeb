@@ -13,6 +13,7 @@ import Tutorial from './components/Tutorial.vue';
 import Notifications from './components/Notifications.vue';
 import Messages from './components/Messages.vue';
 import Friends from './components/Friends.vue';
+import ErrorPage from './components/Error.vue';
 import Toasts from './utilities/toasts';
 
 Vue.use(Router);
@@ -40,6 +41,7 @@ const router = new Router({
     { path: '/translator', component: Translator },
     { path: '/tutorial', component: Tutorial },
     { path: '/friends', component: Friends },
+    { path: '/error', component: ErrorPage, props: { message: '' } },
     { path: '*', redirect: '/' },
   ],
 });

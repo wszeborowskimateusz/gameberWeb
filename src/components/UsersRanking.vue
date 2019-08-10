@@ -2,7 +2,8 @@
   <div v-if="isLoading" class="col-12 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div class="ranking__container col-12" v-else>
+  <div v-else-if="Object.entries(rankings).length !== 0 && rankings.constructor === Object"
+    class="ranking__container col-12">
     <div class="btn-group special mb-2" role="group" aria-label="Basic example">
       <button
         v-for="type in rankingTypes"
@@ -39,6 +40,12 @@
       </tbody>
     </table>
   </div>
+  <div class="col-12" v-else>
+    <ErrorComponent
+      message='Nie udało się wczytać rankingu graczy.
+              Być może ranking nie został jeszcze przygotowany'
+    />
+  </div>
 </template>
 
 <style scoped>
@@ -69,6 +76,7 @@
 import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import usersRankingService from '../services/usersRankingService';
+import ErrorComponent from './Error.vue';
 
 export default {
   data() {
@@ -106,6 +114,7 @@ export default {
   },
   components: {
     CubeSpin,
+    ErrorComponent,
   },
 };
 </script>

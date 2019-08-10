@@ -2,7 +2,9 @@
   <div v-if="isLoading" class="col-12 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div class="store col-12 mb-5" v-else-if="avatars || backgroundImages">
+  <div class="store col-12 mb-5"
+    v-else-if="(avatars != null || backgroundImages != null)
+            && (avatars.length > 0 || backgroundImages.length > 0)">
     <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
       <li class="nav-item">
         <a
@@ -87,7 +89,8 @@
     </div>
   </div>
   <div class="col-12" v-else>
-    <ErrorComponent message="Nie udało się wczytać zasobów sklepu" />
+    <ErrorComponent
+      message="Nie udało się wczytać zasobów sklepu. W sklepie nie ma żadnych produktów." />
   </div>
 </template>
 
