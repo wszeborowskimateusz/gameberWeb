@@ -76,11 +76,6 @@
               {{user.username}}
             </router-link>
           </li>
-          <li class="nav-item">
-            <button class="btn btn-info ml-3" @click="logout()">
-              <i class="fas fa-sign-out-alt"></i> Wyloguj się
-            </button>
-          </li>
           <autocomplete
             class="ml-3 h-25"
             :search="search"
@@ -90,6 +85,11 @@
             @submit="handleSubmit"
             auto-select
           ></autocomplete>
+          <li class="nav-item">
+            <button class="btn btn-info ml-3" @click="logout()">
+              <i class="fas fa-sign-out-alt"></i> Wyloguj się
+            </button>
+          </li>
         </ul>
       </div>
     </nav>
