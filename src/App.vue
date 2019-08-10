@@ -48,9 +48,10 @@
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
-            <a href="#" class="nav-link" title="Znajomi">
+            <router-link to="/friends" name="friends"
+            class="nav-link rounded-circle" title="Znajomi">
               <img width="25" src="https://img.icons8.com/color/100/000000/friends--v2.png" />
-            </a>
+            </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
