@@ -1,5 +1,8 @@
 <template>
-  <div class="store col-12 mb-5" v-if="avatars || backgroundImages">
+  <div v-if="isLoading" class="col-12 d-flex justify-content-center">
+    <cube-spin class="m-2"></cube-spin>
+  </div>
+  <div class="store col-12 mb-5" v-else-if="avatars || backgroundImages">
     <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
       <li class="nav-item">
         <a
@@ -142,6 +145,7 @@ figcaption {
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import bootbox from '../utilities/bootbox';
 import tooltip from '../utilities/tippy';
 import avatarsStoreService from '../services/avatarsStoreService';
@@ -150,6 +154,7 @@ import ErrorComponent from './Error.vue';
 export default {
   data() {
     return {
+      isLoading: false,
       itemsPerRow: [4, 2],
       avatars: [],
       backgroundImages: [],
@@ -167,6 +172,7 @@ export default {
     );
   },
   created() {
+    this.isLoading = true;
     this.fetchAvatars();
     this.fetchBackgroundImages();
   },
@@ -230,6 +236,7 @@ export default {
       avatarsStoreService
         .getAvatarsSupply(this.$store.state.users.user)
         .then((avatars) => {
+          this.isLoading = false;
           this.avatars = avatars;
         });
     },
@@ -244,6 +251,7 @@ export default {
   },
   components: {
     ErrorComponent,
+    CubeSpin,
   },
 };
 </script>

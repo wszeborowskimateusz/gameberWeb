@@ -1,5 +1,8 @@
 <template>
-  <div class="GameController col-12">
+  <div v-if="isLoading" class="col-12 d-flex justify-content-center">
+    <cube-spin class="m-2"></cube-spin>
+  </div>
+  <div class="GameController col-12" v-else>
     <div
       class="background-image"
       :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}"
@@ -105,6 +108,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import WordLearning from './Games/WordLearning.vue';
 import WordPicker from './Games/WordPicker.vue';
 import WordGuessing from './Games/WordGuessing.vue';
@@ -118,6 +122,7 @@ import gameControllerService from '../services/gameControllerService';
 export default {
   data() {
     return {
+      isLoading: false,
       categoriesWithoutFinishing: ['WordLearning', 'StoryGame'],
       category: {
         games: [],
@@ -131,6 +136,7 @@ export default {
     };
   },
   created() {
+    this.isLoading = true;
     this.fetchCategory();
   },
   computed: {
@@ -148,6 +154,7 @@ export default {
     Crossword,
     StoryGame,
     PhraseLearning,
+    CubeSpin,
   },
   methods: {
     ...mapActions('userProfile', ['getCategoryRewards']),
@@ -155,6 +162,7 @@ export default {
       gameControllerService
         .getCategoryData(this.user, this.categoryId)
         .then((category) => {
+          this.isLoading = false;
           this.category = category;
         })
         /* eslint-disable no-param-reassign */

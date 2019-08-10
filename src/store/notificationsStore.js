@@ -46,12 +46,13 @@ const defaultNotifications = [
   },
 ];
 
-const notificationsState = { notifications: [] };
+const notificationsState = { notifications: [], isLoading: false };
 
 
 const actions = {
   getAllNotifications({ commit }) {
     const userToken = JSON.parse(localStorage.getItem('user'));
+    commit('loading');
     notificationService.getAllNotifications(userToken)
       .then(
         (user) => {
@@ -96,11 +97,16 @@ const actions = {
 
 /* eslint-disable no-param-reassign */
 const mutations = {
+  loading(state) {
+    state.isLoading = true;
+  },
   gettingNotificationsSuccess(state, notifications) {
     state.notifications = notifications.notifications;
+    state.isLoading = false;
   },
   gettingNotificationsFailure(state) {
     state.notifications = defaultNotifications;
+    state.isLoading = false;
   },
   markingNotificationAsReadSuccess(state, notificationId) {
     state.notifications.find(x => x.id === notificationId).isRead = true;
