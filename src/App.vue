@@ -48,19 +48,18 @@
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png" />
-              {{user.level}}
+            <a href="#" class="nav-link" title="Znajomi">
+              <img width="25" src="https://img.icons8.com/color/100/000000/friends--v2.png" />
             </a>
           </li>
           <li class="nav-item">
-            <router-link to="/store" name="store" class="nav-link rounded-circle">
+            <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
               <img width="25" src="https://img.icons8.com/color/48/000000/coins.png" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/notifications" class="nav-link rounded-circle">
+            <router-link to="/notifications" class="nav-link rounded-circle" title="Powiadomienia">
               <notification-bell
                 class="justify-content-center d-flex"
                 :size="25"
@@ -71,7 +70,8 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/user-profile" name="profil" class="nav-link rounded-circle">
+            <router-link to="/user-profile" name="profil" class="nav-link rounded-circle"
+              title="Profil">
               <img width="25" src="https://img.icons8.com/nolan/2x/user.png" />
               {{user.username}}
             </router-link>
