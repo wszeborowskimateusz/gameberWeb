@@ -172,7 +172,12 @@ export default {
     const url = `${config.apiUrl}/games/categories/${categoryId}`;
     const result = await requestSender.sendGetRequest(token, url)
       .then(
-        category => category,
+        (response) => {
+          for (let i = 0; i < response.games.length; i += 1) {
+            response.games[i].gameInfo = JSON.parse(response.games[i].gameInfo);
+          }
+          return response;
+        },
         () => {
           toasts.errorToast('Niestety nie udało się wczytać kategorii. Spróbuj odświeżyć stronę.');
           return defaultCategory;
