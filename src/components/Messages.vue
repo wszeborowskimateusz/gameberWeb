@@ -91,12 +91,12 @@
 
 .messages__content {
   background-color: rgba(255, 255, 255, 0.9);
-  height: 86%;
+  height: 70vh;
   overflow: auto;
 }
 
 .messages__send_field {
-  height: 14%;
+  height: 10vh;
   background-color: #7084ff;
 }
 </style>
