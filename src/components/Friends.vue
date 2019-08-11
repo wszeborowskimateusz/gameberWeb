@@ -12,7 +12,7 @@
           </router-link>
           <figcaption class="imgCaption">
             <router-link :to="'users/' + friend.id" class="friend__link" :title="friend.name">
-              <span class="m-3 font-weight-bold">{{friend.name}}</span>
+              <span class="m-3 h3 font-weight-bold">{{friend.name}}</span>
             </router-link>
             <button class="m-2 btn btn-primary" onclick="alert('FIGHT');">
               Wyzwij na pojedynek
@@ -28,7 +28,7 @@
     <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
     <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
     <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
-    <p class="h3">Skorzystaj z wyszukiwarki żeby znaleźć swoich znajowych</p>
+    <p class="h3">Skorzystaj z wyszukiwarki żeby znaleźć swoich znajomych</p>
   </div>
 </template>
 
