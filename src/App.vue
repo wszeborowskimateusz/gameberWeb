@@ -139,10 +139,14 @@ body {
   background-color: #9dcadf;
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 html {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #app {
@@ -152,10 +156,12 @@ html {
   text-align: center;
   color: #2c3e50;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-  height: 100%;
+  overflow: hidden;
 }
 
 .container__row {

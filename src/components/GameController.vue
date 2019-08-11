@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading" class="col-12 d-flex justify-content-center">
+  <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
   <div class="GameController col-12" v-else>
@@ -36,7 +36,7 @@
         role="toolbar"
         aria-label="Toolbar with button groups"
       >
-        <div class="btn-group mr-12 p-1" role="group" aria-label="First group">
+        <div class="btn-group mb-3 mr-12 p-1" role="group" aria-label="First group">
           <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
             <img src="https://img.icons8.com/plasticine/30/000000/circled-chevron-left.png" />
             Poprzedni

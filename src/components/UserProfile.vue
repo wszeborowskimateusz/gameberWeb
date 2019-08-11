@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading" class="col-12 d-flex justify-content-center">
+  <div v-if="isLoading" class="col-12 d-flex p-2 justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
   <div v-else-if="(user != null && user.avatars)" class="userProfile col-12">
@@ -8,7 +8,7 @@
       :style="{'background-image' :
             'url(' + pickedImage.img +')'}"
     ></div>
-    <div class="scrollbar_remover">
+    <div class="scrollbar_remover mb-5">
       <div class="profile__container">
         <div class="row profile__content">
           <div class="avatar col-sm-12 col-lg-3 col-md-12 p-4">
@@ -276,7 +276,6 @@ input[type="radio"]:checked + .radioLabel {
   overflow-x: hidden;
   width: 100%;
   height: 100%;
-  position: absolute;
   top: 0px;
   left: 0px;
   z-index: 1000;

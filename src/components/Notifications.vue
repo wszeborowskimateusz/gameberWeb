@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading" class="col-12 d-flex justify-content-center">
+  <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
   <div v-else-if="notifications != null && notifications.length > 0"

@@ -50,7 +50,7 @@
         <v-facebook-login :app-id="fb_app_id"></v-facebook-login>
       </div>
     </div>
-    <div v-if="status.loginInProgress" class="d-flex justify-content-center">
+    <div v-if="status.loginInProgress" class="d-flex p-2 justify-content-center">
           <cube-spin class="m-2"></cube-spin>
     </div>
   </div>

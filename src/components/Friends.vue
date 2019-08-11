@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading" class="col-12 d-flex justify-content-center">
+  <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
   <div class="col-12 friends__container row" v-else-if="friends != null && friends.length > 0">

@@ -2,7 +2,7 @@
   <div class="messages__container col-12">
     <div class="messages__content">
       <div class="messages__scrollable_container">
-        <div v-if="isLoading || isConversationLoading" class="d-flex justify-content-center">
+        <div v-if="isLoading || isConversationLoading" class="d-flex p-2 justify-content-center">
           <cube-spin class="m-2"></cube-spin>
         </div>
         <div
