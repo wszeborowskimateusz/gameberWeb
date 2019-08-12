@@ -79,7 +79,7 @@
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-size: cover;
+  background-size: 100% 100%;
   width: 100%;
   height: 100%;
 }
