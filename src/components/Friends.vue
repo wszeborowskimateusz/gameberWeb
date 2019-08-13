@@ -2,10 +2,11 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div class="col-12 friends__container row" v-else-if="friends != null && friends.length > 0">
+  <div v-else-if="friends != null && friends.length > 0"
+    class="col-12 friends__container row d-flex justify-content-center">
     <p class="h1 col-12">Znajomi</p>
     <div v-for="friend in friends" class="friends__row row" v-bind:key="friend.id">
-      <div class="col-12 store__item m-1 mb-3" :class="['col-lg-3', 'col-md-6', 'col-sm-6']">
+      <div class="col-12 col-lg-3 col-md-6 col-sm-6 store__item m-1 mb-3">
         <figure class="mx-auto friend__figure">
           <router-link :to="'users/' + friend.id" class="friend__link" :title="friend.name">
             <img class="friend__avatar" width="350" height="400" :src="friend.avatar" />

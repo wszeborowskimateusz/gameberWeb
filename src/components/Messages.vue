@@ -36,7 +36,7 @@
     <div class="messages__send_field">
       <form @submit.prevent="handleMessageSending">
         <div class="row">
-          <div class="ml-lg-5 ml-2 mt-3 col-9">
+          <div class="ml-lg-5 mt-3 col-6 col-lg-9">
             <input
               @focus="onFieldFocus"
               type="text"
@@ -45,8 +45,8 @@
               autofocus
             />
           </div>
-          <div class="col-2 mt-3">
-            <button type="submit" class="btn btn-primary mb-2">
+          <div class="col-4 col-lg-2 mt-3">
+            <button type="submit" class="btn btn-primary mb-md-2">
               Wyślij
               <img width="25" src="https://img.icons8.com/color/50/000000/filled-sent.png" />
             </button>
