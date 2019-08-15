@@ -26,15 +26,9 @@ img {
 </style>
 
 <script>
-import bootbox from '../../utilities/bootbox';
-import tooltip from '../../utilities/tippy';
-
 export default {
   props: {
     gameInfo: Object,
-  },
-  mounted() {
-    tooltip.addTooltip('.wordPickerImage', `${this.gameInfo.answers[this.gameInfo.correctAnswer]}`);
   },
   methods: {
     playSound(sound) {
@@ -44,13 +38,8 @@ export default {
       }
     },
     checkAnswer(answerId, answer) {
-      if (answerId === this.gameInfo.correctAnswer) {
-        this.playSound(answer);
-        bootbox.correctAnswerAlert();
-        this.$parent.finishGame();
-      } else {
-        bootbox.incorrectAnswerAlert();
-      }
+      this.playSound(answer);
+      this.$parent.finishGame(answerId);
     },
   },
 };

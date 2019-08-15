@@ -155,8 +155,7 @@ export default {
       });
 
       if (isCorrect) {
-        bootbox.correctAnswerAlert();
-        this.$parent.finishGame();
+        this.$parent.finishGame('');
       }
     },
   },

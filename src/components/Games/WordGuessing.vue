@@ -28,8 +28,6 @@ img {
 </style>
 
 <script>
-import bootbox from '../../utilities/bootbox';
-
 export default {
   data() {
     return {
@@ -47,13 +45,7 @@ export default {
       }
     },
     checkAnswer() {
-      if (this.userAnswer.toUpperCase() === this.gameInfo.correctAnswer.toUpperCase()) {
-        this.playSound(this.userAnswer);
-        bootbox.correctAnswerAlert();
-        this.$parent.finishGame();
-      } else {
-        bootbox.incorrectAnswerAlert();
-      }
+      this.$parent.finishGame(this.userAnswer);
     },
   },
 };

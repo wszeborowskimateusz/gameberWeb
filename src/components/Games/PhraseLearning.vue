@@ -74,8 +74,6 @@ li {
 </style>
 
 <script>
-import bootbox from '../../utilities/bootbox';
-
 export default {
   data() {
     return {
@@ -98,34 +96,13 @@ export default {
       this.wordsToSelect.splice(wordIndex, 1);
 
       this.playSound(word);
-
-      if (this.gameInfo.correctOrder.length === this.selectedWords.length) {
-        this.checkAnswer();
-      }
     },
     unselectWord(word, wordIndex) {
       this.wordsToSelect.push(word);
       this.selectedWords.splice(wordIndex, 1);
     },
     checkAnswer() {
-      let isAnswerCorrect = true;
-
-      if (this.gameInfo.correctOrder.length !== this.selectedWords.length) {
-        isAnswerCorrect = false;
-      } else {
-        for (let i = 0; i < this.gameInfo.correctOrder.length; i += 1) {
-          if (this.gameInfo.correctOrder[i] !== this.selectedWords[i]) {
-            isAnswerCorrect = false;
-          }
-        }
-      }
-
-      if (isAnswerCorrect) {
-        bootbox.correctAnswerAlert();
-        this.$parent.finishGame();
-      } else {
-        bootbox.incorrectAnswerAlert();
-      }
+      this.$parent.finishGame(this.selectedWords);
     },
   },
 };

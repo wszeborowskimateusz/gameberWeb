@@ -5,19 +5,19 @@ import toasts from '../utilities/toasts';
 const defaultCategory = {
   games: [
     {
+      gameId: 0,
       name: 'PhraseLearning',
       gameInfo: {
         question: 'How are you ?',
         words: ['I', 'all', 'am', 'right'],
-        correctOrder: ['I', 'am', 'all', 'right'],
       },
     },
     {
       name: 'WordMatching',
       gameInfo: {
+        gameId: 1,
         isPhrase: true,
         polishName: 'Jak się masz ?',
-        correctAnswer: 'How are you ?',
         answers: [
           {
             img: 'https://images.typeform.com/images/fxGsvvmE9wJZ/image/default',
@@ -41,6 +41,7 @@ const defaultCategory = {
     {
       name: 'StoryGame',
       gameInfo: {
+        gameId: 2,
         stories: [
           {
             img: 'https://www.hakaimagazine.com/wp-content/uploads/header-polar-bear-conflict.jpg',
@@ -69,13 +70,14 @@ const defaultCategory = {
     {
       name: 'WordGuessing',
       gameInfo: {
+        gameId: 3,
         img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
-        correctAnswer: 'seal',
       },
     },
     {
       name: 'Crossword',
       gameInfo: {
+        gameId: 4,
         words: [
           { word: 'penguin', description: 'Czarno białe zwierze' },
           { word: 'bear', description: 'Biały miś' },
@@ -96,6 +98,7 @@ const defaultCategory = {
     {
       name: 'WordMatching',
       gameInfo: {
+        gameId: 5,
         isPhrase: false,
         polishName: 'Pingwin',
         correctAnswer: 'Penguin',
@@ -122,14 +125,15 @@ const defaultCategory = {
     {
       name: 'WordPicker',
       gameInfo: {
+        gameId: 6,
         img: 'https://www.seacoastsciencecenter.org/wp-content/themes/FoundationPress/img/seal%202.png',
-        correctAnswer: 0,
         answers: ['Seal', 'Bear', 'Penguin', 'Water'],
       },
     },
     {
       name: 'WordLearning',
       gameInfo: {
+        gameId: 7,
         polishName: 'Foka',
         englishName: 'Seal',
         img: 'http://bi.gazeta.pl/im/3/11672/z11672953IER,Foka-grenlandzka.jpg',
@@ -138,6 +142,7 @@ const defaultCategory = {
     {
       name: 'WordLearning',
       gameInfo: {
+        gameId: 8,
         polishName: 'Niedźwiedź polarny',
         englishName: 'Polar bear',
         img: 'https://vignette.wikia.nocookie.net/harrypotter/images/2/25/POLAR.jpg/revision/latest?cb=20160925151133&path-prefix=pl',
@@ -146,6 +151,7 @@ const defaultCategory = {
     {
       name: 'WordLearning',
       gameInfo: {
+        gameId: 9,
         polishName: 'Mors',
         englishName: 'Walrus',
         img: 'https://upload.wikimedia.org/wikipedia/commons/2/22/Pacific_Walrus_-_Bull_%288247646168%29.jpg',
@@ -154,6 +160,7 @@ const defaultCategory = {
     {
       name: 'WordLearning',
       gameInfo: {
+        gameId: 10,
         polishName: 'Wilk',
         englishName: 'Wolf',
         img: 'https://4.bp.blogspot.com/-aGeDdmUSRiM/WJJKJa_-sMI/AAAAAAABITI/Du7ATdHn8NUH1cP35IGSgNJ_jBeBppx1gCLcB/s1600/ScreenShot8509.jpg',
@@ -164,6 +171,7 @@ const defaultCategory = {
   categoryName: 'Zwierzęta Arktyki',
   categoryCountryIcon: 'https://img.icons8.com/color/48/000000/iceland.png',
   categoryIcon: 'https://img.icons8.com/color/48/000000/seal.png',
+  currentGameIndex: 0,
 };
 
 
@@ -184,6 +192,19 @@ export default {
         },
       );
 
+    return result;
+  },
+  async checkAnswer(token, gameId, answer) {
+    const url = `${config.apiUrl}/games/check-answer/${gameId}`;
+    const result = await requestSender.sendPostRequest(url, { answer }, token)
+      .then(
+        response => response.wasAnswerCorrect,
+        () => {
+          toasts.errorToast('Niestety nie udało pobrać odpowiedzi z serwera. Spróbuj jeszcze raz.');
+          // FIXME: Remove this later
+          return true;
+        },
+      );
     return result;
   },
   finishCategory(token, categoryId) {
