@@ -10,15 +10,13 @@ import am4chartsGeodataWorld from '@amcharts/amcharts4-geodata/worldLow';
 import { pointsToPath } from '@amcharts/amcharts4/.internal/core/rendering/Path';
 import { lab } from 'd3';
 
-// Globals that should be on server
-const allCountries = [
-  'IN', 'AU', 'BR', 'US', 'SW', 'DE', 'PL',
-];
+import { mapState, mapActions } from 'vuex';
+import mapService from '../services/mapService';
+import { connect } from 'net';
+import { privateDecrypt } from 'crypto';
+import { release } from 'os';
 
-// List of players unlocked countries
-const unlockedCountries = [
-  'PL', 'FR', 'IT'
-];
+
 
 // Categories data
 const countryCategories = {
@@ -220,7 +218,7 @@ const countriesLatlon = {
   PG: { latitude: -6, longitude: 147 },
   PH: { latitude: 13, longitude: 122 },
   PK: { latitude: 30, longitude: 70 },
-  PL: { latitude: 52, longitude: 20 },
+  PL: { latitude: 52, longitude: 18 },
   PM: { latitude: 46.8333, longitude: -56.3333 },
   PR: { latitude: 18.25, longitude: -66.5 },
   PS: { latitude: 32, longitude: 35.25 },
@@ -289,7 +287,7 @@ const countriesLatlon = {
   ZW: { latitude: -20, longitude: 30 },
 };
 
-const lockedCountryFillColor = 'black';
+const lockedCountryFillColor = 'gray';
 const unlockedCountryFillColor = 'red';
 
 const circleRadius = 2;
@@ -299,7 +297,10 @@ const labelFontSize = circleRadius / 3;
 const labelDxOffset = 0.8;
 const labelDyOffset = 0.1;
 
-const categoriesShowZoomLevel = 10;
+const lockIconSize = 10;
+
+const interfaceShowZoomLevel = 5;
+let isInterfaceHidden = false;
 
 function getCirclePoints(num_points, radius, x, y) {
   if (num_points <= 1) return [[x, y]];
@@ -312,91 +313,170 @@ function getCirclePoints(num_points, radius, x, y) {
     angle += d_angle;
     points.push(p);
   }
-
   return points;
-}
+};
 
 
 export default {
   name: 'GameMap',
 
-  mounted() {
+  data() {
+    return {
+      unlockedCountries: [],
+      lockedCountries: [],
+      lastSelectedCountry: null,
+    };
+  },
+  compouted: {
+  },
+  methods: {
+    async getMapCountries() {
+      const allCountries = await mapService.getMapCountries(this.$store.state.users.user);
+      const allIds = allCountries.map(c => c._id);
+
+      const unlockedCountries = await mapService.getUnlockedCountries(this.$store.state.users.user)
+      const unlockedIds = unlockedCountries.map(c => c.country_id);
+
+      const lockedIds = allIds.filter(c => !unlockedIds.includes(c));
+
+      this.unlockedCountries = allCountries.filter(c => unlockedIds.includes(c._id));
+      this.lockedCountries = allCountries.filter(c => lockedIds.includes(c._id));
+    },    
+    countryPolygonClick(ev) {
+        // Reset zoom if already zoomed to country
+        if (this.lastSelected == ev.target) {
+          ev.target.series.chart.goHome();
+          this.lastSelected = null;
+          return;
+        }
+
+        ev.target.series.chart.zoomToMapObject(ev.target);
+          this.lastSelected = ev.target;
+
+        const countryId = ev.target.dataItem.dataContext.id;
+        console.log('clicked on: ', countryId);
+    },
+    async lockIconClick(ev) {
+      const countryISO = ev.target.dataItem.dataContext.ISO;
+
+      const result = await mapService.buyCountry(this.$store.state.users.user, countryISO);
+      console.log(result);
+      if (result.status)
+      {
+        ev.target.baseSprite.openPopup("You bought " + countryISO);
+        console.log('successfully bougth country');
+      }
+      else
+      {
+        ev.target.baseSprite.openPopup("Unable to buy country.\n" + result.comment);
+      }
+    }
+  },
+  created() {    
+
+  },
+  async mounted() {
+    // Download required info from server
+    await this.getMapCountries();
+
     // Choose theme
     am4core.useTheme(am4themesAnimated);
 
     // Create map instance
     const map = am4core.create(this.$refs.chartdiv, am4maps.MapChart);
-
     map.geodata = am4chartsGeodataWorld;
     map.projection = new am4maps.projections.Miller();
     map.maxPanOut = 0;
 
-    // Paint all countries in the world to gray to make map shape
+    // All countries background
     const worldSeries = map.series.push(new am4maps.MapPolygonSeries());
     worldSeries.useGeodata = true;
     worldSeries.mapPolygons.template.strokeOpacity = 0;
 
-    // Paint all countries included in game
-    const allCountriesSeries = map.series.push(new am4maps.MapPolygonSeries());
-    allCountriesSeries.useGeodata = true;
-    allCountriesSeries.include = allCountries;
-    allCountriesSeries.mapPolygons.template.fill = lockedCountryFillColor
+    // Locked countries
+    const lockedCountriesSeries = map.series.push(new am4maps.MapPolygonSeries());
+    lockedCountriesSeries.useGeodata = true;
+    lockedCountriesSeries.include = this.lockedCountries.map(c => c.ISO);
+    lockedCountriesSeries.mapPolygons.template.fill = lockedCountryFillColor;
+    lockedCountriesSeries.mapPolygons.template.events.on('hit',
+      this.countryPolygonClick,
+      this);
+
+    // locked country interface
+    let lockedCountryInterfaceSeries = new am4maps.MapImageSeries();
+    map.series.push(lockedCountryInterfaceSeries);
+    lockedCountryInterfaceSeries.hidden = true;   // initialy hidden (map zoomed out)
+    let lockedCountryInterfaceTemplate = lockedCountryInterfaceSeries.mapImages.template;
+    lockedCountryInterfaceTemplate.propertyFields.latitude = 'centerLatitude';
+    lockedCountryInterfaceTemplate.propertyFields.longitude = 'centerLongitude';
+    lockedCountryInterfaceTemplate.contextMenuDisabled = true;
+    lockedCountryInterfaceTemplate.events.on('hit',
+      this.lockIconClick,
+      this);
+
+    // add lock icon
+    let lockImage = lockedCountryInterfaceTemplate.createChild(am4core.Image);
+    lockImage.href = require("../assets/icons/map_lock_icon.png");
+    lockImage.width = lockIconSize;
+    lockImage.verticalCenter = "middle";
+    lockImage.horizontalCenter = "middle";
+    lockImage.dy = -3;
+
+    // add price label
+    let priceLabel = lockedCountryInterfaceTemplate.createChild(am4core.Label);
+    priceLabel.propertyFields.text = 'price';
+    priceLabel.fontSize = 5;
+    priceLabel.verticalCenter = "middle";
+    priceLabel.horizontalCenter = "middle";
+    priceLabel.dy = 3;
+    priceLabel.dx = 1;
+  
+    // add data to locked countries interface
+    this.lockedCountries.forEach(country => {
+      country.price = country.price + '$';
+      lockedCountryInterfaceSeries.addData(country);
+    });
+    
+
 
     // Unlocked countries
     const unlockedCountriesSeries = map.series.push(new am4maps.MapPolygonSeries());
     unlockedCountriesSeries.useGeodata = true;
-    unlockedCountriesSeries.include = unlockedCountries;
+    unlockedCountriesSeries.include = this.unlockedCountries.map(c => c.ISO);
     unlockedCountriesSeries.mapPolygons.template.fill = unlockedCountryFillColor;
-
-
-    // Zomming to selected countries
-    let lastSelected = null;
     unlockedCountriesSeries.mapPolygons.template.events.on('hit',
-      (ev) => {
-        // Reset zoom if already zoomed to country
-        if (lastSelected == ev.target) {
-          ev.target.series.chart.goHome();
-          lastSelected = null;
-          return;
-        }
-
-        ev.target.series.chart.zoomToMapObject(ev.target);
-        lastSelected = ev.target;
-
-        const countryId = ev.target.dataItem.dataContext.id;
-        console.log('clicked on: ', countryId);
-      },
+      this.countryPolygonClick,
       this);
 
-    // Initial categories images setup
+    // Unlocked coutry interface
+    let unlockedCountryInterfaceSeries = new am4maps.MapImageSeries();
+    // unlockedCountryInterfaceSeries.data = categories;
+    unlockedCountryInterfaceSeries.dataFields.value = 'name';
+    unlockedCountryInterfaceSeries.hidden = true;   // initialy hidden (map zoomed out)
+    map.series.push(unlockedCountryInterfaceSeries);
+    // unlockedCountryInterfaceSeries.alwaysShowTooltip = true; // <---- why is this not working ?!
 
-    let categoriesSeries = new am4maps.MapImageSeries()
-    // categoriesSeries.data = categories;
-    categoriesSeries.dataFields.value = 'name';
-    categoriesSeries.hidden = true;
-    map.series.push(categoriesSeries);
-    // categoriesSeries.alwaysShowTooltip = true; // <---- why is this not working ?!
+    let unlockedCountryInterfaceTemplate = unlockedCountryInterfaceSeries.mapImages.template;
+    unlockedCountryInterfaceTemplate.propertyFields.latitude = 'latitude';
+    unlockedCountryInterfaceTemplate.propertyFields.longitude = 'longitude';
+    unlockedCountryInterfaceTemplate.nonScaling = false;
+    unlockedCountryInterfaceTemplate.clickable = true;
+    unlockedCountryInterfaceTemplate.contextMenuDisabled = true;
 
-    let categoriesTemplate = categoriesSeries.mapImages.template;
-    categoriesTemplate.propertyFields.latitude = 'latitude';
-    categoriesTemplate.propertyFields.longitude = 'longitude';
-    categoriesTemplate.nonScaling = false;
-    categoriesTemplate.clickable = true;
-    categoriesTemplate.contextMenuDisabled = true;
-
-    // Enlarge circle on hover
-    categoriesTemplate.events.on('over',
+    // Enlarge category on hover
+    unlockedCountryInterfaceTemplate.events.on('over',
       (ev) => {
         console.log('over circle');
-        ev.radius = 200;
+        // ev.traget.radius = 200;
     });
 
-    // Draw circles
-    unlockedCountries.forEach(countryId => {
+    // Draw categories interface
+    this.unlockedCountries.forEach(c => {
+      const countryId = c.ISO;
       let categories = countryCategories[countryId];
       if (categories != null)
       {
-        categoriesSeries.addData(categories);
+        unlockedCountryInterfaceSeries.addData(categories);
         
 
         const countryPos = countriesLatlon[countryId];
@@ -405,11 +485,9 @@ export default {
         for (let i = 0; i < categories.length; i += 1) {
           categories[i].latitude = countryPos.latitude;
           categories[i].longitude = countryPos.longitude;
-          const circle = categoriesTemplate.createChild(am4core.Circle);
+          const circle = unlockedCountryInterfaceTemplate.createChild(am4core.Circle);
 
-
-
-          const label = categoriesTemplate.createChild(am4core.Label);
+          const label = unlockedCountryInterfaceTemplate.createChild(am4core.Label);
           circle.fill = am4core.color(categories[i].color);
           circle.dx = points[i][0];
           circle.dy = points[i][1];
@@ -429,25 +507,26 @@ export default {
       }
     });
 
-
+    // map zoom events
     map.events.on('zoomlevelchanged',
       (ev) => {
-        if (categoriesTemplate != null)
+        if (unlockedCountryInterfaceTemplate != null)
         {
-          if (map.zoomLevel > categoriesShowZoomLevel && categoriesSeries.isHidden)
-          {          
-            console.log('Show categories.');
-            categoriesSeries.show(); 
-          }
-          else if (map.zoomLevel <= categoriesShowZoomLevel && !categoriesSeries.isHidden)
+          if (map.zoomLevel > interfaceShowZoomLevel && this.isInterfaceHidden)
           {
-            console.log('Hide categories.');
-            categoriesSeries.hide();
+            lockedCountryInterfaceSeries.show();
+            unlockedCountryInterfaceSeries.show(); 
+            this.isInterfaceHidden = false;
+          }
+          else if (map.zoomLevel <= interfaceShowZoomLevel && !this.isInterfaceHidden)
+          {
+            lockedCountryInterfaceSeries.hide();
+            unlockedCountryInterfaceSeries.hide();
+            this.isInterfaceHidden = true;
           }
         }
       });
   },
-
 
   beforeDestroy() {
     if (this.chart) {
@@ -457,12 +536,11 @@ export default {
 
 };
 
-
 </script>
 
 <style scoped>
     #mapdiv {
         width: 100%;
-        height: 630px;
+        height: 100%;
     }
 </style>
