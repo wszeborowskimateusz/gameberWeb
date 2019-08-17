@@ -167,8 +167,7 @@ export default {
       }
     },
     puzzleSolved() {
-      bootbox.correctAnswerAlert();
-      this.$parent.finishGame();
+      this.$parent.finishGame('');
     },
     wrongWordCrossed() {
       $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');

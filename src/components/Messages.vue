@@ -2,6 +2,9 @@
   <div class="messages__container col-12">
     <div class="messages__content">
       <div class="messages__scrollable_container">
+        <div v-if="isLoading || isConversationLoading" class="d-flex p-2 justify-content-center">
+          <cube-spin class="m-2"></cube-spin>
+        </div>
         <div
           class="messages_message m-5"
           v-for="(message, index) in conversation.messages"
@@ -33,11 +36,17 @@
     <div class="messages__send_field">
       <form @submit.prevent="handleMessageSending">
         <div class="row">
-          <div class="ml-lg-5 ml-2 mt-3 col-9">
-            <input type="text" v-model="messageToSend" class="form-control" autofocus />
+          <div class="ml-lg-5 mt-3 col-6 col-lg-9">
+            <input
+              @focus="onFieldFocus"
+              type="text"
+              v-model="messageToSend"
+              class="form-control"
+              autofocus
+            />
           </div>
-          <div class="col-2 mt-3">
-            <button type="submit" class="btn btn-primary mb-2">
+          <div class="col-4 col-lg-2 mt-3">
+            <button type="submit" class="btn btn-primary mb-md-2">
               Wyślij
               <img width="25" src="https://img.icons8.com/color/50/000000/filled-sent.png" />
             </button>
@@ -82,74 +91,130 @@
 
 .messages__content {
   background-color: rgba(255, 255, 255, 0.9);
-  height: 86%;
+  height: 70vh;
   overflow: auto;
 }
 
 .messages__send_field {
-  height: 14%;
+  height: 10vh;
   background-color: #7084ff;
 }
 </style>
 
 <script>
 import { mapState } from 'vuex';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
+import messagesService from '../services/messagesService';
 
 export default {
   data() {
     return {
+      areAllMessagesLoaded: false,
+      isConversationLoading: false,
+      messagesPerRequest: 10,
+      lastImageOffset: 0,
+      isLoading: false,
+      wasMessageSend: true,
       messageToSend: '',
       userId: this.$route.params.id,
       conversation: {
-        user: {
-          userName: 'John',
-          avatar:
-            'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
-        },
-        messages: [
-          {
-            content: "Hey, how's goin",
-            isOurMessage: false,
-            date: '2019-07-27T18:15:33.671Z',
-          },
-          {
-            content: 'I was worrying about you',
-            isOurMessage: false,
-            date: '2019-07-27T18:17:33.671Z',
-          },
-          {
-            content: "I am all right bro, don't worry",
-            isOurMessage: true,
-            date: '2019-07-27T18:23:33.671Z',
-          },
-        ],
+        user: {},
+        messages: [],
       },
     };
   },
   computed: {
     ...mapState('userProfile', { userFromStore: 'user' }),
+    ...mapState('users', ['user']),
     pickedAvatar() {
       let result = null;
-      this.userFromStore.avatars.forEach((avatar) => {
-        if (avatar.id === this.userFromStore.avatarId) {
-          result = avatar;
-          return false;
-        }
-        return true;
-      });
+      if (
+        this.userFromStore.avatars !== null
+        && this.userFromStore.avatars !== undefined
+      ) {
+        this.userFromStore.avatars.forEach((avatar) => {
+          if (avatar.id === this.userFromStore.avatarId) {
+            result = avatar;
+            return false;
+          }
+          return true;
+        });
+      }
+
       return result === null ? '' : result.img;
     },
   },
   mounted() {
+    const scrollableContainer = document.querySelector('.messages__content');
+    if (scrollableContainer !== null && scrollableContainer !== undefined) {
+      scrollableContainer.onscroll = this.scroll;
+    }
+
+    this.isConversationLoading = true;
     this.updateScrollPosition();
+    this.getConversationUser();
+    this.getMessages(this.messagesPerRequest, 0);
+    this.lastImageOffset += this.messagesPerRequest;
   },
   updated() {
-    this.updateScrollPosition();
+    if (this.wasMessageSend) {
+      this.updateScrollPosition();
+    }
   },
   methods: {
+    getMessages(limit, offset) {
+      messagesService
+        .getMessages(this.user, this.userId, limit, offset)
+        .then((messages) => {
+          if (messages.length === 0) {
+            this.areAllMessagesLoaded = true;
+          }
+
+          this.conversation.messages.unshift(...messages);
+
+          this.setScrollPositionToJustBelowTop();
+          this.isLoading = false;
+          this.isConversationLoading = false;
+        })
+        .then(() => this.$forceUpdate());
+    },
+    getConversationUser() {
+      messagesService
+        .getConversationUser(this.user, this.userId)
+        .then((conversationUser) => {
+          this.conversation.user = conversationUser;
+        })
+        .then(() => this.$forceUpdate());
+    },
+    onFieldFocus() {
+      this.wasMessageSend = true;
+      this.updateScrollPosition();
+    },
+    scroll() {
+      const scrollableContainer = document.querySelector('.messages__content');
+
+      if (
+        scrollableContainer.scrollTop === 0
+        && this.areAllMessagesLoaded === false
+      ) {
+        this.isLoading = true;
+        this.wasMessageSend = false;
+
+        this.getMessages(this.messagesPerRequest, this.lastImageOffset);
+        this.lastImageOffset += this.messagesPerRequest;
+      }
+    },
+    setScrollPositionToJustBelowTop() {
+      const scrollableContainer = document.querySelector('.messages__content');
+      if (scrollableContainer !== null) {
+        scrollableContainer.scrollTop = 10;
+      }
+    },
     updateScrollPosition() {
       const scrollableContainer = document.querySelector('.messages__content');
-      scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+      if (scrollableContainer !== null) {
+        scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+      }
     },
     convertIsoDateToString(IsoString) {
       const date = new Date(IsoString);
@@ -166,6 +231,7 @@ export default {
     },
     handleMessageSending() {
       if (this.messageToSend !== '') {
+        this.wasMessageSend = true;
         this.conversation.messages.push({
           content: this.messageToSend,
           date: new Date().toISOString(),
@@ -174,6 +240,9 @@ export default {
         this.messageToSend = '';
       }
     },
+  },
+  components: {
+    CubeSpin,
   },
 };
 </script>

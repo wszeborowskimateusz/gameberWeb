@@ -33,7 +33,7 @@
       Tłumacz
       <img src="https://img.icons8.com/dusk/64/000000/google-translate.png" />
     </button>
-    <div v-if="loading" class="d-flex justify-content-center">
+    <div v-if="loading" class="d-flex p-2 justify-content-center">
       <cube-spin class="m-2"></cube-spin>
     </div>
   </div>

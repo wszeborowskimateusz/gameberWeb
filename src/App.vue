@@ -48,19 +48,19 @@
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png" />
-              {{user.level}}
-            </a>
+            <router-link to="/friends" name="friends"
+            class="nav-link rounded-circle" title="Znajomi">
+              <img width="25" src="https://img.icons8.com/color/100/000000/friends--v2.png" />
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/store" name="store" class="nav-link rounded-circle">
+            <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
               <img width="25" src="https://img.icons8.com/color/48/000000/coins.png" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/notifications" class="nav-link rounded-circle">
+            <router-link to="/notifications" class="nav-link rounded-circle" title="Powiadomienia">
               <notification-bell
                 class="justify-content-center d-flex"
                 :size="25"
@@ -71,15 +71,11 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/user-profile" name="profil" class="nav-link rounded-circle">
+            <router-link to="/user-profile" name="profil" class="nav-link rounded-circle"
+              title="Profil">
               <img width="25" src="https://img.icons8.com/nolan/2x/user.png" />
               {{user.username}}
             </router-link>
-          </li>
-          <li class="nav-item">
-            <button class="btn btn-info ml-3" @click="logout()">
-              <i class="fas fa-sign-out-alt"></i> Wyloguj się
-            </button>
           </li>
           <autocomplete
             class="ml-3 h-25"
@@ -90,6 +86,11 @@
             @submit="handleSubmit"
             auto-select
           ></autocomplete>
+          <li class="nav-item">
+            <button class="btn btn-info ml-3" @click="logout()">
+              <i class="fas fa-sign-out-alt"></i> Wyloguj się
+            </button>
+          </li>
         </ul>
       </div>
     </nav>
@@ -138,10 +139,14 @@ body {
   background-color: #9dcadf;
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 html {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #app {
@@ -151,10 +156,12 @@ html {
   text-align: center;
   color: #2c3e50;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-  height: 100%;
+  overflow: hidden;
 }
 
 .container__row {

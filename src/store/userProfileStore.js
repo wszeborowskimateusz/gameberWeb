@@ -50,7 +50,7 @@ const userDefaultState = {
     ],
   },
 };
-const userState = { user: {} };
+const userState = { user: {}, isLoading: false };
 
 
 function formatMessage(rewards, categoryName) {
@@ -85,6 +85,7 @@ const defaultCategoryRewards = {
 const actions = {
   getUserData({ commit }) {
     const userToken = JSON.parse(localStorage.getItem('user'));
+    commit('loading');
     userProfileService.getUserData(userToken)
       .then(
         (user) => {
@@ -172,11 +173,16 @@ const actions = {
 
 /* eslint-disable no-param-reassign */
 const mutations = {
+  loading(state) {
+    state.isLoading = true;
+  },
   gettingDataSuccess(state, user) {
     state.user = user.user;
+    state.isLoading = false;
   },
   gettingDataFailure(state) {
     state.user = userDefaultState.user;
+    state.isLoading = false;
   },
   changingAvatarSuccess(state, avatarId) {
     if (state.user) {

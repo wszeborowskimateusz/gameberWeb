@@ -1,5 +1,8 @@
 <template>
-  <div class="GameController col-12">
+  <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
+    <cube-spin class="m-2"></cube-spin>
+  </div>
+  <div class="GameController col-12" v-else>
     <div
       class="background-image"
       :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}"
@@ -19,13 +22,13 @@
         ></div>
         <div
           class="progress-bar-title bar-title"
-        >{{this.currentGameIndex + 1}} / {{this.category.games.length}}</div>
+        >{{category.currentGameIndex + 1}} / {{category.games.length}}</div>
       </div>
       <div v-if="category.games.length > 0" class="gameContainer">
         <component
           class="game"
-          v-bind:gameInfo="category.games[currentGameIndex].gameInfo"
-          :is="category.games[currentGameIndex].name"
+          v-bind:gameInfo="category.games[category.currentGameIndex].gameInfo"
+          :is="category.games[category.currentGameIndex].name"
         ></component>
       </div>
       <div
@@ -33,7 +36,7 @@
         role="toolbar"
         aria-label="Toolbar with button groups"
       >
-        <div class="btn-group mr-12 p-1" role="group" aria-label="First group">
+        <div class="btn-group mb-3 mr-12 p-1" role="group" aria-label="First group">
           <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
             <img src="https://img.icons8.com/plasticine/30/000000/circled-chevron-left.png" />
             Poprzedni
@@ -41,8 +44,8 @@
           <button
             type="button"
             class="m-3 btn btn-primary"
-            :disabled="category.games[currentGameIndex]
-                          && category.games[currentGameIndex].isFinished === false"
+            :disabled="category.games[category.currentGameIndex]
+                          && category.games[category.currentGameIndex].isFinished === false"
             v-on:click="nextGame()"
           >
             Następny
@@ -76,7 +79,7 @@
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-size: cover;
+  background-size: 100% 100%;
   width: 100%;
   height: 100%;
 }
@@ -105,6 +108,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
+
 import WordLearning from './Games/WordLearning.vue';
 import WordPicker from './Games/WordPicker.vue';
 import WordGuessing from './Games/WordGuessing.vue';
@@ -113,11 +119,14 @@ import WordSearch from './Games/WordSearch.vue';
 import Crossword from './Games/Crossword.vue';
 import StoryGame from './Games/StoryGame.vue';
 import PhraseLearning from './Games/PhraseLearning.vue';
+
 import gameControllerService from '../services/gameControllerService';
+import bootbox from '../utilities/bootbox';
 
 export default {
   data() {
     return {
+      isLoading: false,
       categoriesWithoutFinishing: ['WordLearning', 'StoryGame'],
       category: {
         games: [],
@@ -125,18 +134,22 @@ export default {
         categoryName: '',
         categoryCountryIcon: '',
         categoryIcon: '',
+        currentGameIndex: 0,
       },
-      currentGameIndex: 0,
       categoryId: this.$route.params.id,
     };
   },
   created() {
+    this.isLoading = true;
     this.fetchCategory();
   },
   computed: {
     ...mapState('users', ['user']),
     gameProgress() {
-      return ((this.currentGameIndex + 1) / this.category.games.length) * 100;
+      return (
+        ((this.category.currentGameIndex + 1) / this.category.games.length)
+        * 100
+      );
     },
   },
   components: {
@@ -148,6 +161,7 @@ export default {
     Crossword,
     StoryGame,
     PhraseLearning,
+    CubeSpin,
   },
   methods: {
     ...mapActions('userProfile', ['getCategoryRewards']),
@@ -155,24 +169,46 @@ export default {
       gameControllerService
         .getCategoryData(this.user, this.categoryId)
         .then((category) => {
+          this.isLoading = false;
           this.category = category;
         })
         /* eslint-disable no-param-reassign */
         /* eslint-disable no-return-assign */
-        .then(() => this.category.games.forEach(
-          game => (game.isFinished = this.categoriesWithoutFinishing.includes(game.name)),
-        ))
+        .then(() => this.category.games.forEach((game, index) => {
+          game.isFinished = this.categoriesWithoutFinishing.includes(game.name)
+              || index < this.category.currentGameIndex;
+        }))
         /* eslint-enable no-param-reassign */
         /* eslint-enable no-return-assign */
         .then(() => this.$forceUpdate());
     },
-    finishGame() {
-      this.category.games[this.currentGameIndex].isFinished = true;
-      this.nextGame();
+    async checkAnswer(answer, shouldShowModal) {
+      const currentGame = this.category.games[this.category.currentGameIndex];
+      const serverResponse = await gameControllerService.checkAnswer(
+        this.user,
+        currentGame.gameInfo.gameId,
+        answer,
+      );
+      if (serverResponse != null && serverResponse === true) {
+        if (shouldShowModal === true) bootbox.correctAnswerAlert();
+        currentGame.isFinished = true;
+        this.nextGameAction();
+      } else if (shouldShowModal === true) bootbox.incorrectAnswerAlert();
+    },
+    async finishGame(answer) {
+      this.checkAnswer(answer, true);
     },
     nextGame() {
-      if (this.currentGameIndex + 1 < this.category.games.length) {
-        this.currentGameIndex += 1;
+      const currentGame = this.category.games[this.category.currentGameIndex];
+      if (this.categoriesWithoutFinishing.includes(currentGame.name)) {
+        this.checkAnswer('', false);
+      } else {
+        this.nextGameAction();
+      }
+    },
+    nextGameAction() {
+      if (this.category.currentGameIndex + 1 < this.category.games.length) {
+        this.category.currentGameIndex += 1;
       } else {
         this.getCategoryRewards({
           token: this.user,
@@ -182,8 +218,8 @@ export default {
       }
     },
     prevGame() {
-      if (this.currentGameIndex - 1 >= 0) {
-        this.currentGameIndex -= 1;
+      if (this.category.currentGameIndex - 1 >= 0) {
+        this.category.currentGameIndex -= 1;
       }
     },
   },

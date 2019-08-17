@@ -85,7 +85,6 @@
 
 <script>
 import shuffle from '../../utilities/arrayManipulation';
-import bootbox from '../../utilities/bootbox';
 
 export default {
   data() {
@@ -108,12 +107,7 @@ export default {
       }
     },
     checkAnswer() {
-      if (this.selectedAnswer !== -1 && this.selectedAnswer === this.gameInfo.correctAnswer) {
-        bootbox.correctAnswerAlert();
-        this.$parent.finishGame();
-      } else {
-        bootbox.incorrectAnswerAlert();
-      }
+      this.$parent.finishGame(this.selectedAnswer);
     },
   },
 };

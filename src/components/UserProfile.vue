@@ -1,11 +1,14 @@
 <template>
-  <div v-if="(user && user.avatars)" class="userProfile col-12">
+  <div v-if="isLoading" class="col-12 d-flex p-2 justify-content-center">
+    <cube-spin class="m-2"></cube-spin>
+  </div>
+  <div v-else-if="(user != null && user.avatars)" class="userProfile col-12">
     <div
       class="profil col-12"
       :style="{'background-image' :
             'url(' + pickedImage.img +')'}"
     ></div>
-    <div class="scrollbar_remover">
+    <div class="scrollbar_remover mb-5">
       <div class="profile__container">
         <div class="row profile__content">
           <div class="avatar col-sm-12 col-lg-3 col-md-12 p-4">
@@ -273,7 +276,6 @@ input[type="radio"]:checked + .radioLabel {
   overflow-x: hidden;
   width: 100%;
   height: 100%;
-  position: absolute;
   top: 0px;
   left: 0px;
   z-index: 1000;
@@ -313,6 +315,7 @@ input[type="radio"]:checked + .radioLabel {
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import otherUsersProfileService from '../services/otherUsersProfileService';
 import usersInteractionsService from '../services/usersInteractionsService';
 
@@ -332,7 +335,10 @@ export default {
       return this.otherUser;
     },
     ...mapState('users', { userToken: 'user' }),
-    ...mapState('userProfile', { userFromStore: 'user' }),
+    ...mapState('userProfile', {
+      userFromStore: 'user',
+      isLoading: 'isLoading',
+    }),
     pickedAvatar() {
       let result = null;
       this.user.avatars.forEach((avatar) => {
@@ -374,7 +380,11 @@ export default {
     this.$forceUpdate();
   },
   methods: {
-    ...mapActions('userProfile', ['changeAvatar', 'changeBackgroundImage', 'getUserData']),
+    ...mapActions('userProfile', [
+      'changeAvatar',
+      'changeBackgroundImage',
+      'getUserData',
+    ]),
     exchangeAvatar() {
       this.changeAvatar(this.avatarIdToChange);
     },
@@ -391,12 +401,18 @@ export default {
     },
     addToFriends() {
       const userToAddId = this.userId;
-      usersInteractionsService.sendFriendshipRequest(this.userToken, userToAddId);
+      usersInteractionsService.sendFriendshipRequest(
+        this.userToken,
+        userToAddId,
+      );
     },
     sendMessage() {
       const userToSendMessageToId = this.userId;
       this.$router.push(`/messages/${userToSendMessageToId}`);
     },
+  },
+  components: {
+    CubeSpin,
   },
 };
 </script>
