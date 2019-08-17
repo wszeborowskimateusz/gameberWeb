@@ -1,6 +1,6 @@
 import config from '../../config';
-import requestSender from '../utilities/requestSender';
-import toasts from '../utilities/toasts';
+import requestSender from '@/utilities/requestSender';
+import toasts from '@/utilities/toasts';
 
 const defaultCategory = {
   games: [

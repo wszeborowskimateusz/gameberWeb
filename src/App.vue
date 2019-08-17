@@ -50,12 +50,12 @@
           <li class="nav-item">
             <router-link to="/friends" name="friends"
             class="nav-link rounded-circle" title="Znajomi">
-              <img width="25" src="https://img.icons8.com/color/100/000000/friends--v2.png" />
+              <img width="25" :src="imagesGetter.getImgUrl('app/friends.png')" />
             </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
-              <img width="25" src="https://img.icons8.com/color/48/000000/coins.png" />
+              <img width="25" :src="imagesGetter.getImgUrl('app/coins.png')" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
@@ -66,14 +66,14 @@
                 :size="25"
                 :count="amountOfUnReadNotifications"
                 counterBackgroundColor="#fa323c"
-                icon="https://img.icons8.com/dusk/64/000000/appointment-reminders.png"
+                :icon="imagesGetter.getImgUrl('app/notifications.png')"
               />
             </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/user-profile" name="profil" class="nav-link rounded-circle"
               title="Profil">
-              <img width="25" src="https://img.icons8.com/nolan/2x/user.png" />
+              <img width="25" :src="imagesGetter.getImgUrl('app/user.png')"/>
               {{user.username}}
             </router-link>
           </li>
@@ -188,11 +188,15 @@ html {
 import { mapState, mapActions } from 'vuex';
 import NotificationBell from 'vue-notification-bell';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
-import searchService from './services/searchService';
+import searchService from '@/services/searchService';
+
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
-    return {};
+    return {
+      imagesGetter,
+    };
   },
   mounted() {
     this.getUserData();

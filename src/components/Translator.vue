@@ -15,7 +15,7 @@
         <small class="form-text text-muted">Możesz wpisać maksymalnie 70 znaków</small>
       </div>
       <button v-on:click="swapTranslations()" onclick="this.blur();" class="col-2 btn btn-default">
-        <img src="https://img.icons8.com/dusk/64/000000/replace.png" />
+        <img :src="imagesGetter.getImgUrl('translate/replace.png')" />
       </button>
       <div class="translator__main__to col-5">
         <label for="translate__input__to" class>{{translateTo.name}}</label>
@@ -31,7 +31,7 @@
     </div>
     <button class="btn btn-primary m-4" v-on:click="translate()">
       Tłumacz
-      <img src="https://img.icons8.com/dusk/64/000000/google-translate.png" />
+      <img :src="imagesGetter.getImgUrl('translate/translate.png')" />
     </button>
     <div v-if="loading" class="d-flex p-2 justify-content-center">
       <cube-spin class="m-2"></cube-spin>
@@ -52,11 +52,14 @@ textarea {
 
 <script>
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-import translator from '../services/translator/translator_api';
+
+import translator from '@/services/translator/translator_api';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
     return {
+      imagesGetter,
       translateFrom: { name: 'Angielski', code: 'en', value: '' },
       translateTo: { name: 'Polski', code: 'pl', value: '' },
       error: { is: false, text: '' },

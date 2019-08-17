@@ -17,7 +17,7 @@
             </router-link>
             <button class="m-2 btn btn-primary" onclick="alert('FIGHT');">
               Wyzwij na pojedynek
-              <img src="https://img.icons8.com/ios-filled/50/000000/battle.png" />
+              <img :src="imagesGetter.getImgUrl('friends/battle.png')" />
             </button>
           </figcaption>
         </figure>
@@ -26,9 +26,9 @@
   </div>
   <div class="col-12" v-else>
     <p class="h1">Niestety nie masz jeszcze żadnych znajomych</p>
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('friends/crying.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('friends/nothing_found.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('friends/crying.png')" />
     <p class="h3">Skorzystaj z wyszukiwarki żeby znaleźć swoich znajomych</p>
   </div>
 </template>
@@ -66,11 +66,14 @@ figcaption {
 <script>
 import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-import friendsService from '../services/friendsService';
+
+import friendsService from '@/services/friendsService';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
     return {
+      imagesGetter,
       isLoading: false,
       friends: [],
     };

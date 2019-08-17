@@ -9,7 +9,7 @@
               <p class="english__text">{{story.storyEnglish}}</p>
               <p>{{story.storyPolish}}</p>
               <button class="btn" v-on:click="playSound(story.storyEnglish)">
-                <img src="https://img.icons8.com/dusk/64/000000/medium-volume.png" />
+                <img :src="imagesGetter.getImgUrl('games/story_game/speaker.png')" />
               </button>
             </div>
           </div>
@@ -53,7 +53,14 @@
 <script>
 import { Carousel, Slide } from 'vue-carousel';
 
+import imagesGetter from '@/utilities/imagesGetter';
+
 export default {
+  data() {
+    return {
+      imagesGetter,
+    };
+  },
   props: {
     gameInfo: Object,
   },

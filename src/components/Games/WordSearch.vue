@@ -70,12 +70,15 @@
 /* eslint-env browser */
 /* global $ */
 /* global wordsearch */
-import arrayManipulation from '../../utilities/arrayManipulation';
-import bootbox from '../../utilities/bootbox';
+import arrayManipulation from '@/utilities/arrayManipulation';
+import bootbox from '@/utilities/bootbox';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
     return {
+      imagesGetter,
+      sadImageUrl: imagesGetter.getImgUrl('games/word_search/sad.png'),
       puzzle: Object,
       wordsToSearch: [],
     };
@@ -172,13 +175,13 @@ export default {
     wrongWordCrossed() {
       $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
       bootbox.alert(`Niestety nie wykreśliłeś żadnego z podanych wyrazów
-            <img src="https://img.icons8.com/color/48/000000/sad.png">`);
+            <img src="${this.sadImageUrl}">`);
     },
     adjacentCrossingInformation() {
       $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
       bootbox.alert(`Musisz wykreślać literki przylegające do siebie 
             poziomo, pionowo lub ukośnie
-            <img src="https://img.icons8.com/color/48/000000/sad.png">`);
+            <img src="${this.sadImageUrl}">`);
     },
   },
 };

@@ -13,7 +13,7 @@
         </div>
         <div class="col-12">
             <button class="btn" v-on:click="playSound(gameInfo.englishName)">
-                <img src="https://img.icons8.com/dusk/48/000000/medium-volume.png" />
+                <img height="48" :src="imagesGetter.getImgUrl('games/story_game/speaker.png')" />
             </button>
         </div>
     </div>
@@ -33,7 +33,14 @@
 </style>
 
 <script>
+import imagesGetter from '@/utilities/imagesGetter';
+
 export default {
+  data() {
+    return {
+      imagesGetter,
+    };
+  },
   props: {
     gameInfo: Object,
   },
