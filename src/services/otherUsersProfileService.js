@@ -41,7 +41,7 @@ const defaultUser = {
 
 export default {
   async getUser(token, userId) {
-    const url = `${config.apiUrl}/users/get/${userId}`;
+    const url = `${config.apiUrl}/users/profile/${userId}`;
     const result = await requestSender.sendGetRequest(token, url).then(
       results => results,
       () => {
