@@ -31,12 +31,13 @@ export default {
       },
     );
     return unlockedCountries;
-  },    
+  },
 
   async buyCountry(token, countryISO){
     const url = `${config.apiUrl}/map/buyCountry`;
-    let body = {};
-    body.countryISO = countryISO;
+    let body = {
+      countryISO: countryISO,
+    };
     let result = {};
     await requestSender.sendPostRequest(url, body, token)
         .then(
@@ -51,6 +52,24 @@ export default {
             }
         );
     return result;
-    },
+  },
+
+  async getCountryCategories(token, countryISO){
+    const url = `${config.apiUrl}/map/countryCategories`;
+    let body = {
+      countryISO: countryISO,
+    }
+    let result = {};
+    await requestSender.sendPostRequest(url, body, token)
+      .then(
+        (r) => {
+          result = r.categories;
+        },
+        () => {
+          toasts.errorToast('Błąd serwera podczas pobierania kategorii dla kraju ' + countryISO);
+        }
+      );
+    return result;
+  }
 
 };

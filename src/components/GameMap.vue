@@ -1,6 +1,14 @@
 <template>
-    <div id="mapdiv" ref="chartdiv"></div>
+    <div class="col-12" id="mapdiv" ref="chartdiv"></div>
 </template>
+
+<style scoped>
+    #mapdiv {
+        width: 100vw;
+        height: 100vh;
+    }
+</style>
+
 
 <script>
 import * as am4core from '@amcharts/amcharts4/core';
@@ -15,33 +23,8 @@ import mapService from '../services/mapService';
 import { connect } from 'net';
 import { privateDecrypt } from 'crypto';
 import { release } from 'os';
-
-
-
-// Categories data
-const countryCategories = {
-  'PL': [
-    { name: 'Animals', color: 'yellow' },
-    { name: 'Greetings', color: 'blue' },
-    { name: 'Local food', color: 'orange' },
-    { name: 'Weather', color: 'green' },
-    { name: 'Poles', color: 'white' }
-  ],
-  'FR': [
-    { name: 'Animals', color: 'yellow' },
-    { name: 'Greetings', color: 'blue' },
-    { name: 'Local food', color: 'orange' },
-    { name: 'Weather', color: 'green' },
-    { name: 'Poles', color: 'white' }
-  ],
-  'IT': [
-    { name: 'Animals', color: 'yellow' },
-    { name: 'Greetings', color: 'blue' },
-    { name: 'Local food', color: 'orange' },
-    { name: 'Weather', color: 'green' },
-    { name: 'Poles', color: 'white' }
-  ],
-};
+import { constants } from 'fs';
+import config from '../../config';
 
 // Gloobals for map
 const countriesLatlon = {
@@ -295,7 +278,7 @@ const circleDistanceFromCenter = 4;
 
 const labelFontSize = circleRadius / 3;
 const labelDxOffset = 0.8;
-const labelDyOffset = 0.1;
+const labelDyOffset = 2.5;
 
 const lockIconSize = 10;
 
@@ -325,6 +308,7 @@ export default {
       unlockedCountries: [],
       lockedCountries: [],
       lastSelectedCountry: null,
+      allCategories: {},
     };
   },
   compouted: {
@@ -342,6 +326,12 @@ export default {
       this.unlockedCountries = allCountries.filter(c => unlockedIds.includes(c._id));
       this.lockedCountries = allCountries.filter(c => lockedIds.includes(c._id));
     },    
+    async getCountriesCategories() {
+      for (let i = 0; i < this.unlockedCountries.length; i++)
+      {
+        this.unlockedCountries[i].categories = await mapService.getCountryCategories(this.$store.state.users.user, this.unlockedCountries[i].ISO);
+      };
+    },
     countryPolygonClick(ev) {
         // Reset zoom if already zoomed to country
         if (this.lastSelected == ev.target) {
@@ -360,17 +350,16 @@ export default {
       const countryISO = ev.target.dataItem.dataContext.ISO;
 
       const result = await mapService.buyCountry(this.$store.state.users.user, countryISO);
-      console.log(result);
       if (result.status)
       {
         ev.target.baseSprite.openPopup("You bought " + countryISO);
-        console.log('successfully bougth country');
+        ev.target.baseSprite.validateData();
       }
       else
       {
         ev.target.baseSprite.openPopup("Unable to buy country.\n" + result.comment);
       }
-    }
+    },
   },
   created() {    
 
@@ -378,7 +367,8 @@ export default {
   async mounted() {
     // Download required info from server
     await this.getMapCountries();
-
+    let n = await this.getCountriesCategories();
+    console.log(JSON.stringify(this.unlockedCountries))
     // Choose theme
     am4core.useTheme(am4themesAnimated);
 
@@ -466,43 +456,51 @@ export default {
     // Enlarge category on hover
     unlockedCountryInterfaceTemplate.events.on('over',
       (ev) => {
-        console.log('over circle');
-        // ev.traget.radius = 200;
+        ev.target.scale = 1.2;
+        
+    });
+    unlockedCountryInterfaceTemplate.events.on('out',
+      (ev) => {
+        ev.target.scale = 1.0;
+    });
+
+    unlockedCountryInterfaceTemplate.events.on('hit',
+      (ev) => {
+        category = ev.target.dataItem.dataContext;
+        console.log(categoryName);
     });
 
     // Draw categories interface
     this.unlockedCountries.forEach(c => {
-      const countryId = c.ISO;
-      let categories = countryCategories[countryId];
-      if (categories != null)
+      let countryCategories = c.categories;
+      if (countryCategories != null)
       {
-        unlockedCountryInterfaceSeries.addData(categories);
-        
+        unlockedCountryInterfaceSeries.addData(countryCategories);
 
-        const countryPos = countriesLatlon[countryId];
-        const points = getCirclePoints(categories.length, circleDistanceFromCenter, 0, 0);
+        const points = getCirclePoints(countryCategories.length, circleDistanceFromCenter, 0, 0);
 
-        for (let i = 0; i < categories.length; i += 1) {
-          categories[i].latitude = countryPos.latitude;
-          categories[i].longitude = countryPos.longitude;
-          const circle = unlockedCountryInterfaceTemplate.createChild(am4core.Circle);
+        for (let i = 0; i < countryCategories.length; i += 1) {
+          countryCategories[i].latitude = c.centerLatitude;
+          countryCategories[i].longitude = c.centerLongitude;
+
+          const categoryIcon = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
+          categoryIcon.href=`${config.apiUrl}/images/${countryCategories[i].category_icon}`;
+          categoryIcon.dx = points[i][0];
+          categoryIcon.dy = points[i][1];
+          categoryIcon.width = circleRadius * 2;
+          categoryIcon.verticalCenter = 'middle';
+          categoryIcon.horizontalCenter = 'middle';
 
           const label = unlockedCountryInterfaceTemplate.createChild(am4core.Label);
-          circle.fill = am4core.color(categories[i].color);
-          circle.dx = points[i][0];
-          circle.dy = points[i][1];
-          circle.radius = circleRadius;
-          circle.verticalCenter = 'middle';
-          circle.horizontalCenter = 'middle';
-          // circle.tooltipText = '{name}';
-          label.dx = circle.dx + labelDxOffset;
-          label.dy = circle.dy + labelDyOffset;
+
+          label.dx = categoryIcon.dx + labelDxOffset;
+          label.dy = categoryIcon.dy + labelDyOffset;
           label.fontSize = labelFontSize;
           label.fontWeight = 'bold';
           label.fontFamily = 'Arial';
           label.horizontalCenter = 'middle';
           label.verticalCenter = 'middle';
-          label.text = categories[i].name;
+          label.text = countryCategories[i].category_name;
         }
       }
     });
@@ -526,6 +524,7 @@ export default {
           }
         }
       });
+
   },
 
   beforeDestroy() {
@@ -537,10 +536,3 @@ export default {
 };
 
 </script>
-
-<style scoped>
-    #mapdiv {
-        width: 100%;
-        height: 100%;
-    }
-</style>
