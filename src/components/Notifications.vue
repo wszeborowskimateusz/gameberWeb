@@ -182,15 +182,19 @@ export default {
   computed: {
     ...mapState('notificationsStore', ['notifications', 'isLoading']),
     amountOfReadNotifications() {
+      if (this.notifications === undefined) { return []; }
       return this.notifications.filter(x => x.isRead).length;
     },
     amountOfUnReadNotifications() {
+      if (this.notifications === undefined) { return []; }
       return this.notifications.filter(x => !x.isRead).length;
     },
     ReadNotifications() {
+      if (this.notifications === undefined) { return []; }
       return this.notifications.filter(x => x.isRead);
     },
     UnReadNotifications() {
+      if (this.notifications === undefined) { return []; }
       return this.notifications.filter(x => !x.isRead);
     },
     NotificationsStatus() {
