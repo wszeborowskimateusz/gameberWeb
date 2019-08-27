@@ -2,7 +2,7 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div class="GameController col-12" v-else>
+  <div class="GameController col-12" v-else-if="category != null">
     <div
       class="background-image"
       :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}"
@@ -56,6 +56,13 @@
         </div>
       </div>
     </div>
+  </div>
+  <div v-else class="col-12">
+    <!-- TODO: Change those images once this branch is merged -->
+    <h1 class="mb-5">Nie znaleziono kategorii o wskazanym identyfikatorze</h1>
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
+    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
   </div>
 </template>
 
