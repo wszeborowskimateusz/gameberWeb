@@ -11,6 +11,9 @@
       <img width="50" :src="category.categoryCountryIcon" />
       <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
       <img width="50" :src="category.categoryIcon" />
+      <div v-if="isAnswerLoading" class="answer_loading_indicator">
+        <cube-spin class="m-2"></cube-spin>
+      </div>
       <div class="progress m-2">
         <div
           class="progress-bar dynamic progress-bar-animated progress-bar-striped"
@@ -67,6 +70,14 @@
 </template>
 
 <style scoped>
+.answer_loading_indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .GameController {
   text-align: center;
   color: #000;
@@ -134,6 +145,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      isAnswerLoading: false,
       categoriesWithoutFinishing: ['WordLearning', 'StoryGame'],
       category: {
         games: [],
@@ -190,12 +202,14 @@ export default {
         .then(() => this.$forceUpdate());
     },
     async checkAnswer(answer, shouldShowModal) {
+      this.isAnswerLoading = true;
       const currentGame = this.category.games[this.category.currentGameIndex];
       const serverResponse = await gameControllerService.checkAnswer(
         this.user,
         currentGame.gameId,
         answer,
       );
+      this.isAnswerLoading = false;
       if (serverResponse != null && serverResponse === true) {
         if (shouldShowModal === true) bootbox.correctAnswerAlert();
         currentGame.isFinished = true;

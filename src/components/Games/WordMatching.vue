@@ -107,7 +107,7 @@ export default {
       }
     },
     checkAnswer() {
-      this.$parent.finishGame(this.selectedAnswer);
+      this.$parent.finishGame(this.selectedAnswer.toLowerCase());
     },
   },
 };
