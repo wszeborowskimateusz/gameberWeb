@@ -184,6 +184,9 @@ export default {
           for (let i = 0; i < response.games.length; i += 1) {
             response.games[i].gameInfo = JSON.parse(response.games[i].gameInfo);
           }
+          if (response.currentGameIndex === undefined) {
+            response.currentGameIndex = 0;
+          }
           return response;
         },
         () => {
@@ -195,20 +198,20 @@ export default {
     return result;
   },
   async checkAnswer(token, gameId, answer) {
-    const url = `${config.apiUrl}/games/check-answer/${gameId}`;
-    const result = await requestSender.sendPostRequest(url, { answer }, token)
+    const url = `${config.apiUrl}/games/check-answer`;
+    const result = await requestSender.sendPostRequest(url, { answer, gameId }, token)
       .then(
-        response => response.wasAnswerCorrect,
+        response => response.isCorrect,
         () => {
           toasts.errorToast('Niestety nie udało pobrać odpowiedzi z serwera. Spróbuj jeszcze raz.');
           // FIXME: Remove this later
-          return true;
+          return false;
         },
       );
     return result;
   },
   finishCategory(token, categoryId) {
     const url = `${config.apiUrl}/games/category/finish`;
-    return requestSender.sendPostRequest(url, categoryId, token);
+    return requestSender.sendPostRequest(url, { categoryId }, token);
   },
 };

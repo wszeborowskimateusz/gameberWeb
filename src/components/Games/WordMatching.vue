@@ -89,7 +89,7 @@ import shuffle from '../../utilities/arrayManipulation';
 export default {
   data() {
     return {
-      selectedAnswer: -1,
+      selectedAnswer: '',
     };
   },
   mounted() {

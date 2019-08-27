@@ -8,9 +8,9 @@
       :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}"
     ></div>
     <div class="content">
-      <img :src="category.categoryCountryIcon" />
+      <img width="50" :src="category.categoryCountryIcon" />
       <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
-      <img :src="category.categoryIcon" />
+      <img width="50" :src="category.categoryIcon" />
       <div class="progress m-2">
         <div
           class="progress-bar dynamic progress-bar-animated progress-bar-striped"
@@ -186,7 +186,7 @@ export default {
       const currentGame = this.category.games[this.category.currentGameIndex];
       const serverResponse = await gameControllerService.checkAnswer(
         this.user,
-        currentGame.gameInfo.gameId,
+        currentGame.gameId,
         answer,
       );
       if (serverResponse != null && serverResponse === true) {
@@ -196,7 +196,7 @@ export default {
       } else if (shouldShowModal === true) bootbox.incorrectAnswerAlert();
     },
     async finishGame(answer) {
-      this.checkAnswer(answer, true);
+      this.checkAnswer(JSON.stringify(answer), true);
     },
     nextGame() {
       const currentGame = this.category.games[this.category.currentGameIndex];
