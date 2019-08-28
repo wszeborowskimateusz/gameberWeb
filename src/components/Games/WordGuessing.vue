@@ -45,7 +45,7 @@ export default {
       }
     },
     checkAnswer() {
-      this.$parent.finishGame(this.userAnswer);
+      this.$parent.finishGame(this.userAnswer.toLowerCase());
     },
   },
 };

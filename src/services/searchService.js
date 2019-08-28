@@ -12,7 +12,7 @@ const maimumNumberOfDisplayedResults = 7;
 
 export default {
   searchForUsers(token, query) {
-    const url = `${config.apiUrl}/search?query=${encodeURI(query)}`;
+    const url = `${config.apiUrl}/users/search?query=${encodeURIComponent(query)}`;
     return requestSender.sendGetRequest(token, url)
       .then(
         searchResult => searchResult.searchResult.slice(0, maimumNumberOfDisplayedResults),
