@@ -3,11 +3,11 @@ export default {
   interfaceShowZoomLevel: 5,
   lockedCountryFillColor: 'gray',
   unlockedCountryFillColor: 'red',
-  circleRadius: 2,
-  labelFontSize: 1.5,
-  circleDistanceFromCenter: 4,
-  labelDxOffset: 0.8,
-  labelDyOffset: 2.5,
-  lockIconSize: 10,
+  categoryIconSize: 4,
+  lockIconSize: 7,
+  labelFontSize: 1.8,
+  priceLabelDxOffset: 1,
+  priceLabelDyOffset: 0.8,
+  categoryIconsSpacing: 1.5,
 };
 </script>

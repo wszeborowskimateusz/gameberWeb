@@ -1,6 +1,7 @@
 import config from '@/../config';
 import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
+import { async } from 'q';
 
 export default {
   async getMapCountries(token) {
@@ -19,7 +20,10 @@ export default {
     const url = `${config.apiUrl}/map/unlockedcountries`;
     return await requestSender.sendGetRequest(token, url)
     .then(
-      (r) => {return r.unlockedCountries},
+      (r) => {
+        console.log('unlocked countries')
+        console.log(r.unlockedCountries)
+        return r.unlockedCountries},
       () => {
         toasts.errorToast('Niestety nie udało się wczytać listy odblokowanych krajow. Spróbuj odświeżyć stronę.');
         return [];
@@ -27,10 +31,10 @@ export default {
     );
   },
 
-  async buyCountry(token, countryISO){
+  async buyCountry(token, countryId){
     const url = `${config.apiUrl}/map/buyCountry`;
     const body = {
-      countryISO: countryISO,
+      countryId: countryId,
     };
     return await requestSender.sendPostRequest(url, body, token)
         .then(
@@ -49,10 +53,10 @@ export default {
         );
   },
 
-  async getCountryCategories(token, countryISO){
-    const url = `${config.apiUrl}/map/countryCategories`;
+  async getAllCategories(token, countries){
+    const url = `${config.apiUrl}/map/getCategories`;
     const body = {
-      countryISO: countryISO,
+      countriesIds: countries.map(c => c._id),
     }
     return await requestSender.sendPostRequest(url, body, token)
       .then(
@@ -60,10 +64,10 @@ export default {
           return r.categories;
         },
         () => {
-          toasts.errorToast('Błąd serwera podczas pobierania kategorii dla kraju ' + countryISO);
+          toasts.errorToast('Bład pobierania kategorii');
           return null;
         }
-      );
+      )
   }
 
 };
