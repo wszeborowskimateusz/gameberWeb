@@ -9,7 +9,7 @@
     <div class="user_response__container d-flex justify-content-center p-5 mb-5">
       <div class="check_answer_button m-2">
         <button type="button" class="btn btn-primary" v-on:click="checkAnswer()">
-            Sprawdź odpowiedź
+          Sprawdź odpowiedź
         </button>
       </div>
       <ul class="list-group list-group-horizontal">
@@ -35,15 +35,6 @@
 </template>
 
 <style scoped>
-.selected_item:hover {
-  background: url("https://img.icons8.com/dusk/32/000000/delete-sign.png")
-    no-repeat scroll right top;
-}
-.item_to_select:hover {
-  background: url("https://img.icons8.com/color/32/000000/plus.png") no-repeat
-    scroll right top;
-}
-
 li {
   background-color: #f4e5dd;
   cursor: pointer;

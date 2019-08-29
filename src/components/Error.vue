@@ -1,9 +1,9 @@
 <template>
   <div class="container col-12">
     <div class="error p-3">
-        <img class="error__icon_left" src="https://img.icons8.com/flat_round/64/000000/error--v1.png">
-        <img class="error__icon_right" src="https://img.icons8.com/officel/64/000000/road-closure.png">
-      <img src="http://www.onelove4ever.com/files/image/error.png" width="250" height="250" />
+        <img class="error__icon_left" :src="imagesGetter.getImgUrl('error/error_icon_1.png')">
+        <img class="error__icon_right" :src="imagesGetter.getImgUrl('error/error_icon_2.png')">
+      <img :src="imagesGetter.getImgUrl('error/error_image.png')" width="250" height="250" />
       <p class="h1 p-2 font-weight-bold">Ooops! Coś poszło nie tak</p>
       <p class="h5">{{message}}</p>
     </div>
@@ -30,8 +30,15 @@
 </style>
 
 <script>
+import imagesGetter from '@/utilities/imagesGetter';
+
 export default {
   name: 'ErrorComponent',
+  data() {
+    return {
+      imagesGetter,
+    };
+  },
   props: {
     message: String,
   },

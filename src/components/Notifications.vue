@@ -54,7 +54,7 @@
             <img
               width="35"
               height="35"
-              src="https://img.icons8.com/cotton/64/000000/delete-sign--v2.png"
+              :src="imagesGetter.getImgUrl('notifications/delete.png')"
             />
           </button>
           <button
@@ -65,7 +65,7 @@
             <img
               width="35"
               height="35"
-              src="https://img.icons8.com/cute-clipart/64/000000/visible.png"
+              :src="imagesGetter.getImgUrl('notifications/mark_as_read.png')"
             />
           </button>
           <p class="pt-3 font-weight-bold">{{notification.title}}</p>
@@ -96,7 +96,7 @@
                 <img
                   width="35"
                   height="35"
-                  src="https://img.icons8.com/dusk/64/000000/approval.png"
+                  :src="imagesGetter.getImgUrl('notifications/accept.png')"
                 />
               </button>
               <button
@@ -107,7 +107,7 @@
                 <img
                   width="35"
                   height="35"
-                  src="https://img.icons8.com/plasticine/100/000000/delete-sign.png"
+                  :src="imagesGetter.getImgUrl('notifications/decline.png')"
                 />
               </button>
             </div>
@@ -118,9 +118,9 @@
   </div>
   <div class="col-12" v-else>
     <p class="h1">Niestety nie masz żadnych powiadomień</p>
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('notifications/crying.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('notifications/nothing_found.png')"  />
+    <img class="m-5" :src="imagesGetter.getImgUrl('notifications/crying.png')"  />
   </div>
 </template>
 
@@ -170,9 +170,12 @@
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
+import imagesGetter from '@/utilities/imagesGetter';
+
 export default {
   data() {
     return {
+      imagesGetter,
       pickedNotificationsStatus: 0,
     };
   },
@@ -222,15 +225,15 @@ export default {
     getNotificationIcon(notificationType) {
       switch (notificationType) {
         case 'friendship_request':
-          return 'https://img.icons8.com/dusk/50/000000/add-user-male.png';
+          return imagesGetter.getImgUrl('notifications/friendship_request.png');
         case 'achievement_receive':
-          return 'https://img.icons8.com/dusk/64/000000/diploma.png';
+          return imagesGetter.getImgUrl('notifications/achievement_receive.png');
         case 'friendship_accepted':
-          return 'https://img.icons8.com/dusk/64/000000/friends.png';
+          return imagesGetter.getImgUrl('notifications/friendship_accepted.png');
         case 'message_received':
-          return 'https://img.icons8.com/dusk/64/000000/new-message.png';
+          return imagesGetter.getImgUrl('notifications/new_message.png');
         default:
-          return 'https://img.icons8.com/plasticine/100/000000/appointment-reminders.png';
+          return imagesGetter.getImgUrl('notifications/default_notification.png');
       }
     },
     acceptFriendshipInvitation(userId) {

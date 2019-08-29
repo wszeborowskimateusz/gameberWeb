@@ -48,7 +48,7 @@
           <div class="col-4 col-lg-2 mt-3">
             <button type="submit" class="btn btn-primary mb-md-2">
               Wyślij
-              <img width="25" src="https://img.icons8.com/color/50/000000/filled-sent.png" />
+              <img width="25" :src="imagesGetter.getImgUrl('messages/send.png')" />
             </button>
           </div>
         </div>
@@ -104,11 +104,14 @@
 <script>
 import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-import messagesService from '../services/messagesService';
+
+import messagesService from '@/services/messagesService';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
     return {
+      imagesGetter,
       areAllMessagesLoaded: false,
       isConversationLoading: false,
       messagesPerRequest: 10,

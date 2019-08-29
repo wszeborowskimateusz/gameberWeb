@@ -85,8 +85,9 @@
 <script>
 /* eslint-env browser */
 /* global $ */
-import bootbox from '../../utilities/bootbox';
-import arrayManipulation from '../../utilities/arrayManipulation';
+import bootbox from '@/utilities/bootbox';
+import arrayManipulation from '@/utilities/arrayManipulation';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
@@ -141,12 +142,12 @@ export default {
         else array[index] = element.letter;
       });
       /* eslint-enable no-param-reassign */
-
+      const sadImageUrl = imagesGetter.getImgUrl('games/crossword/sad.png');
       let isCorrect = true;
       $('.crosswordElemInput').each(function (index) {
         if ($(this).val() !== flatGrid[index]) {
           bootbox.alert(`Niestety nie udało ci się prawidłowo wypełnić krzyżówki 
-                    <img src="https://img.icons8.com/color/48/000000/sad.png">`);
+                    <img src="${sadImageUrl}">`);
           isCorrect = false;
           return false;
         }

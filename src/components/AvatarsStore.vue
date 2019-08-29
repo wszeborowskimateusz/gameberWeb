@@ -68,7 +68,7 @@
                 <span class="font-weight-bold">{{item.name}}</span>
                 <br />
                 <span class="font-weight-bold">{{item.price}}</span>
-                <img width="25" src="https://img.icons8.com/color/48/000000/coins.png" />
+                <img width="25" :src="imagesGetter.getImgUrl('store/coins.png')" />
                 <br />
                 <button
                   :class="[(user.numberOfCoins === undefined || user.numberOfCoins < item.price)
@@ -79,7 +79,7 @@
                   class="item__buy__button m-2 btn btn-primary"
                 >
                   Kup
-                  <img src="https://img.icons8.com/cotton/25/000000/buy-for-change.png" />
+                  <img height="25" :src="imagesGetter.getImgUrl('store/buy.png')" />
                 </button>
               </figcaption>
             </figure>
@@ -149,19 +149,23 @@ figcaption {
 <script>
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-import bootbox from '../utilities/bootbox';
-import tooltip from '../utilities/tippy';
-import avatarsStoreService from '../services/avatarsStoreService';
-import ErrorComponent from './Error.vue';
+import bootbox from '@/utilities/bootbox';
+import tooltip from '@/utilities/tippy';
+import avatarsStoreService from '@/services/avatarsStoreService';
+import ErrorComponent from '@/components/Error.vue';
+
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
     return {
+      imagesGetter,
       isLoading: false,
       itemsPerRow: [4, 2],
       avatars: [],
       backgroundImages: [],
       currentItemsCategory: 0,
+      coinsUrl: imagesGetter.getImgUrl('store/coins.png'),
     };
   },
   updated() {
@@ -199,11 +203,11 @@ export default {
           `Czy na pewno chcesz kupić 
                     <span class="font-weight-bold">${item.name}</span>
                     za <span class="font-weight-bold">${item.price}</span> 
-                    <img width="25" src="https://img.icons8.com/color/48/000000/coins.png"> ?
+                    <img width="25" src="${this.coinsUrl}"> ?
                     \n\nPozostanie ci 
                     <span class="font-weight-bold">${this.user.numberOfCoins
                       - item.price}</span>
-                    <img width="25" src="https://img.icons8.com/color/48/000000/coins.png">`,
+                    <img width="25" src="${this.coinsUrl}">`,
           (bought) => {
             if (bought) {
               if (this.currentItemsCategory === 0) {

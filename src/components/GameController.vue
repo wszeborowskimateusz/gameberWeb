@@ -41,7 +41,7 @@
       >
         <div class="btn-group mb-3 mr-12 p-1" role="group" aria-label="First group">
           <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
-            <img src="https://img.icons8.com/plasticine/30/000000/circled-chevron-left.png" />
+            <img height="50" :src="imagesGetter.getImgUrl('game_controller/prev.png')" />
             Poprzedni
           </button>
           <button
@@ -52,9 +52,7 @@
             v-on:click="nextGame()"
           >
             Następny
-            <img
-              src="https://img.icons8.com/plasticine/30/000000/circled-chevron-right.png"
-            />
+            <img height="50" :src="imagesGetter.getImgUrl('game_controller/next.png')" />
           </button>
         </div>
       </div>
@@ -129,21 +127,23 @@ import { mapState, mapActions } from 'vuex';
 
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
-import WordLearning from './Games/WordLearning.vue';
-import WordPicker from './Games/WordPicker.vue';
-import WordGuessing from './Games/WordGuessing.vue';
-import WordMatching from './Games/WordMatching.vue';
-import WordSearch from './Games/WordSearch.vue';
-import Crossword from './Games/Crossword.vue';
-import StoryGame from './Games/StoryGame.vue';
-import PhraseLearning from './Games/PhraseLearning.vue';
+import WordLearning from '@/components/Games/WordLearning.vue';
+import WordPicker from '@/components/Games/WordPicker.vue';
+import WordGuessing from '@/components/Games/WordGuessing.vue';
+import WordMatching from '@/components/Games/WordMatching.vue';
+import WordSearch from '@/components/Games/WordSearch.vue';
+import Crossword from '@/components/Games/Crossword.vue';
+import StoryGame from '@/components/Games/StoryGame.vue';
+import PhraseLearning from '@/components/Games/PhraseLearning.vue';
 
-import gameControllerService from '../services/gameControllerService';
-import bootbox from '../utilities/bootbox';
+import gameControllerService from '@/services/gameControllerService';
+import bootbox from '@/utilities/bootbox';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
     return {
+      imagesGetter,
       isLoading: false,
       isAnswerLoading: false,
       categoriesWithoutFinishing: ['WordLearning', 'StoryGame'],

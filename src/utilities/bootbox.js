@@ -1,3 +1,5 @@
+import imagesGetter from '@/utilities/imagesGetter';
+
 const bootbox = require('bootbox');
 
 export default {
@@ -10,14 +12,16 @@ export default {
   },
   correctAnswerAlert() {
     bootbox.alert({
-      message: 'Tak jest! To jest prawidłowa odpowiedź!<img src="https://img.icons8.com/color/48/000000/fire-element.png">',
+      message: `Tak jest! To jest prawidłowa odpowiedź! 
+        <img src="${imagesGetter.getImgUrl('bootbox/fire.png')}">`,
       backdrop: true,
       centerVertical: true,
     });
   },
   incorrectAnswerAlert() {
     bootbox.alert({
-      message: 'Niestety nie jest to prawidłowa odpowiedź <img src="https://img.icons8.com/color/48/000000/sad.png">',
+      message: `Niestety nie jest to prawidłowa odpowiedź 
+        <img src="${imagesGetter.getImgUrl('bootbox/sad.png')}">`,
       backdrop: true,
       centerVertical: true,
     });

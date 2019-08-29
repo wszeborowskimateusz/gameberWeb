@@ -21,7 +21,7 @@
                 data-toggle="modal"
                 data-target="#avatarModal"
               >
-                <img width="70" src="https://img.icons8.com/color/96/000000/plus-2-math.png" />
+                <img width="70" :src="imagesGetter.getImgUrl('profile/change_avatar.png')" />
               </button>
               <h1>{{user.username}}</h1>
             </div>
@@ -39,7 +39,7 @@
             </a>
             <div v-if="!user.achievements || user.achievements.length === 0">
               <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
-              <img src="https://img.icons8.com/ios/100/000000/empty-set-filled.png" />
+              <img :src="imagesGetter.getImgUrl('profile/no_achievements.png')" />
             </div>
           </div>
           <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
@@ -51,17 +51,17 @@
             >
               Zmień zdjęcie w tle
               <img
-                width="25"
-                src="https://img.icons8.com/clouds/100/000000/picture.png"
+                width="50"
+                :src="imagesGetter.getImgUrl('profile/change_image.png')"
               />
             </button>
             <button v-else-if="!user.isFriend" class="btn btn-primary" v-on:click="addToFriends()">
               Dodaj do znajomych
-              <img src="https://img.icons8.com/dusk/50/000000/add-user-male.png" />
+              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
             </button>
             <button v-else class="btn btn-primary" v-on:click="sendMessage()">
               Wyślij wiadomość
-              <img src="https://img.icons8.com/dusk/64/000000/send-mass-email.png" />
+              <img :src="imagesGetter.getImgUrl('profile/send_message.png')"/>
             </button>
           </div>
         </div>
@@ -205,9 +205,9 @@
   </div>
   <div v-else class="col-12">
     <h1 class="mb-5">Nie znaleziono użytkownika o wskazanym identyfikatorze</h1>
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('profile/crying.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('profile/nothing_found.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('profile/crying.png')" />
   </div>
 </template>
 
@@ -316,12 +316,15 @@ input[type="radio"]:checked + .radioLabel {
 <script>
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-import otherUsersProfileService from '../services/otherUsersProfileService';
-import usersInteractionsService from '../services/usersInteractionsService';
+
+import otherUsersProfileService from '@/services/otherUsersProfileService';
+import usersInteractionsService from '@/services/usersInteractionsService';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   data() {
     return {
+      imagesGetter,
       backgroundImageIdToChange: 0,
       avatarIdToChange: 0,
       userId: this.$route.params.id,

@@ -41,7 +41,7 @@
           <img
             width="20px"
             alt="Google &quot;G&quot; Logo"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+            :src="imagesGetter.getImgUrl('login/google_logo.png')"
           />
           Login with Google
         </button>
@@ -64,11 +64,13 @@ import { mapState, mapActions } from 'vuex';
 import { VFBLogin as VFacebookLogin } from 'vue-facebook-login-component';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import config from '../../config';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   name: 'login',
   data() {
     return {
+      imagesGetter,
       username: '',
       password: '',
       submitted: false,
