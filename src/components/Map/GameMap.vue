@@ -23,6 +23,7 @@ import bootbox from '@/utilities/bootbox';
 import toasts from '@/utilities/toasts';
 import config from '@/../config';
 import mapConsts from '@/components/Map/MapConstants.vue';
+import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
   name: 'GameMap',
@@ -165,7 +166,7 @@ export default {
 
       // add lock icon
       const categoryImage = lockedCountryInterfaceTemplate.createChild(am4core.Image);
-      categoryImage.href = require('@/assets/icons/map_lock_icon.png');
+      categoryImage.href = imagesGetter.getImgUrl('game_map/map_lock_icon.png');
       categoryImage.width = mapConsts.lockIconSize;
       categoryImage.verticalCenter = 'middle';
       categoryImage.horizontalCenter = 'middle';
@@ -265,11 +266,12 @@ export default {
     },
     async lockIconClick(ev) {
       const country = ev.target.dataItem.dataContext;
+      const coinsUrl = imagesGetter.getImgUrl('game_map/coins.png');
       bootbox.confirmationDialog(
         `Czy na pewno chcesz kupić kraj
                   <span class="font-weight-bold">${country.country_name}</span>
                   za <span class="font-weight-bold">${country.price}</span> 
-                  <img width="25" src="https://img.icons8.com/color/48/000000/coins.png"> ?`,
+                  <img width="25" src="${coinsUrl}"> ?`,
         async (bought) => {
           if (bought) {
             const result = await mapService.buyCountry(this.user, country._id);

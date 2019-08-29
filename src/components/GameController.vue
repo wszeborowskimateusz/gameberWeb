@@ -59,11 +59,10 @@
     </div>
   </div>
   <div v-else class="col-12">
-    <!-- TODO: Change those images once this branch is merged -->
     <h1 class="mb-5">Nie znaleziono kategorii o wskazanym identyfikatorze</h1>
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/nothing-found.png" />
-    <img class="m-5" src="https://img.icons8.com/cute-clipart/100/000000/crying.png" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('profile/crying.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('profile/nothing_found.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('profile/crying.png')" />
   </div>
 </template>
 
