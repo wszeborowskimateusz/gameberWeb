@@ -4,7 +4,7 @@ import Home from './components/Home.vue';
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
 import UserProfile from './components/UserProfile.vue';
-import GameMap from './components/GameMap.vue';
+import GameMap from './components/Map/GameMap.vue';
 import GameController from './components/GameController.vue';
 import AvatarsStore from './components/AvatarsStore.vue';
 import UsersRanking from './components/UsersRanking.vue';

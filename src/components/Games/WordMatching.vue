@@ -89,7 +89,7 @@ import shuffle from '../../utilities/arrayManipulation';
 export default {
   data() {
     return {
-      selectedAnswer: -1,
+      selectedAnswer: '',
     };
   },
   mounted() {
@@ -107,7 +107,7 @@ export default {
       }
     },
     checkAnswer() {
-      this.$parent.finishGame(this.selectedAnswer);
+      this.$parent.finishGame(this.selectedAnswer.toLowerCase());
     },
   },
 };

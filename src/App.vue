@@ -207,6 +207,7 @@ export default {
     ...mapState('userProfile', ['user']),
     ...mapState('notificationsStore', ['notifications']),
     amountOfUnReadNotifications() {
+      if (this.notifications === undefined || this.notifications === null) return 0;
       return this.notifications.filter(x => !x.isRead).length;
     },
   },
