@@ -94,7 +94,7 @@
         </ul>
       </div>
     </nav>
-    <div class="container">
+    <div class="container-fluid">
       <div class="row container__row">
         <!--<div class="col-sm-6 offset-sm-3">-->
         <router-view :key="$route.path"></router-view>
