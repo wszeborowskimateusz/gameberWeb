@@ -48,19 +48,25 @@
         </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
-            <router-link to="/friends" name="friends"
-            class="nav-link rounded-circle" title="Znajomi">
+            <router-link
+              to="/friends"
+              name="friends"
+              class="nav-link rounded-circle"
+              title="Znajomi"
+            >
               <img width="25" :src="imagesGetter.getImgUrl('app/friends.png')" />
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
+            <router-link to="/store"
+            name="store" class="nav-link rounded-circle" title="Sklep">
               <img width="25" :src="imagesGetter.getImgUrl('app/coins.png')" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/notifications" class="nav-link rounded-circle" title="Powiadomienia">
+            <router-link to="/notifications"
+            class="nav-link rounded-circle" title="Powiadomienia">
               <notification-bell
                 class="justify-content-center d-flex"
                 :size="25"
@@ -71,9 +77,13 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/user-profile" name="profil" class="nav-link rounded-circle"
-              title="Profil">
-              <img width="25" :src="imagesGetter.getImgUrl('app/user.png')"/>
+            <router-link
+              to="/user-profile"
+              name="profil"
+              class="nav-link rounded-circle"
+              title="Profil"
+            >
+              <img width="25" :src="imagesGetter.getImgUrl('app/user.png')" />
               {{user.username}}
             </router-link>
           </li>
@@ -101,11 +111,13 @@
         <!--</div>-->
       </div>
     </div>
-    <footer class="fixed-bottom">
-      Strona stworzona przez studentów Politechniki Gdańskiej jako projekt inżynierski.
-      <router-link to="/about">O nas</router-link>.
-      App icons by
-      <a href="https://icons8.com">icons8</a>.
+    <footer>
+      <div class="p-3">
+        Strona stworzona przez studentów Politechniki Gdańskiej jako projekt inżynierski.
+        <router-link to="/about">O nas</router-link>.
+        App icons by
+        <a href="https://icons8.com">icons8</a>.
+      </div>
     </footer>
   </div>
 </template>
@@ -124,10 +136,9 @@
 }
 
 footer {
-  height: 25px;
   width: 100%;
   color: #2c3e50;
-  background-color: #f4e5dd;
+  background-color: rgb(240,220,215);
 }
 
 footer a {
@@ -160,8 +171,9 @@ html {
   padding: 0;
 }
 
-.container {
+.container-fluid {
   overflow: hidden;
+  min-height: 100%;
 }
 
 .container__row {
