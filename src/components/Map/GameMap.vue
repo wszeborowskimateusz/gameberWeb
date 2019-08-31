@@ -3,11 +3,13 @@
     <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
       <cube-spin class="m-2"></cube-spin>
     </div>
-    <div v-if="userStatus === 'map'" id="mapdiv" ref="chartdiv"></div>
-    <div v-if="userStatus === 'test'" class="p-5">
-      <TestCard :testPath="'/friends'"></TestCard>
+    <div v-if="userStatus.status === 'map'" id="mapdiv" ref="chartdiv"></div>
+    <div v-if="userStatus.status === 'test'" class="p-5">
+      <TestCard :testPath="'/games/' + userStatus.testCategoryId"></TestCard>
     </div>
-    <div v-if="userStatus === 'beginner'"></div>
+    <div v-if="userStatus.status === 'beginner'" class="p-5">
+      <BeginnerLevel :categories="this.userStatus.beginnersCategories"></BeginnerLevel>
+    </div>
   </div>
 </template>
 
@@ -36,15 +38,19 @@ import imagesGetter from "@/utilities/imagesGetter";
 
 import CubeSpin from "vue-loading-spinner/src/components/Circle8.vue";
 import TestCard from "@/components/Map/TestCard.vue";
+import BeginnerLevel from "@/components/Map/BeginnerLevel.vue";
 
 export default {
   name: "GameMap",
   data() {
     return {
+      userStatus: {
+        status: "",
+        testCategoryId: 1,
+        beginnersCategories: []
+      },
       imagesGetter,
-      testCategoryId: 1,
       isLoading: false,
-      userStatus: "test",
       unlockedCountries: [],
       lockedCountries: [],
       categories: [],
@@ -59,18 +65,13 @@ export default {
   },
   components: {
     CubeSpin,
-    TestCard
+    TestCard,
+    BeginnerLevel
   },
   async mounted() {
     this.isLoading = true;
-    if (this.userStatus === "map") {
-      await this.prepareMap();
-    } else if (this.userStatus === "test") {
-    } else if(this.userStatus === 'testStarted') {
-      this.$router.push(`/games/${this.testCategoryId}`);
-    } else if (this.userStatus === "beginner") {
-    }
-
+    this.userStatus = await mapService.getUserStatus(this.user);
+    await this.onUserStatusLoaded();
     this.isLoading = false;
   },
   beforeDestroy() {
@@ -83,7 +84,15 @@ export default {
   },
   methods: {
     ...mapActions("userProfile", ["getUserData"]),
-    getUserStatus() {},
+    async onUserStatusLoaded() {
+      if (this.userStatus.status === "map") {
+        await this.prepareMap();
+      } else if (this.userStatus.status === "test") {
+      } else if (this.userStatus.status === "testStarted") {
+        this.$router.push(`/games/${this.userStatus.testCategoryId}`);
+      } else if (this.userStatus.status === "beginner") {
+      }
+    },
     async prepareMap() {
       // Download required info from server
       await this.getMapCountries();
@@ -133,7 +142,9 @@ export default {
       });
     },
     async getMapCountries() {
+      console.log(`CATEGORIES:`);
       const allCountries = await mapService.getMapCountries(this.user);
+
       const allIds = allCountries.map(c => c._id);
 
       const unlockedCountries = await mapService.getUnlockedCountries(

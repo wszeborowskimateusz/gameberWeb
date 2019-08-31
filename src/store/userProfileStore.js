@@ -53,8 +53,13 @@ const userDefaultState = {
 const userState = { user: {}, isLoading: false };
 
 
-function formatMessage(rewards, categoryName) {
-  let message = `Gratulacje! Ukończyłeś właśnie kategorię: "${categoryName}" Twoje nagrody to:<br><br>`;
+function formatMessage(rewards, categoryName, isTestCategory, isPassed) {
+  if (isPassed === false) {
+    return 'Niestety nie udało Ci się przejść danej kategorii. Spróbuj później';
+  }
+  let message = `Gratulacje! Ukończyłeś właśnie 
+    ${isTestCategory === true ? 'test' : 'kategorię'}: 
+    "${categoryName}" Twoje nagrody to:<br><br>`;
   if (rewards.achievements) {
     rewards.achievements.forEach((achievement) => {
       message += `<img width="25" src="https://img.icons8.com/doodle/48/000000/first-place-ribbon.png"> ${
@@ -69,6 +74,9 @@ function formatMessage(rewards, categoryName) {
     message += `<img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png"> ${
       rewards.experiencePoints}<br>`;
   }
+  if (isTestCategory === true) {
+    message += 'Możesz teraz przejść do zdobywanias świata.';
+  }
   return message;
 }
 
@@ -79,6 +87,7 @@ const defaultCategoryRewards = {
   ],
   coins: 20,
   experiencePoints: 30,
+  isPassed: false,
 };
 
 
@@ -151,17 +160,21 @@ const actions = {
       );
   },
   /* eslint-enable no-unused-vars */
-  getCategoryRewards({ dispatch }, { token, categoryId, categoryName }) {
+  getCategoryRewards({ dispatch }, {
+    token, categoryId, categoryName, isTestCategory,
+  }) {
     gameControllerService.finishCategory(token, { categoryId })
       .then(
         (rewards) => {
-          bootbox.alert(formatMessage(rewards, categoryName));
+          bootbox.alert(formatMessage(rewards, categoryName, isTestCategory, rewards.isPassed));
           dispatch('getUserData');
           router.push('/map');
         },
         () => {
+          // FIXME Remove this alerts
           toasts.errorToast('Niestety nie udało się ukończyć kategorii. Wystąpił problem z serwerem');
-          bootbox.alert(formatMessage(defaultCategoryRewards, categoryName));
+          bootbox.alert(formatMessage(defaultCategoryRewards, categoryName,
+            isTestCategory, defaultCategoryRewards.isPassed));
           dispatch('getUserData');
           router.push('/map');
         },

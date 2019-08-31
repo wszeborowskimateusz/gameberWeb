@@ -153,6 +153,7 @@ export default {
         categoryCountryIcon: '',
         categoryIcon: '',
         currentGameIndex: 0,
+        isTestCategory: true,
       },
       categoryId: this.$route.params.id,
     };
@@ -209,11 +210,17 @@ export default {
         answer,
       );
       this.isAnswerLoading = false;
-      if (serverResponse != null && serverResponse.isCorrect === true) {
+      if (this.category.isTestCategory === true) {
+        currentGame.isFinished = true;
+        this.nextGameAction();
+      } else if (serverResponse != null && serverResponse.isCorrect === true) {
         if (shouldShowModal === true) bootbox.correctAnswerAlert();
         currentGame.isFinished = true;
         this.nextGameAction();
-      } else if (shouldShowModal === true && serverResponse.isCorrect === false) {
+      } else if (
+        shouldShowModal === true
+        && serverResponse.isCorrect === false
+      ) {
         if (serverResponse.wasAlreadySolved === false) bootbox.incorrectAnswerAlert();
         else {
           bootbox.incorrectAnswerPreviousleSolvedAlert();
@@ -241,6 +248,7 @@ export default {
           token: this.user,
           categoryId: this.categoryId,
           categoryName: this.category.categoryName,
+          isTestCategory: this.category.isTestCategory,
         });
       }
     },
