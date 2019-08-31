@@ -209,11 +209,18 @@ export default {
         answer,
       );
       this.isAnswerLoading = false;
-      if (serverResponse != null && serverResponse === true) {
+      if (serverResponse != null && serverResponse.isCorrect === true) {
         if (shouldShowModal === true) bootbox.correctAnswerAlert();
         currentGame.isFinished = true;
         this.nextGameAction();
-      } else if (shouldShowModal === true) bootbox.incorrectAnswerAlert();
+      } else if (shouldShowModal === true && serverResponse.isCorrect === false) {
+        if (serverResponse.wasAlreadySolved === false) bootbox.incorrectAnswerAlert();
+        else {
+          bootbox.incorrectAnswerPreviousleSolvedAlert();
+          currentGame.isFinished = true;
+          this.nextGameAction();
+        }
+      }
     },
     async finishGame(answer) {
       this.checkAnswer(JSON.stringify(answer), true);

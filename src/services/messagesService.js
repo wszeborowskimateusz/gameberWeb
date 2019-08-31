@@ -28,19 +28,6 @@ const defaultConversation = {
 };
 
 export default {
-  async getConversationUser(token, userId) {
-    const url = `${config.apiUrl}/conversation/${userId}`;
-    const result = await requestSender.sendGetRequest(token, url).then(
-      results => results.conversation.user,
-      () => {
-        toast.errorToast('Nie udało się pobrać danych użytkownika, z którym korespondujesz');
-        // FIXME remove this later
-        return defaultConversation.user;
-      },
-    );
-
-    return result;
-  },
   async getMessages(token, userId, limit, offset) {
     const url = `${config.apiUrl}/messages/${userId}?limit=${limit}&offset=${offset}`;
     const result = await requestSender.sendGetRequest(token, url).then(

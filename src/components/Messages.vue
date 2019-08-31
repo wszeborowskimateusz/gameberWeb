@@ -106,6 +106,7 @@ import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
 import messagesService from '@/services/messagesService';
+import otherUsersProfileService from '@/services/otherUsersProfileService';
 import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
@@ -182,12 +183,23 @@ export default {
         .then(() => this.$forceUpdate());
     },
     getConversationUser() {
-      messagesService
-        .getConversationUser(this.user, this.userId)
+      otherUsersProfileService.getUser(this.user, this.userId)
         .then((conversationUser) => {
-          this.conversation.user = conversationUser;
+          this.conversation.user.userName = conversationUser.username;
+          this.conversation.user.avatar = this.getUserAvatar(conversationUser);
         })
         .then(() => this.$forceUpdate());
+    },
+    getUserAvatar(user) {
+      let result = null;
+      user.avatars.forEach((avatar) => {
+        if (avatar.id === user.avatarId) {
+          result = avatar;
+          return false;
+        }
+        return true;
+      });
+      return result.img;
     },
     onFieldFocus() {
       this.wasMessageSend = true;
@@ -235,11 +247,13 @@ export default {
     handleMessageSending() {
       if (this.messageToSend !== '') {
         this.wasMessageSend = true;
-        this.conversation.messages.push({
+        const message = {
           content: this.messageToSend,
           date: new Date().toISOString(),
-          isOurMessage: Math.random() >= 0.5,
-        });
+          isOurMessage: true,
+        };
+        this.conversation.messages.push(message);
+        messagesService.sendMessage(this.user, this.userId, message);
         this.messageToSend = '';
       }
     },

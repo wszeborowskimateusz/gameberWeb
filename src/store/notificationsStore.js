@@ -7,20 +7,16 @@ const defaultNotifications = [
     type: 'friendship_request',
     img:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSouJh0Vvrn9GWzoyrv4IqVh4SbDH3OIeftIf5yzLqj4YjmLOkr',
-    title: 'Zaproszenie do znajomych',
     name: 'Szymon35',
-    description:
-        'Otrzymałeś właśnie zaproszenie do grona znajomych od użytkownika Szymon35',
-    userId: 5,
     isRead: false,
+    isAlreadyAccepted: false,
+    userId: 1,
   },
   {
     id: 2,
     type: 'achievement_receive',
     img: 'https://img.icons8.com/dusk/100/000000/prize.png',
-    title: 'Otrzymałeś osiągnięcie',
     name: 'Nagroda',
-    description: 'Otrzymałeś właśnie osiągnięcie',
     isRead: false,
   },
   {
@@ -28,21 +24,18 @@ const defaultNotifications = [
     type: 'friendship_accepted',
     img:
         'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
-    title: 'Zaproszenie zaakceptowane',
     name: 'ZwariowanyMarcin15',
-    description:
-        'Twoje zaproszenie zostało potwierdzone przez użytkownika ',
     isRead: true,
+    userId: 1,
   },
   {
     id: 4,
     type: 'message_received',
     img:
         'https://www.lastlivingcity.com/wp-content/uploads/2018/05/ea47aebe7edcdf32b192efa147066753.jpg',
-    title: 'Otrzymałeś wiadomość',
     name: 'Szymon35',
-    description: 'Otrzymałeś właśnie zaproszenie do grona znajomych',
     isRead: true,
+    userId: 1,
   },
 ];
 

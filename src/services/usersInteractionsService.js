@@ -9,10 +9,20 @@ export default {
       () => {
         toasts.successToast('Pomyślnie wysłano zaproszenie do znajomych');
       },
-      (error) => {
+      () => {
         toasts.errorToast('Nie udało się wysłać zaproszenia do znajomych. Spróbuj ponownie');
-        console.log(error);
       },
     );
+  },
+  acceptFriendshipRequest(token, userId) {
+    const url = `${config.apiUrl}/friends/accept`;
+    requestSender.sendPostRequest(url, { userId }, token)
+      .then(() => {
+        toasts.successToast('Pomyślnie zaakceptowano zaproszenie.');
+      });
+  },
+  declineFriendshipRequest(token, userId) {
+    const url = `${config.apiUrl}/friends/decline`;
+    requestSender.sendPostRequest(url, { userId }, token);
   },
 };

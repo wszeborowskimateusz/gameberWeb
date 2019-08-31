@@ -124,28 +124,26 @@ const actions = {
       );
   },
   /* eslint-disable no-unused-vars */
-  buyAvatar({ commit, dispatch }, avatar) {
+  buyAvatar({ dispatch }, avatar) {
     const userToken = JSON.parse(localStorage.getItem('user'));
     userProfileService.buyAvatar(userToken, avatar)
       .then(
         () => {
           toasts.successToast('Pomyślnie zakupiono avatar');
           dispatch('getUserData');
-          // commit('buyingAvatarSuccess', avatar);
         },
         () => {
           toasts.errorToast('Nie udało się zakupić avatara. Spróbuj jeszcze raz');
         },
       );
   },
-  buyBackgroundImage({ commit, dispatch }, image) {
+  buyBackgroundImage({ dispatch }, image) {
     const userToken = JSON.parse(localStorage.getItem('user'));
     userProfileService.buyBackgroundImage(userToken, image)
       .then(
         () => {
           toasts.successToast('Pomyślnie zakupiono zdjęcie w tle');
           dispatch('getUserData');
-          // commit('buyingBackgroundImageSuccess', image);
         },
         () => {
           toasts.errorToast('Nie udało się zakupić zdjęcia w tle. Spróbuj jeszcze raz');
@@ -192,16 +190,6 @@ const mutations = {
   changingBackgroundImageSuccess(state, imageId) {
     if (state.user) {
       state.user.backgroundImageId = imageId;
-    }
-  },
-  buyingAvatarSuccess(state, avatar) {
-    if (state.user && state.user.avatars) {
-      state.user.avatars.push(avatar);
-    }
-  },
-  buyingBackgroundImageSuccess(state, image) {
-    if (state.user && state.user.backgroundImages) {
-      state.user.backgroundImages.push(image);
     }
   },
 };
