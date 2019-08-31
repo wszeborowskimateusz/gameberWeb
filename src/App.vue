@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top">
+    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top"
+      :class="[$route.path === '/map' ? 'zero_margin' : '' ]">
       <button
         class="navbar-toggler navbar-light"
         type="button"
@@ -104,11 +105,9 @@
         </ul>
       </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container-fluid" :class="[$route.path === '/map' ? 'zero_padding' : '' ]">
       <div class="row container__row">
-        <!--<div class="col-sm-6 offset-sm-3">-->
         <router-view :key="$route.path"></router-view>
-        <!--</div>-->
       </div>
     </div>
     <footer>
@@ -169,6 +168,14 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+.zero_padding {
+  padding: 0;
+}
+
+.zero_margin {
+  margin: 0 !important;
 }
 
 .container-fluid {
