@@ -4,7 +4,7 @@ import toasts from '@/utilities/toasts';
 
 export default {
   async getUserStatus(token) {
-    const url = `${config.apiUrl}/user/status`;
+    const url = `${config.apiUrl}/users/status`;
     return requestSender.sendGetRequest(token, url)
       .then(
         result => result,
