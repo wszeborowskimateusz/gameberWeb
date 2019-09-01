@@ -1,5 +1,5 @@
-import config from '../../config';
-import requestSender from '../utilities/requestSender';
+import config from '@/../config';
+import requestSender from '@/utilities/requestSender';
 
 function logout() {
   localStorage.removeItem('user');

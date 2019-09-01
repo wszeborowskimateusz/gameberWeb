@@ -2,7 +2,8 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div v-else-if="Object.entries(rankings).length !== 0 && rankings.constructor === Object"
+  <div v-else-if="rankings != null &&
+    Object.entries(rankings).length !== 0 && rankings.constructor === Object"
     class="ranking__container col-12  mb-5">
     <div class="btn-group special mb-2" role="group" aria-label="Basic example">
       <button

@@ -6,30 +6,39 @@
           <cube-spin class="m-2"></cube-spin>
         </div>
         <div
-          class="messages_message m-5"
-          v-for="(message, index) in conversation.messages"
-          v-bind:key="message.content + ' ' + index"
+          v-else-if="conversation != null
+          && conversation.messages != null
+          && conversation.user != null"
         >
-          <div :class="[message.isOurMessage ? 'flex-row-reverse' : 'flex-row']" class="d-flex">
-            <div>
-              <img
-                class="rounded-circle m-3"
-                :src="[message.isOurMessage ? pickedAvatar: conversation.user.avatar]"
-                width="75"
-              />
-            </div>
-            <div
-              :class="[message.isOurMessage ? 'our_message' : 'other_message']"
-              class="d-flex flex-column message__text p-3"
-            >
-              <p class="h5 align-middle">{{message.content}}</p>
-              <p
-                :class="[message.isOurMessage ? ['text-light', 'text-left']
+          <div
+            class="messages_message m-5"
+            v-for="(message, index) in conversation.messages"
+            v-bind:key="message.content + ' ' + index"
+          >
+            <div :class="[message.isOurMessage ? 'flex-row-reverse' : 'flex-row']" class="d-flex">
+              <div>
+                <img
+                  class="rounded-circle m-3"
+                  :src="[message.isOurMessage ? pickedAvatar: conversation.user.avatar]"
+                  width="75"
+                />
+              </div>
+              <div
+                :class="[message.isOurMessage ? 'our_message' : 'other_message']"
+                class="d-flex flex-column message__text p-3"
+              >
+                <p class="h5 align-middle">{{message.content}}</p>
+                <p
+                  :class="[message.isOurMessage ? ['text-light', 'text-left']
                                               : ['text-muted', 'text-right']]"
-                class="date-text"
-              >{{convertIsoDateToString(message.date)}}</p>
+                  class="date-text"
+                >{{convertIsoDateToString(message.date)}}</p>
+              </div>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <p class="h3 p-5">Wystąpił problem przy wczytywaniu wiadomości</p>
         </div>
       </div>
     </div>
@@ -170,11 +179,15 @@ export default {
       messagesService
         .getMessages(this.user, this.userId, limit, offset)
         .then((messages) => {
-          if (messages.length === 0) {
-            this.areAllMessagesLoaded = true;
-          }
+          if (messages != null) {
+            if (messages.length === 0) {
+              this.areAllMessagesLoaded = true;
+            }
 
-          this.conversation.messages.unshift(...messages);
+            this.conversation.messages.unshift(...messages);
+          } else {
+            this.conversation.messages = null;
+          }
 
           this.setScrollPositionToJustBelowTop();
           this.isLoading = false;
@@ -183,10 +196,15 @@ export default {
         .then(() => this.$forceUpdate());
     },
     getConversationUser() {
-      otherUsersProfileService.getUser(this.user, this.userId)
+      otherUsersProfileService
+        .getUser(this.user, this.userId)
         .then((conversationUser) => {
-          this.conversation.user.userName = conversationUser.username;
-          this.conversation.user.avatar = this.getUserAvatar(conversationUser);
+          if (conversationUser == null) {
+            this.conversation.user = null;
+          } else {
+            this.conversation.user.userName = conversationUser.username;
+            this.conversation.user.avatar = this.getUserAvatar(conversationUser);
+          }
         })
         .then(() => this.$forceUpdate());
     },
@@ -252,7 +270,6 @@ export default {
           date: new Date().toISOString(),
           isOurMessage: true,
         };
-        this.conversation.messages.push(message);
         messagesService.sendMessage(this.user, this.userId, message);
         this.messageToSend = '';
       }

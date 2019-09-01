@@ -1,6 +1,6 @@
-import config from '../../config';
-import requestSender from '../utilities/requestSender';
-import toasts from '../utilities/toasts';
+import config from '@/../config';
+import requestSender from '@/utilities/requestSender';
+import toasts from '@/utilities/toasts';
 
 export default {
   sendFriendshipRequest(token, userId) {

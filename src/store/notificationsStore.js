@@ -1,46 +1,7 @@
-import toasts from '../utilities/toasts';
-import notificationService from '../services/notificationsService';
-
-const defaultNotifications = [
-  {
-    id: 1,
-    type: 'friendship_request',
-    img:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSouJh0Vvrn9GWzoyrv4IqVh4SbDH3OIeftIf5yzLqj4YjmLOkr',
-    name: 'Szymon35',
-    isRead: false,
-    isAlreadyAccepted: false,
-    userId: 1,
-  },
-  {
-    id: 2,
-    type: 'achievement_receive',
-    img: 'https://img.icons8.com/dusk/100/000000/prize.png',
-    name: 'Nagroda',
-    isRead: false,
-  },
-  {
-    id: 3,
-    type: 'friendship_accepted',
-    img:
-        'https://samequizy.pl/wp-content/uploads/2017/07/filing_images_4fed8a491a6a.jpg',
-    name: 'ZwariowanyMarcin15',
-    isRead: true,
-    userId: 1,
-  },
-  {
-    id: 4,
-    type: 'message_received',
-    img:
-        'https://www.lastlivingcity.com/wp-content/uploads/2018/05/ea47aebe7edcdf32b192efa147066753.jpg',
-    name: 'Szymon35',
-    isRead: true,
-    userId: 1,
-  },
-];
+import toasts from '@/utilities/toasts';
+import notificationService from '@/services/notificationsService';
 
 const notificationsState = { notifications: [], isLoading: false };
-
 
 const actions = {
   getAllNotifications({ commit }) {
@@ -66,8 +27,6 @@ const actions = {
         },
         () => {
           toasts.errorToast('Nie udało się oznaczyć powiadomienia jako przeczytane. Spróbuj odświeżyć stronę');
-          // TODO: Remove this later
-          notificationsState.notifications.find(x => x.id === notificationId).isRead = true;
         },
       );
   },
@@ -80,9 +39,6 @@ const actions = {
         },
         () => {
           toasts.errorToast('Nie udało się usunąć powiadomienia. Spróbuj odświeżyć stronę');
-          // TODO: Remove this later
-          notificationsState
-            .notifications = notificationsState.notifications.filter(x => x.id !== notificationId);
         },
       );
   },
@@ -98,7 +54,7 @@ const mutations = {
     state.isLoading = false;
   },
   gettingNotificationsFailure(state) {
-    state.notifications = defaultNotifications;
+    state.notifications = null;
     state.isLoading = false;
   },
   markingNotificationAsReadSuccess(state, notificationId) {
@@ -108,7 +64,7 @@ const mutations = {
     state.notifications = state.notifications.filter(x => x.id !== notificationId);
   },
 };
-  /* eslint-enable no-param-reassign */
+/* eslint-enable no-param-reassign */
 
 
 export default {

@@ -3,12 +3,20 @@
     <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
       <cube-spin class="m-2"></cube-spin>
     </div>
-    <div v-if="userStatus.status === 'map'" id="mapdiv" ref="chartdiv"></div>
-    <div v-if="userStatus.status === 'test'" class="p-5">
-      <TestCard :testPath="'/games/' + userStatus.testCategoryId"></TestCard>
+    <div v-else-if="userStatus != null">
+      <div v-if="userStatus.status === 'map'" id="mapdiv" ref="chartdiv"></div>
+      <div v-if="userStatus.status === 'test'" class="p-5">
+        <TestCard :testPath="'/games/' + userStatus.testCategoryId"></TestCard>
+      </div>
+      <div v-if="userStatus.status === 'beginner'" class="p-5">
+        <BeginnerLevel :categories="this.userStatus.beginnersCategories"></BeginnerLevel>
+      </div>
     </div>
-    <div v-if="userStatus.status === 'beginner'" class="p-5">
-      <BeginnerLevel :categories="this.userStatus.beginnersCategories"></BeginnerLevel>
+    <div v-else class="p-5">
+      <h1 class="mb-5">Nie udało się wczytać statusu użytkownika</h1>
+      <img class="m-5" :src="imagesGetter.getImgUrl('game_map/crying.png')" />
+      <img class="m-5" :src="imagesGetter.getImgUrl('game_map/nothing_found.png')" />
+      <img class="m-5" :src="imagesGetter.getImgUrl('game_map/crying.png')" />
     </div>
   </div>
 </template>
@@ -85,6 +93,9 @@ export default {
   methods: {
     ...mapActions("userProfile", ["getUserData"]),
     async onUserStatusLoaded() {
+      if(this.userStatus == null) {
+        return;
+      }
       if (this.userStatus.status === "map") {
         await this.prepareMap();
       } else if (this.userStatus.status === "test") {

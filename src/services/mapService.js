@@ -2,38 +2,16 @@ import config from '@/../config';
 import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
 
-const defaultUserStatus = {
-  status: 'map',
-  testCategoryId: 1,
-  beginnersCategories: [
-    {
-      id: 1,
-      img: 'https://images.ctfassets.net/a9odgsv44wmq/SZaQSslPbeB8ju45lM73G/8a6f979bd861b7b038952ffd8ab4c9ff/Menu_BBQBaconDoubleCheeseburger.png',
-      name: 'Nazwa kategorii',
-      isUnlocked: true,
-    },
-    {
-      id: 7,
-      img: 'https://www.almanac.com/sites/default/files/styles/primary_image_in_article/public/image_nodes/winter-solstice.jpg?itok=9iEebU2H',
-      name: 'Nazwa kategorii',
-      isUnlocked: false,
-    },
-    {
-      id: 9,
-      img: 'https://images.ctfassets.net/a9odgsv44wmq/SZaQSslPbeB8ju45lM73G/8a6f979bd861b7b038952ffd8ab4c9ff/Menu_BBQBaconDoubleCheeseburger.png',
-      name: 'Nazwa kategorii',
-      isUnlocked: false,
-    },
-  ],
-};
-
 export default {
   async getUserStatus(token) {
     const url = `${config.apiUrl}/user/status`;
     return requestSender.sendGetRequest(token, url)
       .then(
         result => result,
-        () => defaultUserStatus,
+        () => {
+          toasts.errorToast('Niestety nie udało się wczytać statusu użytkownika. Spróbuj odświeżyć stronę.');
+          return null;
+        },
       );
   },
   async getMapCountries(token) {

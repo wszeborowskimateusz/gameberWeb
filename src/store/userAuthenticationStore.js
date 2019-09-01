@@ -1,6 +1,6 @@
-import userService from '../services/userAuthenticationService';
-import router from '../router';
-import toasts from '../utilities/toasts';
+import userService from '@/services/userAuthenticationService';
+import router from '@/router';
+import toasts from '@/utilities/toasts';
 
 const userToken = JSON.parse(localStorage.getItem('user'));
 const userState = userToken

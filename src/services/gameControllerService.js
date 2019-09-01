@@ -1,27 +1,6 @@
-import config from '../../config';
+import config from '@/../config';
 import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
-
-const defaultCategory = {
-  games: [
-    {
-      name: 'PhraseLearning',
-      gameId: 'asdfdsab3424',
-      correctOrder: ['I', 'am', 'all', 'right'],
-      gameInfo: {
-        question: 'How are you ?',
-        words: ['I', 'all', 'am', 'right'],
-      },
-    },
-  ],
-  categoryBackgroundImage: 'https://wallup.net/wp-content/uploads/2018/10/09/1036532-animals-background-53.jpg',
-  categoryName: 'Zwierzęta Arktyki',
-  categoryCountryIcon: 'https://img.icons8.com/color/48/000000/iceland.png',
-  categoryIcon: 'https://img.icons8.com/color/48/000000/seal.png',
-  currentGameIndex: 0,
-  isTestCategory: true,
-};
-
 
 export default {
   async getCategoryData(token, categoryId) {
@@ -39,9 +18,7 @@ export default {
         },
         () => {
           toasts.errorToast('Niestety nie udało się wczytać kategorii. Spróbuj odświeżyć stronę.');
-          // FIXME Remove this default category
-          return defaultCategory;
-          // return null;
+          return null;
         },
       );
     return result;
@@ -53,8 +30,7 @@ export default {
         response => response,
         () => {
           toasts.errorToast('Niestety nie udało pobrać odpowiedzi z serwera. Spróbuj jeszcze raz.');
-          // FIXME: Remove this later
-          return false;
+          return null;
         },
       );
     return result;
