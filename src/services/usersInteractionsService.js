@@ -5,7 +5,7 @@ import toasts from '@/utilities/toasts';
 export default {
   sendFriendshipRequest(token, userId) {
     const url = `${config.apiUrl}/users/add-to-friends/${userId}`;
-    requestSender.sendPostRequest(url, userId, token).then(
+    requestSender.sendPostRequest(url, { userId }, token).then(
       () => {
         toasts.successToast('Pomyślnie wysłano zaproszenie do znajomych');
       },

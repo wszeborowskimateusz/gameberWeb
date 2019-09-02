@@ -153,7 +153,6 @@ export default {
       });
     },
     async getMapCountries() {
-      console.log(`CATEGORIES:`);
       const allCountries = await mapService.getMapCountries(this.user);
 
       const allIds = allCountries.map(c => c._id);

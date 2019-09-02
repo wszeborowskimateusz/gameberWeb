@@ -14,9 +14,6 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <!-- <div v-if="status.loggedIn" class="w-25 d-none d-lg-block"> -->
-      <!--empty spacer-->
-      <!-- </div> -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex flex-fill">
           <li class="nav-item active">
@@ -105,7 +102,7 @@
         </ul>
       </div>
     </nav>
-    <div class="container-fluid" :class="[$route.path === '/map' ? 'zero_padding' : '' ]">
+    <div :class="[$route.path === '/map' ? ['zero_padding', 'container-fluid'] : 'container' ]">
       <div class="row container__row">
         <router-view :key="$route.path"></router-view>
       </div>
@@ -128,7 +125,7 @@
   border-right: 1px solid #847d88;
 }
 
-@media (max-width: 1200px) {
+ @media (max-width: 1200px) {
   .navbar .divider-vertical {
     display: none;
   }
@@ -180,6 +177,10 @@ html {
 
 .container-fluid {
   overflow: hidden;
+  min-height: 100%;
+}
+
+.container {
   min-height: 100%;
 }
 
