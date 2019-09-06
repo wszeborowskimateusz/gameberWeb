@@ -38,7 +38,9 @@
               <img :src="achievement.src" />
             </a>
             <div v-if="!user.achievements || user.achievements.length === 0">
-              <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
+
+              <h4 v-if="isOurOwnProfile">Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
+              <h4 v-else >Brak osiągnięć</h4>
               <img :src="imagesGetter.getImgUrl('profile/no_achievements.png')" />
             </div>
           </div>
