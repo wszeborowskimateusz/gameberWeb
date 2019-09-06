@@ -6,7 +6,11 @@
         class="font-weight-bold"
       >"{{gameInfo.question}}"</span> Ułóż odpowiedź z poniższych słów.
     </p>
-    <div class="user_response__container d-flex justify-content-center p-5 mb-5">
+    <div v-if="gameInfo.img != null"
+    class="user_response__container d-flex justify-content-center p-5 mb-5">
+      <div class="user_response__image__container"
+       :style="{'background-image' : 'url(' + gameInfo.img +')'}">
+      </div>
       <div class="check_answer_button m-2">
         <button type="button" class="btn btn-primary" v-on:click="checkAnswer()">
           Sprawdź odpowiedź
@@ -15,10 +19,12 @@
       <ul class="list-group list-group-horizontal">
         <li
           v-on:click="unselectWord(word, index)"
-          class="list-group-item selected_item m-2 p-4"
+          class="list-group-item selected_item m-2 p-4 my-auto"
           v-for="(word, index) in selectedWords"
           v-bind:key="word + index"
-        >{{word}}</li>
+        >
+          {{word}}
+        </li>
       </ul>
     </div>
     <div class="words_to_pick__container d-flex justify-content-center">
@@ -58,9 +64,23 @@ li {
   right: 5px;
 }
 
+.user_response__image__container {
+  position: absolute;
+  background-position: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  /* background-size: 100% 100%; */
+  width: 100%;
+  height: 100%;
+}
+
 .user_response__container {
   height: 50%;
   background-color: rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 </style>
 
