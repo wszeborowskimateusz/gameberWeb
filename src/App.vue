@@ -216,7 +216,14 @@ export default {
   data() {
     return {
       imagesGetter,
+      polling: null,
     };
+  },
+  beforeDestroy() {
+    clearInterval(this.polling);
+  },
+  created() {
+    this.pollNotifications();
   },
   mounted() {
     this.getUserData();
@@ -235,6 +242,12 @@ export default {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
     ...mapActions('notificationsStore', ['getAllNotifications']),
+    pollNotifications() {
+      // TODO: You can set notifications getting interval here
+      this.polling = setInterval(() => {
+        this.getAllNotifications();
+      }, 30000);
+    },
     search(input) {
       if (input.length < 1) return [];
       return searchService.searchForUsers(this.$store.state.users.user, input);
