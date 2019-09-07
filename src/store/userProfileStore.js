@@ -2,6 +2,7 @@ import userProfileService from '@/services/userProfileService';
 import gameControllerService from '@/services/gameControllerService';
 import toasts from '@/utilities/toasts';
 import bootbox from '@/utilities/bootbox';
+import imagesGetter from '@/utilities/imagesGetter';
 import router from '@/router';
 
 const userState = { user: {}, isLoading: false };
@@ -16,16 +17,16 @@ function formatMessage(rewards, categoryName, isTestCategory, isPassed) {
     "${categoryName}" Twoje nagrody to:<br><br>`;
   if (rewards.achievements) {
     rewards.achievements.forEach((achievement) => {
-      message += `<img width="25" src="https://img.icons8.com/doodle/48/000000/first-place-ribbon.png"> ${
-        achievement.name}<br>`;
+      message += `<img width="25" src="${imagesGetter.getImgUrl('user_profile_store/achievement.png')}"> 
+      ${achievement.name}<br>`;
     });
   }
   if (rewards.coins) {
-    message += `<img width="25" src="https://img.icons8.com/color/48/000000/coins.png"> ${
+    message += `<img width="25" src="${imagesGetter.getImgUrl('user_profile_store/coins.png')}"> ${
       rewards.coins}<br>`;
   }
   if (rewards.experiencePoints) {
-    message += `<img width="25" src="https://img.icons8.com/plasticine/100/000000/accessibility2.png"> ${
+    message += `<img width="25" src="${imagesGetter.getImgUrl('user_profile_store/experience.png')}"> ${
       rewards.experiencePoints}<br>`;
   }
   if (isTestCategory === true) {

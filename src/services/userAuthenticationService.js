@@ -13,7 +13,7 @@ function login(username, password) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
       } else return Promise.reject(new Error("No token provided in server's response"));
 
-      return user.jwtToken;
+      return user;
     });
 }
 
@@ -25,7 +25,7 @@ function loginWithGoogle(authCode) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
       } else return Promise.reject(new Error("No token provided in server's response"));
 
-      return user.jwtToken;
+      return user;
     });
 }
 
