@@ -77,7 +77,9 @@ export default {
     ...mapActions('userProfile', ['getUserData']),
   },
   mounted() {
-    this.getUserData();
+    if (this.user) {
+      this.getUserData();
+    }
   },
   components: {
     Parallax,
