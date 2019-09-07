@@ -15,14 +15,14 @@ export default {
     );
   },
   acceptFriendshipRequest(token, userId) {
-    const url = `${config.apiUrl}/friends/accept`;
+    const url = `${config.apiUrl}/friends/accept-request`;
     requestSender.sendPostRequest(url, { userId }, token)
       .then(() => {
         toasts.successToast('Pomyślnie zaakceptowano zaproszenie.');
       });
   },
   declineFriendshipRequest(token, userId) {
-    const url = `${config.apiUrl}/friends/decline`;
+    const url = `${config.apiUrl}/friends/decline-request`;
     requestSender.sendPostRequest(url, { userId }, token);
   },
 };
