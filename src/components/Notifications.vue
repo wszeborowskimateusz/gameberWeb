@@ -95,7 +95,8 @@
             </div>
             <div
               v-if="notification.type === 'friendship_request'
-                && notification.isAlreadyAccepted === false"
+                && (notification.isAlreadyAccepted === null
+                 || notification.isAlreadyAccepted === undefined )"
               class="d-flex justify-content-center w-100 m-2"
             >
               <button
@@ -281,12 +282,11 @@ export default {
     acceptFriendshipInvitation(userId, notification) {
       userInteractionsService.acceptFriendshipRequest(this.user, userId);
       notification.isAlreadyAccepted = true;
-      this.markAsRead(notification.id);
     },
     declineFriendshipInvitation(userId, notification) {
       userInteractionsService.declineFriendshipRequest(this.user, userId);
       notification.isAlreadyAccepted = true;
-      this.markAsRead(notification.id);
+      this.removeNotification(notification.id);
     },
     /* eslint-enable no-param-reassign */
   },
