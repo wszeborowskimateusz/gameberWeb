@@ -44,7 +44,7 @@
             <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
         </ul>
-        <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
+        <ul v-if="status.loggedIn && user != null" class="nav navbar-nav navbar-right">
           <li class="nav-item">
             <router-link
               to="/friends"

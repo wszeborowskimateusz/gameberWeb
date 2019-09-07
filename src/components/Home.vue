@@ -7,7 +7,6 @@
     </div>
     <div class="home__content">
       <p class="h1 mb-5 font-weight-bold">GAMEBER = GAME + REMEMBER</p>
-
       <div class="shadow-lg m-5 pt-3 pb-5 description">
         <p class="m-5 h5">
           Jeżeli chcesz się nauczyć angielskiego
@@ -18,12 +17,11 @@
           <router-link to="/tutorial">tutoriala</router-link>
         </p>
       </div>
-      <parallax>
-        <img
+      <img
+        height="500"
         :src="imagesGetter.getImgUrl('home_page/home_page_motto.jpg')"
         class="rounded"
       />
-      </parallax>
       <ul class="list-group mb-5 mt-5" id="features-list">
         <li class="list-group-item">
           <p class="h2 font-weight-bold">Gameber to:</p>
