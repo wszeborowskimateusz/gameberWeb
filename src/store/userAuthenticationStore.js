@@ -22,13 +22,15 @@ function formatEverydayAwardsMessage(awards) {
   if (awards.experiencePoints != null) {
     message += `<img width="25" 
     src="${imagesGetter.getImgUrl('user_authentication_store/experience.png')}"> 
-    ${awards.experiencePoints}<br>`;
+    Punkty doświadczenie: ${awards.experiencePoints}<br>`;
   }
   if (awards.achievements != null) {
     awards.achievements.forEach((achievement) => {
       message += `<img width="25" 
       src="${imagesGetter.getImgUrl('user_authentication_store/achievement.png')}"> 
-      ${achievement.name}<br>`;
+      ${achievement.name}
+      <img width="25" src="${achievement.src}"/>
+      <br>`;
     });
   }
 
