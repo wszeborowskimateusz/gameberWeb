@@ -9,8 +9,8 @@ const actions = {
     commit('loading');
     notificationService.getAllNotifications(userToken)
       .then(
-        (user) => {
-          commit('gettingNotificationsSuccess', user);
+        (notifications) => {
+          commit('gettingNotificationsSuccess', notifications);
         },
         (error) => {
           toasts.errorToast('Nie udało się wczytać informacji o powiadomieniach. Spróbuj odświeżyć stronę');
@@ -50,7 +50,7 @@ const mutations = {
     state.isLoading = true;
   },
   gettingNotificationsSuccess(state, notifications) {
-    state.notifications = notifications.notifications;
+    state.notifications = notifications;
     state.isLoading = false;
   },
   gettingNotificationsFailure(state) {

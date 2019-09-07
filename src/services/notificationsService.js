@@ -8,10 +8,10 @@ export default {
   },
   markNoificationAsRead(token, notificationId) {
     const url = `${config.apiUrl}/notifications/mark-as-read`;
-    return requestSender.sendPostRequest(url, notificationId, token);
+    return requestSender.sendPostRequest(url, { notificationId }, token);
   },
   removeNotification(token, notificationId) {
     const url = `${config.apiUrl}/notifications/remove`;
-    return requestSender.sendPostRequest(url, notificationId, token);
+    return requestSender.sendPostRequest(url, { notificationId }, token);
   },
 };
