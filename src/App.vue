@@ -226,7 +226,7 @@ export default {
     this.pollNotifications();
   },
   mounted() {
-    if (!this.isUserEmpty) {
+    if (this.status.loggedIn) {
       this.getUserData();
       this.getAllNotifications();
     }
@@ -239,9 +239,6 @@ export default {
       if (this.notifications === undefined || this.notifications === null) return 0;
       return this.notifications.filter(x => !x.isRead).length;
     },
-    isUserEmpty() {
-      return Object.entries(this.user).length === 0 && this.user.constructor === Object;
-    },
   },
   methods: {
     ...mapActions('users', ['logout']),
@@ -250,7 +247,7 @@ export default {
     pollNotifications() {
       // TODO: You can set notifications getting interval here
       this.polling = setInterval(() => {
-        if (!this.isUserEmpty) {
+        if (this.status.loggedIn) {
           this.getAllNotifications();
         }
       }, 30000);

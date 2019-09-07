@@ -1,5 +1,15 @@
 <template>
   <div class="messages__container col-12">
+      <div class="m-2">
+        <span class="h2">
+            Konwersacja z
+            <router-link  v-if="conversation.user.userName"
+            :to="'/users/' + userId">
+              {{conversation.user.userName}}
+              <img :src="conversation.user.avatar" class="rounded-circle" width="50"/>
+            </router-link>
+        </span>
+      </div>
     <div class="messages__content">
       <div class="messages__scrollable_container">
         <div v-if="isLoading || isConversationLoading" class="d-flex p-2 justify-content-center">
@@ -183,8 +193,9 @@ export default {
             if (messages.length === 0) {
               this.areAllMessagesLoaded = true;
             }
-
-            this.conversation.messages.unshift(...messages);
+            messages.forEach((msg) => {
+              this.conversation.messages.unshift(msg);
+            });
           } else {
             this.conversation.messages = null;
           }
@@ -270,7 +281,12 @@ export default {
           date: new Date().toISOString(),
           isOurMessage: true,
         };
-        messagesService.sendMessage(this.user, this.userId, message);
+        messagesService.sendMessage(this.user, this.userId, this.messageToSend)
+          .then(() => {
+            this.conversation.messages.push(message);
+          }).then(() => {
+            this.$forceUpdate();
+          });
         this.messageToSend = '';
       }
     },

@@ -7,7 +7,7 @@ export default {
     const url = `${config.apiUrl}/users/friends`;
     const result = await requestSender.sendGetRequest(token, url)
       .then(
-        response => response.friends,
+        response => response,
         () => {
           toasts.errorToast('Niestety nie udało się wczytać znajomych. Spróbuj odświeżyć stronę.');
           return null;

@@ -6,7 +6,7 @@ export default {
   async getMessages(token, userId, limit, offset) {
     const url = `${config.apiUrl}/messages/${userId}?limit=${limit}&offset=${offset}`;
     const result = await requestSender.sendGetRequest(token, url).then(
-      results => results.conversation,
+      results => results,
       () => {
         toast.errorToast('Nie udało się pobrać konwersacji');
         return null;
@@ -15,9 +15,9 @@ export default {
 
     return result;
   },
-  async sendMessage(token, userId, message) {
+  sendMessage(token, userId, content) {
     const url = `${config.apiUrl}/messages/send/${userId}`;
-    await requestSender.sendPostRequest(url, { message }, token).then(
+    return requestSender.sendPostRequest(url, { content }, token).then(
       () => {},
       () => {
         toast.errorToast('Nie udało się wysłać wiadomości');
