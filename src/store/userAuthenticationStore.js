@@ -38,6 +38,7 @@ function formatEverydayAwardsMessage(awards) {
 }
 
 const userToken = JSON.parse(localStorage.getItem('user'));
+
 const userState = userToken
   ? { status: { loggedIn: true }, user: userToken }
   : { status: {}, user: null };
@@ -70,6 +71,7 @@ const actions = {
           commit('loginSuccess', user.jwtToken);
           router.push('/');
           dispatch('userProfile/getUserData', null, { root: true });
+          dispatch('notificationsStore/getAllNotifications', null, { root: true });
           toasts.successToast('Witaj z powrotem!');
           if (user.everydayAwards != null) {
             bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
@@ -81,9 +83,11 @@ const actions = {
         },
       );
   },
-  logout({ commit }) {
+  logout({ commit, dispatch }) {
     userService.logout();
     toasts.successToast('Pomyślnie wylogowano się');
+    dispatch('notificationsStore/resetState', null, { root: true });
+    dispatch('userProfile/resetState', null, { root: true });
     router.push('/');
     commit('logout');
   },

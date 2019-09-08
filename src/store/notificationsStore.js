@@ -1,20 +1,22 @@
 import toasts from '@/utilities/toasts';
 import notificationService from '@/services/notificationsService';
 
-const notificationsState = { notifications: [], isLoading: false };
+const getDefaultState = () => ({ notifications: [], isLoading: false });
+
+const notificationsState = getDefaultState();
 
 const actions = {
-  getAllNotifications({ commit }) {
+  getAllNotifications({ commit }, isRefreshing = false) {
     const userToken = JSON.parse(localStorage.getItem('user'));
-    commit('loading');
+    if (isRefreshing === false) commit('loading');
     notificationService.getAllNotifications(userToken)
       .then(
         (notifications) => {
-          commit('gettingNotificationsSuccess', notifications);
+          commit('gettingNotificationsSuccess', { notifications, isRefreshing });
         },
-        (error) => {
+        () => {
           toasts.errorToast('Nie udało się wczytać informacji o powiadomieniach. Spróbuj odświeżyć stronę');
-          commit('gettingNotificationsFailure', error);
+          commit('gettingNotificationsFailure', isRefreshing);
         },
       );
   },
@@ -42,6 +44,9 @@ const actions = {
         },
       );
   },
+  resetState({ commit }) {
+    commit('resetState');
+  },
 };
 
 /* eslint-disable no-param-reassign */
@@ -49,19 +54,22 @@ const mutations = {
   loading(state) {
     state.isLoading = true;
   },
-  gettingNotificationsSuccess(state, notifications) {
+  gettingNotificationsSuccess(state, { notifications, isRefreshing }) {
     state.notifications = notifications;
-    state.isLoading = false;
+    if (isRefreshing === false) { state.isLoading = false; }
   },
-  gettingNotificationsFailure(state) {
+  gettingNotificationsFailure(state, isRefreshing) {
     state.notifications = null;
-    state.isLoading = false;
+    if (isRefreshing === false) state.isLoading = false;
   },
   markingNotificationAsReadSuccess(state, notificationId) {
     state.notifications.find(x => x.id === notificationId).isRead = true;
   },
   removingNotificationSuccess(state, notificationId) {
     state.notifications = state.notifications.filter(x => x.id !== notificationId);
+  },
+  resetState(state) {
+    Object.assign(state, getDefaultState());
   },
 };
 /* eslint-enable no-param-reassign */

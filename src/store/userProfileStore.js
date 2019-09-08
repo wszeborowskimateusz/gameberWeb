@@ -5,7 +5,11 @@ import bootbox from '@/utilities/bootbox';
 import imagesGetter from '@/utilities/imagesGetter';
 import router from '@/router';
 
-const userState = { user: {}, isLoading: false };
+const getDefaultState = () => ({
+  user: {}, isLoading: false,
+});
+
+const userState = getDefaultState();
 
 
 function formatMessage(rewards, categoryName, isTestCategory, isPassed) {
@@ -119,6 +123,9 @@ const actions = {
         },
       );
   },
+  resetState({ commit }) {
+    commit('resetState');
+  },
 };
 
 /* eslint-disable no-param-reassign */
@@ -143,6 +150,9 @@ const mutations = {
     if (state.user) {
       state.user.backgroundImageId = imageId;
     }
+  },
+  resetState(state) {
+    Object.assign(state, getDefaultState());
   },
 };
 /* eslint-enable no-param-reassign */

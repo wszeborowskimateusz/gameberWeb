@@ -180,11 +180,9 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-
 import userInteractionsService from '@/services/usersInteractionsService';
-
 import imagesGetter from '@/utilities/imagesGetter';
-// TODO: Make sure the page does not refresh wirdly
+
 export default {
   data() {
     return {
