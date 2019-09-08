@@ -6,7 +6,8 @@
     <div v-else-if="userStatus != null">
       <div v-if="userStatus.status === 'map'" id="mapdiv" ref="chartdiv"></div>
       <div v-if="userStatus.status === 'test'" class="p-5">
-        <TestCard :testPath="'/games/' + userStatus.testCategoryId"></TestCard>
+        <TestCard :testCategoryId="userStatus.testCategoryId"
+        :testPath="'/games/' + userStatus.testCategoryId"></TestCard>
       </div>
       <div v-if="userStatus.status === 'beginner'" class="p-5">
         <BeginnerLevel :categories="this.userStatus.beginnersCategories"></BeginnerLevel>
@@ -78,7 +79,7 @@ export default {
   },
   async mounted() {
     this.isLoading = true;
-    this.userStatus = await mapService.getUserStatus(this.user);
+    await this.getUserStatus();
     await this.onUserStatusLoaded();
     this.isLoading = false;
   },
@@ -92,6 +93,9 @@ export default {
   },
   methods: {
     ...mapActions("userProfile", ["getUserData"]),
+    async getUserStatus() {
+      this.userStatus = await mapService.getUserStatus(this.user);
+    },
     async onUserStatusLoaded() {
       if(this.userStatus == null) {
         return;

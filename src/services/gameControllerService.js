@@ -14,6 +14,7 @@ export default {
           if (response.currentGameIndex === undefined) {
             response.currentGameIndex = 0;
           }
+          console.log(response);
           return response;
         },
         () => {
@@ -36,7 +37,7 @@ export default {
     return result;
   },
   finishCategory(token, categoryId) {
-    const url = `${config.apiUrl}/games/category/finish`;
+    const url = `${config.apiUrl}/games/categories/finish`;
     return requestSender.sendPostRequest(url, { categoryId }, token);
   },
 };
