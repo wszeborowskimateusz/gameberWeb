@@ -44,7 +44,8 @@
             <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
         </ul>
-        <ul v-if="status.loggedIn && user != null" class="nav navbar-nav navbar-right">
+        <ul v-if="status.loggedIn && isUserProfileEmpty === false"
+        class="nav navbar-nav navbar-right">
           <li class="nav-item">
             <router-link
               to="/friends"
@@ -239,6 +240,9 @@ export default {
       if (this.notifications === undefined || this.notifications === null) return 0;
       return this.notifications.filter(x => !x.isRead).length;
     },
+    isUserProfileEmpty() {
+      return Object.entries(this.user).length === 0 && this.user.constructor === Object;
+    },
   },
   methods: {
     ...mapActions('users', ['logout']),
@@ -259,7 +263,6 @@ export default {
     getResultValue(result) {
       return `${result.userName}`;
     },
-
     handleSubmit(result) {
       this.$router.push(`/users/${result.userId}`);
     },

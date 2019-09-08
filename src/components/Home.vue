@@ -61,7 +61,7 @@
 
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import Parallax from 'vue-parallaxy';
 
@@ -76,8 +76,12 @@ export default {
   methods: {
     ...mapActions('userProfile', ['getUserData']),
   },
+  computed: {
+    ...mapState('users', ['status']),
+  },
   mounted() {
-    if (this.user) {
+    console.log(this.user);
+    if (this.status.loggedIn) {
       this.getUserData();
     }
   },
