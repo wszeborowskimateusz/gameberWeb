@@ -82,7 +82,7 @@
               class="nav-link rounded-circle"
               title="Profil"
             >
-              <img width="25" :src="imagesGetter.getImgUrl('app/user.png')" />
+              <img width="25" :src="pickedAvatar" class="rounded-circle"/>
               {{user.username}}
             </router-link>
           </li>
@@ -95,6 +95,8 @@
             @submit="handleSubmit"
             auto-select
           ></autocomplete>
+        </ul>
+        <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
             <button class="btn btn-info ml-3" @click="logout()">
               <i class="fas fa-sign-out-alt"></i> Wyloguj się
@@ -241,7 +243,19 @@ export default {
       return this.notifications.filter(x => !x.isRead).length;
     },
     isUserProfileEmpty() {
+      if (this.user == null) return true;
       return Object.entries(this.user).length === 0 && this.user.constructor === Object;
+    },
+    pickedAvatar() {
+      let result = null;
+      this.user.avatars.forEach((avatar) => {
+        if (avatar.id === this.user.avatarId) {
+          result = avatar;
+          return false;
+        }
+        return true;
+      });
+      return result.img;
     },
   },
   methods: {

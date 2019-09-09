@@ -15,6 +15,7 @@
             <router-link :to="'users/' + friend.id" class="friend__link" :title="friend.name">
               <span class="m-3 h3 font-weight-bold">{{friend.name}}</span>
             </router-link>
+            <br/>
             <button class="m-2 btn btn-primary" onclick="alert('FIGHT');">
               Wyzwij na pojedynek
               <img :src="imagesGetter.getImgUrl('friends/battle.png')" />
