@@ -1,7 +1,7 @@
 <template>
     <div class="wordPicker row">
         <div class="col-12">
-            <img width="250" height="250" v-bind:src="gameInfo.img"
+            <img width="250" v-bind:src="gameInfo.img"
                 class="wordPickerImage rounded">
         </div>
         <div class="col-12">

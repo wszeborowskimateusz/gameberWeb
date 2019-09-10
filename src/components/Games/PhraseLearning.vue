@@ -1,7 +1,7 @@
 <template>
   <div class="phrase_learning__container">
     <p class="h5 m-2">
-      W jaki sposób odpowiedziałbyć na takie pytanie:
+      W jaki sposób odpowiedziałbyś na takie pytanie:
       <span
         class="font-weight-bold"
       >"{{gameInfo.question}}"</span> Ułóż odpowiedź z poniższych słów.
