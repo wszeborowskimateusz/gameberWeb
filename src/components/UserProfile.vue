@@ -15,7 +15,7 @@
             <div class="avatar__image">
               <img width="250" class="avatar__image__img" :src="pickedAvatar.img" />
               <button
-                v-if="isOurOwnProfile"
+                v-if="user.isOurOwnProfile"
                 class="image_badge btn btn-default"
                 onclick="this.blur();"
                 data-toggle="modal"
@@ -27,7 +27,7 @@
             </div>
           </div>
           <div class="achievements col-sm-12 col-lg-6 col-md-12 p-5 float-left">
-            <h2 v-if="isOurOwnProfile">Twoje osiągnięcia:</h2>
+            <h2 v-if="user.isOurOwnProfile">Twoje osiągnięcia:</h2>
             <h2 v-else>Osiągnięcia</h2>
             <a
               href="#"
@@ -38,13 +38,15 @@
               <img :src="achievement.src" />
             </a>
             <div v-if="!user.achievements || user.achievements.length === 0">
-              <h4>Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
+
+              <h4 v-if="user.isOurOwnProfile">Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
+              <h4 v-else >Brak osiągnięć</h4>
               <img :src="imagesGetter.getImgUrl('profile/no_achievements.png')" />
             </div>
           </div>
           <div class="col-md-12 col-lg-3 col-sm-12 pt-3">
             <button
-              v-if="isOurOwnProfile"
+              v-if="user.isOurOwnProfile"
               class="btn btn-primary"
               data-toggle="modal"
               data-target="#backgroundImagesModal"
@@ -55,14 +57,17 @@
                 :src="imagesGetter.getImgUrl('profile/change_image.png')"
               />
             </button>
-            <button v-else-if="!user.isFriend" class="btn btn-primary" v-on:click="addToFriends()">
+            <button v-else-if="!user.isFriend && !user.isFriendshipRequested"
+            class="btn btn-primary" v-on:click="addToFriends()">
               Dodaj do znajomych
               <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
             </button>
-            <button v-else class="btn btn-primary" v-on:click="sendMessage()">
+            <button v-else-if="!user.isFriendshipRequested"
+            class="btn btn-primary" v-on:click="sendMessage()">
               Wyślij wiadomość
               <img :src="imagesGetter.getImgUrl('profile/send_message.png')"/>
             </button>
+            <span v-else>Twoje zaproszenie jest w drodze</span>
           </div>
         </div>
         <div class="col-12 pt-3 mx-auto p-5 progress-bar-content">
@@ -407,7 +412,11 @@ export default {
       usersInteractionsService.sendFriendshipRequest(
         this.userToken,
         userToAddId,
-      );
+      ).then(() => {
+        this.user.isFriendshipRequested = true;
+      }).then(() => {
+        this.$forceUpdate();
+      });
     },
     sendMessage() {
       const userToSendMessageToId = this.userId;

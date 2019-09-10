@@ -36,7 +36,7 @@
     <router-link to="/register">tutaj</router-link>
     </div>
     <div class="row">
-      <div class="col-6">
+      <div class="col-6 offset-3">
         <button v-on:click="loginWithGoogleOnClick()" class="btn btn-light">
           <img
             width="20px"
@@ -45,9 +45,6 @@
           />
           Login with Google
         </button>
-      </div>
-      <div class="col-6">
-        <v-facebook-login :app-id="fb_app_id"></v-facebook-login>
       </div>
     </div>
     <div v-if="status.loginInProgress" class="d-flex p-2 justify-content-center">
@@ -61,7 +58,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { VFBLogin as VFacebookLogin } from 'vue-facebook-login-component';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import config from '../../config';
 import imagesGetter from '@/utilities/imagesGetter';
@@ -80,14 +76,9 @@ export default {
   },
   components: {
     CubeSpin,
-    VFacebookLogin,
   },
   computed: {
     ...mapState('users', ['status']),
-  },
-  created() {
-    // reset login status
-    // this.logout();
   },
   methods: {
     ...mapActions('users', ['login', 'logout', 'loginWithGoogle']),
@@ -107,8 +98,6 @@ export default {
         .catch((error) => {
           console.log(`failed: ${error}`);
         });
-    },
-    loginWithFacebookOnClick() {
     },
   },
 };

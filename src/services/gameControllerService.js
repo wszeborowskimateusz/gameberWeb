@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from '@/../config';
 import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
 
@@ -14,6 +14,7 @@ export default {
           if (response.currentGameIndex === undefined) {
             response.currentGameIndex = 0;
           }
+          console.log(response);
           return response;
         },
         () => {
@@ -21,24 +22,22 @@ export default {
           return null;
         },
       );
-
     return result;
   },
   async checkAnswer(token, gameId, answer) {
     const url = `${config.apiUrl}/games/check-answer`;
     const result = await requestSender.sendPostRequest(url, { answer, gameId }, token)
       .then(
-        response => response.isCorrect,
+        response => response,
         () => {
           toasts.errorToast('Niestety nie udało pobrać odpowiedzi z serwera. Spróbuj jeszcze raz.');
-          // FIXME: Remove this later
-          return false;
+          return null;
         },
       );
     return result;
   },
   finishCategory(token, categoryId) {
-    const url = `${config.apiUrl}/games/category/finish`;
+    const url = `${config.apiUrl}/games/categories/finish`;
     return requestSender.sendPostRequest(url, { categoryId }, token);
   },
 };

@@ -1,35 +1,54 @@
 <template>
   <div class="messages__container col-12">
+      <div class="m-2">
+        <span class="h2">
+            Konwersacja z
+            <router-link  v-if="conversation.user.userName"
+            :to="'/users/' + userId">
+              {{conversation.user.userName}}
+              <img :src="conversation.user.avatar" class="rounded-circle" width="50"/>
+            </router-link>
+        </span>
+      </div>
     <div class="messages__content">
       <div class="messages__scrollable_container">
         <div v-if="isLoading || isConversationLoading" class="d-flex p-2 justify-content-center">
           <cube-spin class="m-2"></cube-spin>
         </div>
         <div
-          class="messages_message m-5"
-          v-for="(message, index) in conversation.messages"
-          v-bind:key="message.content + ' ' + index"
+          v-else-if="conversation != null
+          && conversation.messages != null
+          && conversation.user != null"
         >
-          <div :class="[message.isOurMessage ? 'flex-row-reverse' : 'flex-row']" class="d-flex">
-            <div>
-              <img
-                class="rounded-circle m-3"
-                :src="[message.isOurMessage ? pickedAvatar: conversation.user.avatar]"
-                width="75"
-              />
-            </div>
-            <div
-              :class="[message.isOurMessage ? 'our_message' : 'other_message']"
-              class="d-flex flex-column message__text p-3"
-            >
-              <p class="h5 align-middle">{{message.content}}</p>
-              <p
-                :class="[message.isOurMessage ? ['text-light', 'text-left']
+          <div
+            class="messages_message m-5"
+            v-for="(message, index) in conversation.messages"
+            v-bind:key="message.content + ' ' + index"
+          >
+            <div :class="[message.isOurMessage ? 'flex-row-reverse' : 'flex-row']" class="d-flex">
+              <div>
+                <img
+                  class="rounded-circle m-3"
+                  :src="[message.isOurMessage ? pickedAvatar: conversation.user.avatar]"
+                  width="75"
+                />
+              </div>
+              <div
+                :class="[message.isOurMessage ? 'our_message' : 'other_message']"
+                class="d-flex flex-column message__text p-3"
+              >
+                <p class="h5 align-middle">{{message.content}}</p>
+                <p
+                  :class="[message.isOurMessage ? ['text-light', 'text-left']
                                               : ['text-muted', 'text-right']]"
-                class="date-text"
-              >{{convertIsoDateToString(message.date)}}</p>
+                  class="date-text"
+                >{{convertIsoDateToString(message.date)}}</p>
+              </div>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <p class="h3 p-5">Wystąpił problem przy wczytywaniu wiadomości</p>
         </div>
       </div>
     </div>
@@ -106,6 +125,7 @@ import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
 import messagesService from '@/services/messagesService';
+import otherUsersProfileService from '@/services/otherUsersProfileService';
 import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
@@ -169,11 +189,16 @@ export default {
       messagesService
         .getMessages(this.user, this.userId, limit, offset)
         .then((messages) => {
-          if (messages.length === 0) {
-            this.areAllMessagesLoaded = true;
+          if (messages != null) {
+            if (messages.length === 0) {
+              this.areAllMessagesLoaded = true;
+            }
+            messages.forEach((msg) => {
+              this.conversation.messages.unshift(msg);
+            });
+          } else {
+            this.conversation.messages = null;
           }
-
-          this.conversation.messages.unshift(...messages);
 
           this.setScrollPositionToJustBelowTop();
           this.isLoading = false;
@@ -182,12 +207,28 @@ export default {
         .then(() => this.$forceUpdate());
     },
     getConversationUser() {
-      messagesService
-        .getConversationUser(this.user, this.userId)
+      otherUsersProfileService
+        .getUser(this.user, this.userId)
         .then((conversationUser) => {
-          this.conversation.user = conversationUser;
+          if (conversationUser == null) {
+            this.conversation.user = null;
+          } else {
+            this.conversation.user.userName = conversationUser.username;
+            this.conversation.user.avatar = this.getUserAvatar(conversationUser);
+          }
         })
         .then(() => this.$forceUpdate());
+    },
+    getUserAvatar(user) {
+      let result = null;
+      user.avatars.forEach((avatar) => {
+        if (avatar.id === user.avatarId) {
+          result = avatar;
+          return false;
+        }
+        return true;
+      });
+      return result.img;
     },
     onFieldFocus() {
       this.wasMessageSend = true;
@@ -235,11 +276,17 @@ export default {
     handleMessageSending() {
       if (this.messageToSend !== '') {
         this.wasMessageSend = true;
-        this.conversation.messages.push({
+        const message = {
           content: this.messageToSend,
           date: new Date().toISOString(),
-          isOurMessage: Math.random() >= 0.5,
-        });
+          isOurMessage: true,
+        };
+        messagesService.sendMessage(this.user, this.userId, this.messageToSend)
+          .then(() => {
+            this.conversation.messages.push(message);
+          }).then(() => {
+            this.$forceUpdate();
+          });
         this.messageToSend = '';
       }
     },

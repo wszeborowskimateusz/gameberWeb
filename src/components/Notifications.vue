@@ -68,7 +68,7 @@
               :src="imagesGetter.getImgUrl('notifications/mark_as_read.png')"
             />
           </button>
-          <p class="pt-3 font-weight-bold">{{notification.title}}</p>
+          <p class="pt-3 font-weight-bold">{{getNotificationTitle(notification.type)}}</p>
           <div class="row m-3">
             <div class="col-12 col-xl-2">
               <img
@@ -78,19 +78,30 @@
               />
             </div>
             <div class="col-12 col-xl-10">
-              <p class="m-4 text-left">{{notification.description}}</p>
+              <p class="m-4 text-left">{{getNotificationDescription(notification)}}</p>
               <p class="m-4 text-left">
                 Nazwa:
-                <span class="font-weight-bold">{{notification.name}}</span>
+                <span v-if="notification.userId == null"
+                class="font-weight-bold">
+                  {{notification.name}}
+                </span>
+                <a v-else :href="'users/' + notification.userId">
+                  <span v-if="notification.userId != null"
+                  class="font-weight-bold">
+                    {{notification.name}}
+                  </span>
+                </a>
               </p>
             </div>
             <div
-              v-if="notification.type === 'friendship_request'"
+              v-if="notification.type === 'friendship_request'
+                && (notification.isAlreadyAccepted === null
+                 || notification.isAlreadyAccepted === undefined )"
               class="d-flex justify-content-center w-100 m-2"
             >
               <button
                 class="btn btn_default mr-5"
-                v-on:click="acceptFriendshipInvitation(notification.userId)"
+                v-on:click="acceptFriendshipInvitation(notification.userId, notification)"
               >
                 Potwierdź
                 <img
@@ -101,7 +112,7 @@
               </button>
               <button
                 class="btn btn_default ml-5"
-                v-on:click="declineFriendshipInvitation(notification.userId)"
+                v-on:click="declineFriendshipInvitation(notification.userId, notification)"
               >
                 Odrzuć
                 <img
@@ -169,7 +180,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-
+import userInteractionsService from '@/services/usersInteractionsService';
 import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
@@ -184,6 +195,7 @@ export default {
   },
   computed: {
     ...mapState('notificationsStore', ['notifications', 'isLoading']),
+    ...mapState('users', ['user']),
     amountOfReadNotifications() {
       if (this.notifications === undefined) { return []; }
       return this.notifications.filter(x => x.isRead).length;
@@ -236,14 +248,45 @@ export default {
           return imagesGetter.getImgUrl('notifications/default_notification.png');
       }
     },
-    acceptFriendshipInvitation(userId) {
-      // TODO: Implement me
-      console.log(userId.toString());
+    getNotificationTitle(notificationType) {
+      switch (notificationType) {
+        case 'friendship_request':
+          return 'Zaproszenie do znajomych';
+        case 'achievement_receive':
+          return 'Otrzymałeś osiągnięcie';
+        case 'friendship_accepted':
+          return 'Zaproszenie zaakceptowane';
+        case 'message_received':
+          return 'Otrzymałeś wiadomość';
+        default:
+          return 'Otrzymałeś powiadomienie';
+      }
     },
-    declineFriendshipInvitation(userId) {
-      // TODO: Implement me
-      console.log(userId.toString());
+    getNotificationDescription(notification) {
+      switch (notification.type) {
+        case 'friendship_request':
+          return `Otrzymałeś właśnie zaproszenie do grona znajomych od użytkownika: ${notification.name}`;
+        case 'achievement_receive':
+          return `Otrzymałeś właśnie osiągnięcie: ${notification.name}`;
+        case 'friendship_accepted':
+          return 'Twoje zaproszenie zostało potwierdzone przez użytkownika';
+        case 'message_received':
+          return `Otrzymałeś właśnie wiadomość do użytkownika: ${notification.name}`;
+        default:
+          return 'Otrzymałeś właśnie powiadomienie. Czym prędzej je przeczytaj';
+      }
     },
+    /* eslint-disable no-param-reassign */
+    acceptFriendshipInvitation(userId, notification) {
+      userInteractionsService.acceptFriendshipRequest(this.user, userId);
+      notification.isAlreadyAccepted = true;
+    },
+    declineFriendshipInvitation(userId, notification) {
+      userInteractionsService.declineFriendshipRequest(this.user, userId);
+      notification.isAlreadyAccepted = true;
+      this.removeNotification(notification.id);
+    },
+    /* eslint-enable no-param-reassign */
   },
   components: {
     CubeSpin,

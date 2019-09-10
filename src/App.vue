@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top">
+    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top"
+      :class="[$route.path === '/map' ? 'zero_margin' : '' ]">
       <button
         class="navbar-toggler navbar-light"
         type="button"
@@ -13,9 +14,6 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <!-- <div v-if="status.loggedIn" class="w-25 d-none d-lg-block"> -->
-      <!--empty spacer-->
-      <!-- </div> -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex flex-fill">
           <li class="nav-item active">
@@ -46,21 +44,28 @@
             <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
         </ul>
-        <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
+        <ul v-if="status.loggedIn && isUserProfileEmpty === false"
+        class="nav navbar-nav navbar-right">
           <li class="nav-item">
-            <router-link to="/friends" name="friends"
-            class="nav-link rounded-circle" title="Znajomi">
+            <router-link
+              to="/friends"
+              name="friends"
+              class="nav-link rounded-circle"
+              title="Znajomi"
+            >
               <img width="25" :src="imagesGetter.getImgUrl('app/friends.png')" />
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
+            <router-link to="/store"
+            name="store" class="nav-link rounded-circle" title="Sklep">
               <img width="25" :src="imagesGetter.getImgUrl('app/coins.png')" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/notifications" class="nav-link rounded-circle" title="Powiadomienia">
+            <router-link to="/notifications"
+            class="nav-link rounded-circle" title="Powiadomienia">
               <notification-bell
                 class="justify-content-center d-flex"
                 :size="25"
@@ -71,9 +76,13 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/user-profile" name="profil" class="nav-link rounded-circle"
-              title="Profil">
-              <img width="25" :src="imagesGetter.getImgUrl('app/user.png')"/>
+            <router-link
+              to="/user-profile"
+              name="profil"
+              class="nav-link rounded-circle"
+              title="Profil"
+            >
+              <img width="25" :src="imagesGetter.getImgUrl('app/user.png')" />
               {{user.username}}
             </router-link>
           </li>
@@ -94,18 +103,18 @@
         </ul>
       </div>
     </nav>
-    <div class="container">
+    <div :class="[$route.path === '/map' ? ['zero_padding', 'container-fluid'] : 'container' ]">
       <div class="row container__row">
-        <!--<div class="col-sm-6 offset-sm-3">-->
         <router-view :key="$route.path"></router-view>
-        <!--</div>-->
       </div>
     </div>
-    <footer class="fixed-bottom">
-      Strona stworzona przez studentów Politechniki Gdańskiej jako projekt inżynierski.
-      <router-link to="/about">O nas</router-link>.
-      App icons by
-      <a href="https://icons8.com">icons8</a>.
+    <footer>
+      <div class="p-3">
+        Strona stworzona przez studentów Politechniki Gdańskiej jako projekt inżynierski.
+        <router-link to="/about">O nas</router-link>.
+        App icons by
+        <a href="https://icons8.com">icons8</a>.
+      </div>
     </footer>
   </div>
 </template>
@@ -117,17 +126,16 @@
   border-right: 1px solid #847d88;
 }
 
-@media (max-width: 1200px) {
+ @media (max-width: 1200px) {
   .navbar .divider-vertical {
     display: none;
   }
 }
 
 footer {
-  height: 25px;
   width: 100%;
   color: #2c3e50;
-  background-color: #f4e5dd;
+  background-color: rgb(240,220,215);
 }
 
 footer a {
@@ -160,8 +168,21 @@ html {
   padding: 0;
 }
 
-.container {
+.zero_padding {
+  padding: 0;
+}
+
+.zero_margin {
+  margin: 0 !important;
+}
+
+.container-fluid {
   overflow: hidden;
+  min-height: 100%;
+}
+
+.container {
+  min-height: 100%;
 }
 
 .container__row {
@@ -196,11 +217,20 @@ export default {
   data() {
     return {
       imagesGetter,
+      polling: null,
     };
   },
+  beforeDestroy() {
+    clearInterval(this.polling);
+  },
+  created() {
+    this.pollNotifications();
+  },
   mounted() {
-    this.getUserData();
-    this.getAllNotifications();
+    if (this.status.loggedIn) {
+      this.getUserData();
+      this.getAllNotifications();
+    }
   },
   computed: {
     ...mapState('users', ['status']),
@@ -210,11 +240,22 @@ export default {
       if (this.notifications === undefined || this.notifications === null) return 0;
       return this.notifications.filter(x => !x.isRead).length;
     },
+    isUserProfileEmpty() {
+      return Object.entries(this.user).length === 0 && this.user.constructor === Object;
+    },
   },
   methods: {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
     ...mapActions('notificationsStore', ['getAllNotifications']),
+    pollNotifications() {
+      // TODO: You can set notifications getting interval here
+      this.polling = setInterval(() => {
+        if (this.status.loggedIn) {
+          this.getAllNotifications(true);
+        }
+      }, 30000);
+    },
     search(input) {
       if (input.length < 1) return [];
       return searchService.searchForUsers(this.$store.state.users.user, input);
@@ -222,7 +263,6 @@ export default {
     getResultValue(result) {
       return `${result.userName}`;
     },
-
     handleSubmit(result) {
       this.$router.push(`/users/${result.userId}`);
     },
