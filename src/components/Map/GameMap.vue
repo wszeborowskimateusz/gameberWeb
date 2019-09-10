@@ -81,7 +81,6 @@ export default {
     this.isLoading = true;
     await this.getUserStatus();
     await this.onUserStatusLoaded();
-    this.isLoading = false;
   },
   beforeDestroy() {
     if (this.chart) {
@@ -107,11 +106,13 @@ export default {
         this.$router.push(`/games/${this.userStatus.testCategoryId}`);
       } else if (this.userStatus.status === "beginner") {
       }
+      this.isLoading = false;
     },
     async prepareMap() {
       // Download required info from server
       await this.getMapCountries();
       await this.getCategories();
+      this.isLoading = false;
       await this.mapLoaded();
     },
     async mapLoaded() {
