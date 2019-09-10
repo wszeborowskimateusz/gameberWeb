@@ -165,12 +165,11 @@ export default {
       lockedCountryInterfaceTemplate.events.on('hit', this.lockIconClick, this);
 
       // add lock icon
-      const categoryImage = lockedCountryInterfaceTemplate.createChild(am4core.Image);
-      categoryImage.href = imagesGetter.getImgUrl('game_map/map_lock_icon.png');
-      categoryImage.width = mapConsts.lockIconSize;
-      categoryImage.verticalCenter = 'middle';
-      categoryImage.horizontalCenter = 'middle';
-      categoryImage.dy = -3;
+      const lockImage = lockedCountryInterfaceTemplate.createChild(am4core.Image);
+      lockImage.href = imagesGetter.getImgUrl('game_map/map_lock_icon.png');
+      lockImage.width = mapConsts.lockIconSize;
+      lockImage.verticalCenter = 'middle';
+      lockImage.horizontalCenter = 'middle';
 
       // add price label
       const priceLabel = lockedCountryInterfaceTemplate.createChild(
@@ -182,15 +181,6 @@ export default {
       priceLabel.horizontalCenter = 'middle';
       priceLabel.dx = mapConsts.priceLabelDxOffset;
       priceLabel.dy = mapConsts.priceLabelDyOffset;
-
-      // // add price label coins icon
-      // const coinsImage = lockedCountryInterfaceTemplate.createChild(am4core.Image);
-      // coinsImage.href = require('https://img.icons8.com/color/48/000000/coins.png');
-      // coinsImage.width = 25;
-      // coinsImage.verticalCenter = 'middle';
-      // coinsImage.horizontalCenter = 'middle';
-      // coinsImage.dy = 3;
-      // coinsImage.dx = 3;
 
       // add data to locked countries interface
       this.lockedCountries.forEach((country) => {
@@ -215,6 +205,7 @@ export default {
       // unlocked country interface
       this.unlockedCountriesInterfaceSeries = this.map.series.push(new am4maps.MapImageSeries());
       this.unlockedCountriesInterfaceSeries.hidden = true; // initialy hidden (map zoomed out)
+      this.unlockedCountriesInterfaceSeries.tooltip.dy = mapConsts.categoryTootltipDyOffset;
 
       const unlockedCountryInterfaceTemplate = this.unlockedCountriesInterfaceSeries.mapImages.template;
       unlockedCountryInterfaceTemplate.propertyFields.latitude = 'latitude';
@@ -229,16 +220,16 @@ export default {
       unlockedCountryInterfaceTemplate.events.on('out', (ev) => {
         ev.target.scale = 1.0;
       });
-      unlockedCountryInterfaceTemplate.events.on('hit', () => {
-        // let category = ev.target.dataItem.dataContext;
-        this.$router.push('games/1');
+      unlockedCountryInterfaceTemplate.events.on('hit', (ev) => {
+        this.$router.push('games/' + ev.target.dataItem.dataContext._id);
       });
 
-      const categoryImage = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
-      categoryImage.propertyFields.href = 'category_icon';
-      categoryImage.width = mapConsts.categoryIconSize;
-      categoryImage.verticalCenter = 'middle';
-      categoryImage.horizontalCenter = 'middle';
+      const lockImage = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
+      lockImage.propertyFields.href = 'category_icon';
+      lockImage.width = mapConsts.categoryIconSize;
+      lockImage.height = mapConsts.categoryIconSize;
+      lockImage.verticalCenter = 'middle';
+      lockImage.horizontalCenter = 'middle';
 
       this.unlockedCountriesInterfaceSeries.addData(this.categories);
     },
@@ -253,10 +244,8 @@ export default {
       const countryISO = ev.target.dataItem.dataContext.id;
 
       if (countryISO === 'RU') {
-        const map = ev.target.series.chart;
         this.map.zoomToRectangle(this.map.north, this.map.east, 45, 28, this.interfaceShowZoomLevel, true);
       } else if (countryISO === 'US') {
-        const map = ev.target.series.chart;
         this.map.zoomToRectangle(49, -66, 25, -124, this.interfaceShowZoomLevel, true);
       } else {
         ev.target.series.chart.zoomToMapObject(ev.target);
