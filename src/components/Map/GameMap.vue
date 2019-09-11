@@ -101,61 +101,16 @@ export default {
       }
       if (this.userStatus.status === "map") {
         await this.prepareMap();
-      } else if (this.userStatus.status === "test") {
       } else if (this.userStatus.status === "testStarted") {
         this.$router.push(`/games/${this.userStatus.testCategoryId}`);
-      } else if (this.userStatus.status === "beginner") {
-      }
-      this.isLoading = false;
+      } 
     },
     async prepareMap() {
       // Download required info from server
       await this.getMapCountries();
-      await this.getCategories();
       this.isLoading = false;
+      await this.getCategories();
       await this.mapLoaded();
-    },
-    async mapLoaded() {
-      // Choose theme
-      am4core.useTheme(am4themesAnimated);
-
-      // Create map instance
-      this.map = am4core.create(this.$refs.chartdiv, am4maps.MapChart);
-      this.map.geodata = am4chartsGeodataWorld;
-      this.map.projection = new am4maps.projections.Miller();
-      this.map.maxPanOut = 0;
-
-      // All countries background
-      const worldSeries = this.map.series.push(new am4maps.MapPolygonSeries());
-      worldSeries.useGeodata = true;
-      worldSeries.mapPolygons.template.strokeOpacity = 0;
-
-      this.drawLockedCountries();
-      this.drawUnlockedCountries();
-
-      // map zoom events
-      this.map.events.on("zoomlevelchanged", () => {
-        if (
-          this.lockedCountriesInterfaceSeries &&
-          this.unlockedCountriesInterfaceSeries
-        ) {
-          if (
-            this.map.zoomLevel > mapConsts.interfaceShowZoomLevel &&
-            this.isInterfaceHidden
-          ) {
-            this.lockedCountriesInterfaceSeries.show();
-            this.unlockedCountriesInterfaceSeries.show();
-            this.isInterfaceHidden = false;
-          } else if (
-            this.map.zoomLevel <= mapConsts.interfaceShowZoomLevel &&
-            !this.isInterfaceHidden
-          ) {
-            this.lockedCountriesInterfaceSeries.hide();
-            this.unlockedCountriesInterfaceSeries.hide();
-            this.isInterfaceHidden = true;
-          }
-        }
-      });
     },
     async getMapCountries() {
       const allCountries = await mapService.getMapCountries(this.user);
@@ -201,6 +156,48 @@ export default {
       });
       this.categories.forEach(c => {
         c.category_icon = `${config.apiUrl}/images/${c.category_icon}`;
+      });
+    },
+    async mapLoaded() {
+      // Choose theme
+      am4core.useTheme(am4themesAnimated);
+
+      // Create map instance
+      this.map = am4core.create(this.$refs.chartdiv, am4maps.MapChart);
+      this.map.geodata = am4chartsGeodataWorld;
+      this.map.projection = new am4maps.projections.Miller();
+      this.map.maxPanOut = 0;
+
+      // All countries background
+      const worldSeries = this.map.series.push(new am4maps.MapPolygonSeries());
+      worldSeries.useGeodata = true;
+      worldSeries.mapPolygons.template.strokeOpacity = 0;
+
+      this.drawLockedCountries();
+      this.drawUnlockedCountries();
+
+      // map zoom events
+      this.map.events.on("zoomlevelchanged", () => {
+        if (
+          this.lockedCountriesInterfaceSeries &&
+          this.unlockedCountriesInterfaceSeries
+        ) {
+          if (
+            this.map.zoomLevel > mapConsts.interfaceShowZoomLevel &&
+            this.isInterfaceHidden
+          ) {
+            this.lockedCountriesInterfaceSeries.show();
+            this.unlockedCountriesInterfaceSeries.show();
+            this.isInterfaceHidden = false;
+          } else if (
+            this.map.zoomLevel <= mapConsts.interfaceShowZoomLevel &&
+            !this.isInterfaceHidden
+          ) {
+            this.lockedCountriesInterfaceSeries.hide();
+            this.unlockedCountriesInterfaceSeries.hide();
+            this.isInterfaceHidden = true;
+          }
+        }
       });
     },
     async redrawMap() {

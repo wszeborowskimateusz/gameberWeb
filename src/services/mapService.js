@@ -70,7 +70,7 @@ export default {
         r => r.categories,
         () => {
           toasts.errorToast('Bład pobierania kategorii');
-          return null;
+          return [];// null;
         },
       );
   },

@@ -280,6 +280,7 @@ export default {
     acceptFriendshipInvitation(userId, notification) {
       userInteractionsService.acceptFriendshipRequest(this.user, userId);
       notification.isAlreadyAccepted = true;
+      this.$forceUpdate();
     },
     declineFriendshipInvitation(userId, notification) {
       userInteractionsService.declineFriendshipRequest(this.user, userId);
