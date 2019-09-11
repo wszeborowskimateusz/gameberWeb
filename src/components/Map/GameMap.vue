@@ -103,7 +103,8 @@ export default {
         await this.prepareMap();
       } else if (this.userStatus.status === "testStarted") {
         this.$router.push(`/games/${this.userStatus.testCategoryId}`);
-      } 
+      }
+      this.isLoading = false; 
     },
     async prepareMap() {
       // Download required info from server
