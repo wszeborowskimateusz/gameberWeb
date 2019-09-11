@@ -1,20 +1,21 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './components/Home.vue';
-import Login from './components/Login.vue';
-import Register from './components/Register.vue';
-import UserProfile from './components/UserProfile.vue';
-import GameMap from './components/Map/GameMap.vue';
-import GameController from './components/GameController.vue';
-import AvatarsStore from './components/AvatarsStore.vue';
-import UsersRanking from './components/UsersRanking.vue';
-import Translator from './components/Translator.vue';
-import Tutorial from './components/Tutorial.vue';
-import Notifications from './components/Notifications.vue';
-import Messages from './components/Messages.vue';
-import Friends from './components/Friends.vue';
-import ErrorPage from './components/Error.vue';
-import Toasts from './utilities/toasts';
+import Home from '@/components/Home.vue';
+import Login from '@/components/Login.vue';
+import Register from '@/components/Register.vue';
+import UserProfile from '@/components/UserProfile.vue';
+import GameMap from '@/components/Map/GameMap.vue';
+import GameController from '@/components/GameController.vue';
+import AvatarsStore from '@/components/AvatarsStore.vue';
+import UsersRanking from '@/components/UsersRanking.vue';
+import Translator from '@/components/Translator.vue';
+import Tutorial from '@/components/Tutorial.vue';
+import Notifications from '@/components/Notifications.vue';
+import Messages from '@/components/Messages.vue';
+import Friends from '@/components/Friends.vue';
+import ErrorPage from '@/components/Error.vue';
+import Toasts from '@/utilities/toasts';
 
 Vue.use(Router);
 
@@ -49,7 +50,7 @@ const router = new Router({
 // Prevent accessing restricted pages if not logged in
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/', '/about', '/ranking'];
+  const publicPages = ['/login', '/register', '/', '/about', '/tutorial'];
   const authRequired = !publicPages.includes(to.path);
 
   // See if there is a JWT in local storage
