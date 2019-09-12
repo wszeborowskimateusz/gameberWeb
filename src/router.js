@@ -15,7 +15,6 @@ import Notifications from '@/components/Notifications.vue';
 import Messages from '@/components/Messages.vue';
 import Friends from '@/components/Friends.vue';
 import ErrorPage from '@/components/Error.vue';
-import Toasts from '@/utilities/toasts';
 
 Vue.use(Router);
 
@@ -45,27 +44,6 @@ const router = new Router({
     { path: '/error', component: ErrorPage, props: { message: '' } },
     { path: '*', redirect: '/' },
   ],
-});
-
-// Prevent accessing restricted pages if not logged in
-router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/', '/about', '/tutorial'];
-  const authRequired = !publicPages.includes(to.path);
-
-  // See if there is a JWT in local storage
-  const loggedIn = localStorage.getItem('user');
-
-  if (authRequired && !loggedIn) {
-    Toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
-    return next('/login');
-  }
-
-  if (loggedIn && (to.path === '/login' || to.path === '/register')) {
-    return next('/');
-  }
-
-  return next();
 });
 
 export default router;

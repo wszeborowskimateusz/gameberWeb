@@ -1,3 +1,4 @@
+/*eslint-disable */
 import pl from 'vee-validate/dist/locale/pl';
 import Vue from 'vue';
 import VeeValidate, { Validator } from 'vee-validate';
@@ -30,6 +31,32 @@ Vue.use(GAuth, gauthOption);
 // Speaker
 /* eslint-disable no-undef */
 responsiveVoice.setDefaultVoice('UK English Male');
+
+// Prevent accessing restricted pages if not logged in
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login', '/register', '/', '/about', '/tutorial'];
+  const authRequired = !publicPages.includes(to.path);
+
+  // See if there is a JWT in local storage
+  const loggedIn = localStorage.getItem('user');
+
+  if (authRequired && !loggedIn) {
+    if (store.state.users.status.loggedIn) {
+      store.dispatch('users/logout', null, { root: true });
+      Toasts.errorToast('Twój token jest nieprawidłowy, dla bezpieczeństwa wylogowano cię z aplikacji');
+    } else {
+      Toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
+      return next('/login');
+    }
+  }
+
+  if (loggedIn && (to.path === '/login' || to.path === '/register')) {
+    return next('/');
+  }
+
+  return next();
+});
 
 new Vue({
   router,

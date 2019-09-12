@@ -1,6 +1,7 @@
-// function logout() {
-//   localStorage.removeItem('user');
-// }
+/*eslint-disable */
+//TODO: Fix circular dependency in store
+import store from '@/store/store';
+import toasts from '@/utilities/toasts';
 
 function handleResponse(response) {
   return response.text().then((text) => {
@@ -8,8 +9,8 @@ function handleResponse(response) {
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
-        // logout();
-        // this.location.reload(true);
+        store.dispatch('users/logout', null, { root: true });
+        toasts.errorToast('Twój token wygasł');
       }
 
       const error = (data && data.message) || response.statusText;
@@ -20,6 +21,14 @@ function handleResponse(response) {
   });
 }
 
+function checkToken(token) {
+  const userToken = JSON.parse(localStorage.getItem('user'));
+  if (token !== userToken) {
+    store.dispatch('users/logout', null, { root: true });
+    toasts.errorToast('Twój token został zmodyfikowany, dla bezpieczeństwa zostałeś wylogowany');
+  }
+}
+
 export default {
   sendGetRequest(token, url) {
     if (token !== null) {
@@ -27,6 +36,7 @@ export default {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       };
+      checkToken(token);
       return fetch(`${url}`, requestOptions)
         .then(response => handleResponse(response));
     }
@@ -41,6 +51,7 @@ export default {
 
     if (token) {
       requestOptions.headers.Authorization = `Bearer ${token}`;
+      checkToken(token);
     }
 
     return fetch(url, requestOptions)
