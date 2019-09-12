@@ -91,6 +91,14 @@
                     {{notification.name}}
                   </span>
                 </a>
+                <br/>
+                <a v-if="notification.type === 'message_received'"
+                :href="'messages/' + notification.userId">
+                  <span v-if="notification.userId != null"
+                  class="font-weight-bold">
+                    Konwersacja
+                  </span>
+                </a>
               </p>
             </div>
             <div
@@ -178,6 +186,8 @@
 </style>
 
 <script>
+/*eslint-disable */
+//TODO: Remove this once circular dependency problem is solved
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import userInteractionsService from '@/services/usersInteractionsService';
