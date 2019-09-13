@@ -1,6 +1,6 @@
 /*eslint-disable */
 //TODO: Fix circular dependency in store
-import store from '@/store/store';
+import router from '@/router';
 import toasts from '@/utilities/toasts';
 
 function handleResponse(response) {
@@ -9,8 +9,9 @@ function handleResponse(response) {
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
-        store.dispatch('users/logout', null, { root: true });
-        toasts.errorToast('Twój token wygasł');
+        localStorage.removeItem('user');
+        // This is just a page that requires a valid token
+        router.push('/store');
       }
 
       const error = (data && data.message) || response.statusText;
@@ -21,11 +22,13 @@ function handleResponse(response) {
   });
 }
 
+// This function checks is token from localSorage is the one from a request
 function checkToken(token) {
   const userToken = JSON.parse(localStorage.getItem('user'));
   if (token !== userToken) {
-    store.dispatch('users/logout', null, { root: true });
-    toasts.errorToast('Twój token został zmodyfikowany, dla bezpieczeństwa zostałeś wylogowany');
+    // This is just a page that requires a valid token
+    localStorage.removeItem('user');
+    router.push('/store');
   }
 }
 

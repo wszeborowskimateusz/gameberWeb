@@ -3,10 +3,11 @@ import pl from 'vee-validate/dist/locale/pl';
 import Vue from 'vue';
 import VeeValidate, { Validator } from 'vee-validate';
 import GAuth from 'vue-google-oauth2';
-import App from './App.vue';
-import router from './router';
-import store from './store/store';
-import config from '../config';
+import App from '@/App.vue';
+import router from '@/router';
+import store from '@/store/store';
+import config from '@/../config';
+import toasts from '@/utilities/toasts'
 import '@trevoreyre/autocomplete-vue/dist/style.css';
 
 require('bootstrap');
@@ -44,9 +45,9 @@ router.beforeEach((to, from, next) => {
   if (authRequired && !loggedIn) {
     if (store.state.users.status.loggedIn) {
       store.dispatch('users/logout', null, { root: true });
-      Toasts.errorToast('Twój token jest nieprawidłowy, dla bezpieczeństwa wylogowano cię z aplikacji');
+      toasts.errorToast('Twój token jest nieprawidłowy, dla bezpieczeństwa wylogowano cię z aplikacji');
     } else {
-      Toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
+      toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
       return next('/login');
     }
   }

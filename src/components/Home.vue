@@ -80,7 +80,6 @@ export default {
     ...mapState('users', ['status']),
   },
   mounted() {
-    console.log(this.user);
     if (this.status.loggedIn) {
       this.getUserData();
     }
