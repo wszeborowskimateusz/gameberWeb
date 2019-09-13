@@ -1,8 +1,3 @@
-/*eslint-disable */
-//TODO: Fix circular dependency in store
-import router from '@/router';
-import toasts from '@/utilities/toasts';
-
 function handleResponse(response) {
   return response.text().then((text) => {
     console.log(response);
@@ -10,8 +5,6 @@ function handleResponse(response) {
     if (!response.ok) {
       if (response.status === 401) {
         localStorage.removeItem('user');
-        // This is just a page that requires a valid token
-        router.push('/store');
       }
 
       const error = (data && data.message) || response.statusText;
@@ -26,9 +19,8 @@ function handleResponse(response) {
 function checkToken(token) {
   const userToken = JSON.parse(localStorage.getItem('user'));
   if (token !== userToken) {
-    // This is just a page that requires a valid token
+    console.log('MAM CIE OSZUSCIE');
     localStorage.removeItem('user');
-    router.push('/store');
   }
 }
 

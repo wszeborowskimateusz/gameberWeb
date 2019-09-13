@@ -186,8 +186,6 @@
 </style>
 
 <script>
-/*eslint-disable */
-//TODO: Remove this once circular dependency problem is solved
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import userInteractionsService from '@/services/usersInteractionsService';
