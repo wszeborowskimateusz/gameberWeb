@@ -94,7 +94,6 @@
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-size: 100% 100%;
   width: 100%;
   height: 100%;
 }
@@ -196,6 +195,20 @@ export default {
         .then(() => this.category.games.forEach((game, index) => {
           game.isFinished = this.categoriesWithoutFinishing.includes(game.name)
               || index < this.category.currentGameIndex;
+
+          if (game.name === 'WordMatching') {
+            game.gameInfo.answers.forEach(
+              (a) => { a.img = imagesGetter.getImageServerUrl(a.img); },
+            );
+          } else if (game.name === 'StoryGame') {
+            game.gameInfo.stories.forEach(
+              (s) => { s.img = imagesGetter.getImageServerUrl(s.img); },
+            );
+          } else {
+            game.gameInfo.img = imagesGetter.getImageServerUrl(
+              game.gameInfo.img,
+            );
+          }
         }))
         /* eslint-enable no-param-reassign */
         /* eslint-enable no-return-assign */

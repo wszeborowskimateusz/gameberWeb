@@ -35,7 +35,7 @@
 .slide {
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 80% 100%;
+  background-size: 80%;
   width: 100%;
   height: 45vh;
 }

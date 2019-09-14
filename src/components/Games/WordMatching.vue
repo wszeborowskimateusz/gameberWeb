@@ -25,7 +25,7 @@
                     :value="answer.name" :id="answer.name" v-on:click="playSound(answer.name)">
                 <label class="radioLabel" :for="answer.name">
                     <div class="m-2">
-                        <img width="130" height="85" v-bind:src="answer.img" class="rounded">
+                        <img height="85" v-bind:src="answer.img" class="rounded">
                     </div>
                     <div class="font-weight-bold">
                         <h2>
