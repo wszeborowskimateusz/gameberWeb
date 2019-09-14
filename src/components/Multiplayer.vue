@@ -9,7 +9,7 @@
     <div
       v-for="(clashCategory, categoryName , i) in clashes"
       v-bind:key="i"
-      class="mb-5 card shadow"
+      class="mb-5 card shadow multiplayer__card"
     >
       <div class="clash__header p-2">
         <p class="h2">{{clashedCategoriesTitles[i]}}</p>
@@ -50,7 +50,7 @@
             : clash.percentage > clash.opponentsPercentage ?
                   {'background-color': 'rgba(0, 255, 0, 0.8)'}
                 : {'background-color': 'rgba(255, 255, 0, 0.8)'}
-          : {'background-color': 'rgba(255, 255, 255, 0.5)'}]"
+          : {'background-color': 'rgb(237,205,195)'}]"
         >
           <p class="inline_paragraph">Pojedynek z:</p>
           <router-link class="multiplayer__link p-2" :to="'users/' + clash.userId">
@@ -97,6 +97,10 @@
 <style scoped>
 .multiplayer__container {
   position: relative;
+}
+
+.multiplayer__card {
+  background-color: #F4E5DD;
 }
 
 p.inline_paragraph {

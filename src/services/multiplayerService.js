@@ -52,4 +52,15 @@ export default {
 
     return result;
   },
+  acceptClashRequest(token, clashId) {
+    const url = `${config.apiUrl}/multiplayer/accept-request`;
+    requestSender.sendPostRequest(url, { clashId }, token)
+      .then(() => {
+        toasts.successToast('Pomyślnie zaakceptowano zaproszenie.');
+      });
+  },
+  declineClashRequest(token, clashId) {
+    const url = `${config.apiUrl}/multiplayer/decline-request`;
+    requestSender.sendPostRequest(url, { clashId }, token);
+  },
 };
