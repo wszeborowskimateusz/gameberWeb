@@ -53,6 +53,7 @@ const actions = {
           router.push('/');
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
+          dispatch('multiplayerStore/getAllClashes', null, { root: true });
           toasts.successToast(`Witaj z powrotem ${username}`);
           if (user.everydayAwards != null) {
             bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
@@ -72,6 +73,7 @@ const actions = {
           router.push('/');
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
+          dispatch('multiplayerStore/getAllClashes', null, { root: true });
           toasts.successToast('Witaj z powrotem!');
           if (user.everydayAwards != null) {
             bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
@@ -88,6 +90,7 @@ const actions = {
     toasts.successToast('Pomyślnie wylogowano się');
     dispatch('notificationsStore/resetState', null, { root: true });
     dispatch('userProfile/resetState', null, { root: true });
+    dispatch('multiplayerStore/resetState', null, { root: true });
     router.push('/');
     commit('logout');
   },

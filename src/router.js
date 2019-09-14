@@ -15,6 +15,7 @@ import Notifications from '@/components/Notifications.vue';
 import Messages from '@/components/Messages.vue';
 import Friends from '@/components/Friends.vue';
 import ErrorPage from '@/components/Error.vue';
+import Multiplayer from '@/components/Multiplayer.vue';
 
 Vue.use(Router);
 
@@ -42,6 +43,7 @@ const router = new Router({
     { path: '/tutorial', component: Tutorial },
     { path: '/friends', component: Friends },
     { path: '/error', component: ErrorPage, props: { message: '' } },
+    { path: '/multiplayer', component: Multiplayer },
     { path: '*', redirect: '/' },
   ],
 });

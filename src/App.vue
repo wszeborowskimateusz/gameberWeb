@@ -46,6 +46,22 @@
         </ul>
         <ul v-if="status.loggedIn && isUserProfileEmpty === false"
         class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+            <router-link
+              to="/multiplayer"
+              name="multiplayer"
+              class="nav-link rounded-circle"
+              title="Pojedynki"
+            >
+            <notification-bell
+                class="justify-content-center d-flex"
+                :size="25"
+                :count="amountOfClashesToPlay"
+                counterBackgroundColor="#fa323c"
+                :icon="imagesGetter.getImgUrl('app/battle.png')"
+              />
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link
               to="/friends"
@@ -232,15 +248,21 @@ export default {
     if (this.status.loggedIn) {
       this.getUserData();
       this.getAllNotifications();
+      this.getAllClashes();
     }
   },
   computed: {
     ...mapState('users', ['status']),
     ...mapState('userProfile', ['user']),
     ...mapState('notificationsStore', ['notifications']),
+    ...mapState('multiplayerStore', ['clashes']),
     amountOfUnReadNotifications() {
       if (this.notifications === undefined || this.notifications === null) return 0;
       return this.notifications.filter(x => !x.isRead).length;
+    },
+    amountOfClashesToPlay() {
+      if (this.clashes === undefined || this.clashes === null) return 0;
+      return this.clashes.startedNotFinishedByUs.length;
     },
     isUserProfileEmpty() {
       if (this.user == null) return true;
@@ -262,11 +284,13 @@ export default {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
     ...mapActions('notificationsStore', ['getAllNotifications']),
+    ...mapActions('multiplayerStore', ['getAllClashes']),
     pollNotifications() {
       // TODO: You can set notifications getting interval here
       this.polling = setInterval(() => {
         if (this.status.loggedIn) {
-          this.getAllNotifications(true);
+          // this.getAllNotifications(true);
+          // this.getAllClashes(true);
         }
       }, 30000);
     },

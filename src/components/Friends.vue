@@ -2,8 +2,10 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div v-else-if="friends != null && friends.length > 0"
-    class="col-12 friends__container row d-flex justify-content-center">
+  <div
+    v-else-if="friends != null && friends.length > 0"
+    class="col-12 friends__container row d-flex justify-content-center"
+  >
     <p class="h1 col-12">Znajomi</p>
     <div v-for="friend in friends" class="friends__row row" v-bind:key="friend.id">
       <div class="col-12 col-lg-3 col-md-6 col-sm-6 store__item m-1 mb-3">
@@ -15,13 +17,80 @@
             <router-link :to="'users/' + friend.id" class="friend__link" :title="friend.name">
               <span class="m-3 h3 font-weight-bold">{{friend.name}}</span>
             </router-link>
-            <br/>
-            <button class="m-2 btn btn-primary" onclick="alert('FIGHT');">
+            <br />
+            <button
+              class="m-2 btn btn-primary"
+              onclick="this.blur();"
+              data-toggle="modal"
+              data-target="#multiplayerModal"
+              v-on:click="pickUser(friend.id)"
+            >
               Wyzwij na pojedynek
               <img :src="imagesGetter.getImgUrl('friends/battle.png')" />
             </button>
           </figcaption>
         </figure>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="multiplayerModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="multiplayerModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+      role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              id="multiplayerModalTitle"
+            >Wybierz kategorię, w której chciałbyś się pojedynkować</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <span v-if="clashCategories.length === 0">
+              Brak kategorii przeznaczonych do pojedynków
+            </span>
+            <div class="row">
+              <div class="col-12" v-for="(clash, index) in clashCategories"
+              v-bind:key="index">
+                <input
+                  type="radio"
+                  v-model="categoryIdToPick"
+                  name="rGroup"
+                  :value="clash.categoryId"
+                  :id="clash.categoryName + index"
+                />
+                <label class="radioLabel" :for="clash.categoryName + index">
+                  <img width="300" height="200" :src="clash.img" />
+                  <br />
+                  <span class="font-weight-bold">{{clash.categoryName}}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >Anuluj</button>
+            <button
+              v-if="clashCategories.length > 0"
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              :disabled="categoryIdToPick === 0 || pickedUserId === 0"
+              v-on:click="pickClashCategory()"
+            >Zapisz zmiany</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -62,6 +131,21 @@ figcaption {
   display: table-caption;
   caption-side: bottom;
 }
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + .radioLabel {
+  box-shadow: 3px 3px 15px #666;
+  border-color: #427696;
+  background: #427696;
+  color: #fff;
+  cursor: pointer;
+  zoom: 1;
+  filter: alpha(opacity=100);
+  opacity: 1;
+}
 </style>
 
 <script>
@@ -69,6 +153,7 @@ import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
 import friendsService from '@/services/friendsService';
+import multiplayerService from '../services/multiplayerService';
 import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
@@ -77,24 +162,33 @@ export default {
       imagesGetter,
       isLoading: false,
       friends: [],
+      clashCategories: [],
+      categoryIdToPick: 0,
+      pickedUserId: 0,
     };
   },
   computed: {
     ...mapState('users', ['user']),
   },
-  created() {
+  async created() {
     this.isLoading = true;
-    this.fetchFriends();
+    this.friends = await this.fetchFriends();
+    this.clashCategories = await this.fetchClashCategories();
+    this.isLoading = false;
+    this.$forceUpdate();
   },
   methods: {
     fetchFriends() {
-      friendsService
-        .getFriends(this.user)
-        .then((friends) => {
-          this.isLoading = false;
-          this.friends = friends;
-        })
-        .then(() => this.$forceUpdate());
+      return friendsService.getFriends(this.user);
+    },
+    fetchClashCategories() {
+      return multiplayerService.getCategories(this.user);
+    },
+    pickClashCategory() {
+      multiplayerService.challenge(this.user, this.pickedUserId, this.categoryIdToPick);
+    },
+    pickUser(userId) {
+      this.pickedUserId = userId;
     },
   },
   components: {
