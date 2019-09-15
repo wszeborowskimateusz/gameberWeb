@@ -44,6 +44,7 @@ const router = new Router({
     { path: '/friends', component: Friends },
     { path: '/error', component: ErrorPage, props: { message: '' } },
     { path: '/multiplayer', component: Multiplayer },
+    { path: '/multiplayer/:id', component: GameController, props: { isMultiplayer: true } },
     { path: '*', redirect: '/' },
   ],
 });

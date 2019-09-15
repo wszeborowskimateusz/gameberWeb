@@ -157,6 +157,9 @@ export default {
       categoryId: this.$route.params.id,
     };
   },
+  props: {
+    isMultiplayer: Boolean,
+  },
   created() {
     this.isLoading = true;
     this.fetchCategory();
@@ -223,9 +226,9 @@ export default {
         answer,
       );
       this.isAnswerLoading = false;
-      if (this.category.isTestCategory === true) {
+      if (this.category.isTestCategory === true || this.isMultiplayer === true) {
         currentGame.isFinished = true;
-        this.nextGameAction();
+        this.nextGameAction(serverResponse);
       }
       if (serverResponse != null) {
         if (serverResponse.isCorrect === true) {
@@ -256,7 +259,7 @@ export default {
         this.nextGameAction();
       }
     },
-    nextGameAction() {
+    nextGameAction(serverResponse) {
       if (this.category.currentGameIndex + 1 < this.category.games.length) {
         this.category.currentGameIndex += 1;
       } else {
@@ -265,6 +268,8 @@ export default {
           categoryId: this.categoryId,
           categoryName: this.category.categoryName,
           isTestCategory: this.category.isTestCategory,
+          isMultiplayer: this.isMultiplayer,
+          percentage: serverResponse.percentage,
         });
       }
     },

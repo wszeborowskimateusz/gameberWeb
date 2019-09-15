@@ -12,7 +12,15 @@ const getDefaultState = () => ({
 const userState = getDefaultState();
 
 
-function formatMessage(rewards, categoryName, isTestCategory, isPassed) {
+function formatMessage(rewards, categoryName, isTestCategory, isPassed, isMultiplayer, percentage) {
+  if (isTestCategory === true && isPassed === false) {
+    return `Niestety nie udało Ci się rozwiązać testu. Przed przejściem do mapy przygotowaliśmy
+    dla Ciebie dodatkowe poziomy, które pomogą Ci poznać podstawowe słówka i zwroty z języka angielskiego`;
+  }
+  if (isMultiplayer === true) {
+    return `Zakończyłeś właśnie swoją część pojedynku. Zdobyłeś <b>${percentage}%</b>.
+    Teraz musisz poczekać na ruch przeciwnika`;
+  }
   if (isPassed === false) {
     return 'Niestety nie udało Ci się przejść danej kategorii. Spróbuj później';
   }
@@ -109,12 +117,15 @@ const actions = {
   },
   /* eslint-enable no-unused-vars */
   getCategoryRewards({ dispatch }, {
-    token, categoryId, categoryName, isTestCategory,
+    token, categoryId, categoryName, isTestCategory, isMultiplayer, percentage,
   }) {
     gameControllerService.finishCategory(token, { categoryId })
       .then(
         (rewards) => {
-          bootbox.alert(formatMessage(rewards, categoryName, isTestCategory, rewards.isPassed));
+          bootbox.alert(
+            formatMessage(rewards, categoryName, isTestCategory,
+              rewards.isPassed, isMultiplayer, percentage),
+          );
           dispatch('getUserData');
           router.push('/map');
         },
