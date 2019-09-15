@@ -290,6 +290,12 @@ export default {
           return imagesGetter.getImgUrl('notifications/new_message.png');
         case 'clash_request':
           return imagesGetter.getImgUrl('notifications/clash.png');
+        case 'clash_won':
+          return imagesGetter.getImgUrl('notifications/clash_won.png');
+        case 'clash_lost':
+          return imagesGetter.getImgUrl('notifications/clash_lost.png');
+        case 'clash_draw':
+          return imagesGetter.getImgUrl('notifications/clash_draw.png');
         default:
           return imagesGetter.getImgUrl(
             'notifications/default_notification.png',
@@ -308,6 +314,10 @@ export default {
           return 'Otrzymałeś wiadomość';
         case 'clash_request':
           return 'Otrzymałeś wyzwanie';
+        case 'clash_won':
+        case 'clash_lost':
+        case 'clash_draw':
+          return 'Zakończył się właśnie pojedynek';
         default:
           return 'Otrzymałeś powiadomienie';
       }
@@ -324,6 +334,12 @@ export default {
           return `Otrzymałeś właśnie wiadomość do użytkownika: ${notification.name}`;
         case 'clash_request':
           return `Otrzymałeś właśnie wyzwanie od użytkownika: ${notification.name}`;
+        case 'clash_won':
+          return `Wygrałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
+        case 'clash_lost':
+          return `Przegrałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
+        case 'clash_draw':
+          return `Zremisowałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
         default:
           return 'Otrzymałeś właśnie powiadomienie. Czym prędzej je przeczytaj';
       }
