@@ -19,7 +19,6 @@ function handleResponse(response) {
 function checkToken(token) {
   const userToken = JSON.parse(localStorage.getItem('user'));
   if (token !== userToken) {
-    console.log('MAM CIE OSZUSCIE');
     localStorage.removeItem('user');
   }
 }

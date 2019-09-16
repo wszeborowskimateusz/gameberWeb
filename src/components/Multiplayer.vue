@@ -46,10 +46,10 @@
           class="clash__container m-2 p-2 border"
           :style="[categoryName === 'finished' ?
             clash.percentage < clash.opponentsPercentage ?
-            {'background-color': 'rgba(255, 0, 0, 0.8)'}
+            {'background-color': 'rgb(247, 72, 78)'}
             : clash.percentage > clash.opponentsPercentage ?
-                  {'background-color': 'rgba(0, 255, 0, 0.8)'}
-                : {'background-color': 'rgba(255, 255, 0, 0.8)'}
+                  {'background-color': 'rgb(65, 184, 131)'}
+                : {'background-color': 'rgb(248, 179, 52)'}
           : {'background-color': 'rgb(237,205,195)'}]"
         >
           <p class="inline_paragraph">Pojedynek z:</p>

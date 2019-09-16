@@ -87,6 +87,18 @@ const defaultClashes = {
       categoryIcon:
                 'https://img.icons8.com/ios-filled/50/000000/panda.png',
     },
+    {
+      userId: '5d5bc611f4e34cc164e6a3d4',
+      userName: 'John',
+      userAvatar:
+                'http://www.zdziechowska.pl/wp-content/uploads/2017/12/DSC08253-1-e1515414238695-1170x878.jpg',
+      categoryId: '5d3d9c359eae4f18d02267d3',
+      percentage: 80,
+      opponentsPercentage: 80,
+      categoryName: 'Rolnictwo',
+      categoryIcon:
+                'https://img.icons8.com/ios-filled/50/000000/panda.png',
+    },
   ],
 };
 
