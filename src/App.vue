@@ -289,8 +289,8 @@ export default {
       // TODO: You can set notifications getting interval here
       this.polling = setInterval(() => {
         if (this.status.loggedIn) {
-          // this.getAllNotifications(true);
-          // this.getAllClashes(true);
+          this.getAllNotifications(true);
+          this.getAllClashes(true);
         }
       }, 30000);
     },
