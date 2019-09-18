@@ -28,8 +28,8 @@
         </li>
         <li class="list-group-item list-group-item-warning">
           Łatwiejsza trasa wiodąca przez dolinę.
-          To jest droga na skróty, przyznanie się do braku odpowiednich umiejętności,
-          aby przeprawić się przez góry - tym samym przejście do kategorii dla początkujących.
+          To jest droga na skróty, dla osób które nie mają dobrze opanowanych podstaw
+          aby przeprawić się przez góry - tym samym przejście do kategorii dla początkujących
         </li>
       </ul>
       <p>
