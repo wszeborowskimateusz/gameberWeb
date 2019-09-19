@@ -5,7 +5,6 @@
         <div class="slide"
         :style="{'background-image' : 'url(' + imagesGetter.getImgUrl(phase.img) +')'}">
            <div class="slide__container">
-             <!-- <img :src="imagesGetter.getImgUrl(phase.img)"/> -->
              <br/>
             <div class="slide__text__container p-3 ">
               <p class="slide__text__paragraph">{{phase.text}}</p>
@@ -21,14 +20,14 @@
 .tutorial__carousel {
   background-color: rgba(237, 205, 195, 0.5);
   height: 90vh;
-  width: 100%;
+  width: 100vw;
 }
 
 .slide {
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 100%;
-  width: 100%;
+  background-size: 80%;
+  width: 100vw;
   height: 100vh;
 }
 
@@ -68,19 +67,19 @@ export default {
             'Podstawowy interfejs podzielony jest na dwie sekcje - nawigację oraz właściwą zawartość witryny.',
         },
         {
-          img: 'Tutorial/tut_1.png',
+          img: 'Tutorial/tut_2.png',
           text: `W górnym pasku mamy do dyspozycji po kolei - stronę główną, 
           ranking graczy, mapę, czyli główny element gry, sklep z avatarami 
           i obrazkami na tło profilu, oraz tłumacz, który pomoże nam jak zapomnimy jakiegoś słówka`,
         },
         {
-          img: 'Tutorial/tut_1.png',
+          img: 'Tutorial/tut_3.png',
           text: `W górnym pasku po prawej stronie mamy z kolei do dyspozycji - pojedynki 
           z innymi graczami, znajomych, posiadane monety, powiadomienia, możliwość 
           przejścia do swojego profilu oraz wyszukiwarkę graczy`,
         },
         {
-          img: 'Tutorial/tut_1.png',
+          img: 'Tutorial/tut_4.png',
           text: `Mapa stanowi główny element aplikacji, przygodę z nią rozpoczynamy
            od rozwiązania testu wiedzy - gdy uzyskamy odpowiedni wynik pokaże 
            nam się mapa, jeżeli zaś wynik będzie za niski to będziemy musieli 

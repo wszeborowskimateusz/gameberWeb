@@ -41,29 +41,21 @@ function checkForWrongToken(to, from, next) {
   // See if there is a JWT in local storage
   const loggedIn = localStorage.getItem('user');
 
-  if (authRequired && !loggedIn) {
-    if (store.state.users.status.loggedIn) {
-      store.dispatch('users/logout', null, { root: true });
-      toasts.errorToast('Twój token jest nieprawidłowy, dla bezpieczeństwa wylogowano cię z aplikacji');
-    } else if (next !== undefined) {
-      toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
-      return next('/login');
-    }
+  if (!loggedIn && store.state.users.status.loggedIn) {
+    store.dispatch('users/logout', null, { root: true });
+    toasts.errorToast('Twój token jest nieprawidłowy, dla bezpieczeństwa wylogowano cię z aplikacji');
+  } else if (authRequired && !loggedIn) {
+    toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
+    return next('/login');
   }
 
-  if (next !== undefined) {
-    if (loggedIn && (to.path === '/login' || to.path === '/register')) {
-      return next('/');
-    }
-
-    return next();
+  if (loggedIn && (to.path === '/login' || to.path === '/register')) {
+    return next('/');
   }
+
+  return next();
 }
 
-router.afterEach((to, from) => {
-
-  checkForWrongToken(to, from);
-});
 // Prevent accessing restricted pages if not logged in
 router.beforeEach((to, from, next) => {
   checkForWrongToken(to, from, next);

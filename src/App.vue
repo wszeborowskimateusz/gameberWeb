@@ -121,7 +121,8 @@
         </ul>
       </div>
     </nav>
-    <div :class="[$route.path === '/map' ? ['zero_padding', 'container-fluid'] : 'container' ]">
+    <div :class="[$route.path === '/map' ||$route.path === '/tutorial'
+    ? ['zero_padding', 'container-fluid'] : 'container' ]">
       <div class="row container__row">
         <router-view :key="$route.path"></router-view>
       </div>
