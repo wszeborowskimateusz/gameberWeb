@@ -24,10 +24,6 @@
 </template>
 
 <style scoped>
-#mapdiv {
-  /* width: 100vw;
-  height: 100vh; */
-}
 </style>
 
 
