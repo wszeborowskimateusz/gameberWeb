@@ -4,7 +4,8 @@
       <cube-spin class="m-2"></cube-spin>
     </div>
     <div v-else-if="userStatus != null">
-      <div v-if="userStatus.status === 'map'" id="mapdiv" ref="chartdiv"></div>
+      <div id="mapdiv" :style="userStatus.status !== 'map'
+      ? 'width: 0; height: 0;' : 'width: 100vw; height: 100vh;'" ref="chartdiv"></div>
       <div v-if="userStatus.status === 'test'" class="p-5">
         <TestCard :testCategoryId="userStatus.testCategoryId"
         :testPath="'/games/' + userStatus.testCategoryId"></TestCard>
@@ -24,8 +25,8 @@
 
 <style scoped>
 #mapdiv {
-  width: 100vw;
-  height: 100vh;
+  /* width: 100vw;
+  height: 100vh; */
 }
 </style>
 

@@ -91,8 +91,8 @@ const actions = {
     dispatch('notificationsStore/resetState', null, { root: true });
     dispatch('userProfile/resetState', null, { root: true });
     dispatch('multiplayerStore/resetState', null, { root: true });
-    router.push('/');
     commit('logout');
+    router.push('/');
   },
   register({ commit }, user) {
     commit('registerInProgress');
