@@ -119,7 +119,7 @@ const actions = {
   getCategoryRewards({ dispatch }, {
     token, categoryId, categoryName, isTestCategory, isMultiplayer, percentage,
   }) {
-    gameControllerService.finishCategory(token, { categoryId })
+    gameControllerService.finishCategory(token, categoryId)
       .then(
         (rewards) => {
           bootbox.alert(

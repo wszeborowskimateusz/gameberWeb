@@ -14,7 +14,6 @@ export default {
           if (response.currentGameIndex === undefined) {
             response.currentGameIndex = 0;
           }
-          console.log(response);
           return response;
         },
         () => {
