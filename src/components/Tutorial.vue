@@ -87,7 +87,7 @@ export default {
            będziemy mogli przejść do mapy`,
         },
         {
-          img: 'Tutorial/tut_1.png',
+          img: 'Tutorial/tut_5.png',
           text: `Na samej mapie kraje odblokowane oznaczone są kolorem zielonym, 
           zaś te zablokowane kolorem szarym. Za zdobywaną gotówkę możemy odblokowywać 
           kolejne kraje. W każdym kraju do dyspozycji mamy kilka kategorii, zaś w każdej 
