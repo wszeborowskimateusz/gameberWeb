@@ -51,7 +51,6 @@
 }
 
 .crosswordElemWithLetter {
-  /* background-color: #F4E5DD; */
   color: black;
   font-size: 1em;
   text-align: center;

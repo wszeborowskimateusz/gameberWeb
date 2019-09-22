@@ -85,9 +85,12 @@
 }
 
 .background-image {
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
+  color: #fff;
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
   position: fixed;
   top: 0;
   left: 0;
@@ -230,8 +233,7 @@ export default {
         currentGame.isFinished = true;
         const percentage = serverResponse != null ? serverResponse.percentage : null;
         this.nextGameAction(percentage);
-      }
-      if (serverResponse != null) {
+      } else if (serverResponse != null) {
         if (serverResponse.isCorrect === true) {
           if (shouldShowModal === true) bootbox.correctAnswerAlert();
           currentGame.isFinished = true;
