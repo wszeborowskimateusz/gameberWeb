@@ -1,15 +1,18 @@
 <template>
   <div class="messages__container col-12">
-      <div class="m-2">
-        <span class="h2">
-            Konwersacja z
-            <router-link  v-if="conversation.user.userName"
-            :to="'/users/' + userId">
-              {{conversation.user.userName}}
-              <img :src="conversation.user.avatar" class="rounded-circle" width="50"/>
-            </router-link>
-        </span>
-      </div>
+    <div class="m-2">
+      <span class="h2">
+        Konwersacja z
+        <router-link v-if="conversation.user.userName" :to="'/users/' + userId">
+          {{conversation.user.userName}}
+          <img
+            :src="conversation.user.avatar"
+            class="rounded-circle"
+            width="50"
+          />
+        </router-link>
+      </span>
+    </div>
     <div class="messages__content">
       <div class="messages__scrollable_container">
         <div v-if="isLoading || isConversationLoading" class="d-flex p-2 justify-content-center">
@@ -77,12 +80,18 @@
 </template>
 
 <style scoped>
-.message__text {
-  justify-content: space-between;
+.messages__container {
+  height: 80%;
 }
 
-.date-text {
-  font-size: 0.8em;
+.messages__content {
+  background-color: rgba(255, 255, 255, 0.9);
+  height: 70vh;
+  overflow: auto;
+}
+
+.messages__scrollable_container {
+  height: 100%;
 }
 
 .our_message {
@@ -101,17 +110,12 @@
   word-wrap: break-word;
 }
 
-.messages__scrollable_container {
-  height: 100%;
-}
-.messages__container {
-  height: 80%;
+.message__text {
+  justify-content: space-between;
 }
 
-.messages__content {
-  background-color: rgba(255, 255, 255, 0.9);
-  height: 70vh;
-  overflow: auto;
+.date-text {
+  font-size: 0.8em;
 }
 
 .messages__send_field {
@@ -214,7 +218,9 @@ export default {
             this.conversation.user = null;
           } else {
             this.conversation.user.userName = conversationUser.username;
-            this.conversation.user.avatar = this.getUserAvatar(conversationUser);
+            this.conversation.user.avatar = this.getUserAvatar(
+              conversationUser,
+            );
           }
         })
         .then(() => this.$forceUpdate());
@@ -281,10 +287,12 @@ export default {
           date: new Date().toISOString(),
           isOurMessage: true,
         };
-        messagesService.sendMessage(this.user, this.userId, this.messageToSend)
+        messagesService
+          .sendMessage(this.user, this.userId, this.messageToSend)
           .then(() => {
             this.conversation.messages.push(message);
-          }).then(() => {
+          })
+          .then(() => {
             this.$forceUpdate();
           });
         this.messageToSend = '';

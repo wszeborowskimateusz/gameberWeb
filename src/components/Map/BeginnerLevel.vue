@@ -36,25 +36,6 @@
 </template>
 
 <style scoped>
-.category__card {
-  background-color: rgba(255, 255, 255, 0.7);
-  position: relative;
-}
-
-.level_container {
-  position: relative;
-}
-
-.level__title {
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.category__lock {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
 .level__background {
   position: fixed;
   top: 0;
@@ -62,6 +43,21 @@
   right: 0;
   bottom: 0;
   z-index: -1;
+}
+
+.level__title {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.category__card {
+  background-color: rgba(255, 255, 255, 0.7);
+  position: relative;
+}
+
+.category__lock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>
 

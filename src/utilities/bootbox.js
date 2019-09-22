@@ -8,6 +8,7 @@ export default {
       message,
       backdrop: true,
       centerVertical: true,
+      className: 'modal-open',
     });
   },
   correctAnswerAlert() {
@@ -16,6 +17,7 @@ export default {
         <img src="${imagesGetter.getImgUrl('bootbox/fire.png')}">`,
       backdrop: true,
       centerVertical: true,
+      className: 'modal-open',
     });
   },
   incorrectAnswerAlert() {
@@ -24,6 +26,7 @@ export default {
         <img src="${imagesGetter.getImgUrl('bootbox/sad.png')}">`,
       backdrop: true,
       centerVertical: true,
+      className: 'modal-open',
     });
   },
   incorrectAnswerPreviousleSolvedAlert() {
@@ -34,6 +37,7 @@ export default {
         <img src="${imagesGetter.getImgUrl('bootbox/fire.png')}">`,
       backdrop: true,
       centerVertical: true,
+      className: 'modal-open',
     });
   },
   confirmationDialog(message, callback) {
@@ -41,6 +45,7 @@ export default {
       message,
       callback,
       centerVertical: true,
+      className: 'modal-open',
     });
   },
 };

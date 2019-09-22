@@ -2,9 +2,11 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div class="store col-12 mb-5"
+  <div
+    class="store col-12 mb-5"
     v-else-if="(avatars != null || backgroundImages != null)
-            && (avatars.length > 0 || backgroundImages.length > 0)">
+            && (avatars.length > 0 || backgroundImages.length > 0)"
+  >
     <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
       <li class="nav-item">
         <a
@@ -90,49 +92,12 @@
   </div>
   <div class="col-12" v-else>
     <ErrorComponent
-      message="Nie udało się wczytać zasobów sklepu. W sklepie nie ma żadnych produktów." />
+      message="Nie udało się wczytać zasobów sklepu. W sklepie nie ma żadnych produktów."
+    />
   </div>
 </template>
 
 <style scoped>
-.button__disabled_no_coins,
-.button__disabled_already_has {
-  opacity: 0.65;
-  filter: alpha(opacity=65);
-  -webkit-box-shadow: none;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.items__row {
-  height: 50%;
-}
-
-.store__item {
-  max-height: 100%;
-}
-
-.item__image {
-  border-radius: 50%;
-}
-
-.item__image__background {
-  max-width: 100%;
-}
-
-.item__figure:hover {
-  -webkit-transform: scale(1.05);
-  transform: scale(1.05);
-}
-
-figure {
-  display: table;
-}
-figcaption {
-  display: table-caption;
-  caption-side: bottom;
-}
-
 .nav-pills {
   background-color: #f4e5dd !important;
 }
@@ -143,6 +108,45 @@ figcaption {
 
 .nav-link.active {
   color: #f4e5dd !important;
+}
+
+.items__row {
+  height: 50%;
+}
+
+.store__item {
+  max-height: 100%;
+}
+
+.item__figure:hover {
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
+}
+
+figure {
+  display: table;
+}
+
+figcaption {
+  display: table-caption;
+  caption-side: bottom;
+}
+
+.item__image {
+  border-radius: 50%;
+}
+
+.item__image__background {
+  max-width: 100%;
+}
+
+.button__disabled_no_coins,
+.button__disabled_already_has {
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 </style>
 

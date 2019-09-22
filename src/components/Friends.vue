@@ -41,8 +41,7 @@
       aria-labelledby="multiplayerModalTitle"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
-      role="document">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5
@@ -58,8 +57,7 @@
               Brak kategorii przeznaczonych do pojedynków
             </span>
             <div class="row">
-              <div class="col-12" v-for="(clash, index) in clashCategories"
-              v-bind:key="index">
+              <div class="col-12" v-for="(clash, index) in clashCategories" v-bind:key="index">
                 <input
                   type="radio"
                   v-model="categoryIdToPick"
@@ -76,11 +74,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >Anuluj</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
             <button
               v-if="clashCategories.length > 0"
               type="button"
@@ -108,6 +102,15 @@
   color: #2c3e50;
 }
 
+figure {
+  display: table;
+}
+
+figcaption {
+  display: table-caption;
+  caption-side: bottom;
+}
+
 .friend__link {
   color: #2c3e50;
 }
@@ -116,20 +119,12 @@
   text-decoration: none;
 }
 
-.friend__image {
-  border-radius: 50%;
-}
-
 .friend__avatar {
   border-radius: 50%;
 }
 
-figure {
-  display: table;
-}
-figcaption {
-  display: table-caption;
-  caption-side: bottom;
+.friend__image {
+  border-radius: 50%;
 }
 
 input[type="radio"] {
@@ -185,7 +180,11 @@ export default {
       return multiplayerService.getCategories(this.user);
     },
     pickClashCategory() {
-      multiplayerService.challenge(this.user, this.pickedUserId, this.categoryIdToPick);
+      multiplayerService.challenge(
+        this.user,
+        this.pickedUserId,
+        this.categoryIdToPick,
+      );
     },
     pickUser(userId) {
       this.pickedUserId = userId;

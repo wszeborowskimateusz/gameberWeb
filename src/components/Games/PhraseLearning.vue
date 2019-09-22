@@ -6,11 +6,14 @@
         class="font-weight-bold"
       >"{{gameInfo.question}}"</span> Ułóż odpowiedź z poniższych słów.
     </p>
-    <div v-if="gameInfo.img != null"
-    class="user_response__container d-flex justify-content-center p-5 mb-5">
-      <div class="user_response__image__container"
-       :style="{'background-image' : 'url(' + gameInfo.img +')'}">
-      </div>
+    <div
+      v-if="gameInfo.img != null"
+      class="user_response__container d-flex justify-content-center p-5 mb-5"
+    >
+      <div
+        class="user_response__image__container"
+        :style="{'background-image' : 'url(' + gameInfo.img +')'}"
+      ></div>
       <div class="check_answer_button m-2">
         <button type="button" class="btn btn-primary" v-on:click="checkAnswer()">
           Sprawdź odpowiedź
@@ -22,9 +25,7 @@
           class="list-group-item selected_item m-2 p-4 my-auto"
           v-for="(word, index) in selectedWords"
           v-bind:key="word + index"
-        >
-          {{word}}
-        </li>
+        >{{word}}</li>
       </ul>
     </div>
     <div class="words_to_pick__container d-flex justify-content-center">
@@ -41,27 +42,14 @@
 </template>
 
 <style scoped>
-li {
-  background-color: #f4e5dd;
-  cursor: pointer;
+.user_response__container {
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
 .user_response__container li:hover {
   background-color: rgba(255, 0, 0, 0.5);
-}
-
-.words_to_pick__container li:hover {
-  background-color: #edcdc3;
-}
-
-.user_response__container {
-  position: relative;
-}
-
-.check_answer_button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
 }
 
 .user_response__image__container {
@@ -72,15 +60,23 @@ li {
   left: 0;
   right: 0;
   z-index: -1;
-  /* background-size: 100% 100%; */
   width: 100%;
   height: 100%;
 }
 
-.user_response__container {
-  height: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: relative;
+.check_answer_button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+li {
+  background-color: #f4e5dd;
+  cursor: pointer;
+}
+
+.words_to_pick__container li:hover {
+  background-color: #edcdc3;
 }
 </style>
 

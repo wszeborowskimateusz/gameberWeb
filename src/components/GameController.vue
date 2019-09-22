@@ -228,13 +228,14 @@ export default {
       this.isAnswerLoading = false;
       if (this.category.isTestCategory === true || this.isMultiplayer === true) {
         currentGame.isFinished = true;
-        this.nextGameAction(serverResponse);
+        const percentage = serverResponse != null ? serverResponse.percentage : null;
+        this.nextGameAction(percentage);
       }
       if (serverResponse != null) {
         if (serverResponse.isCorrect === true) {
           if (shouldShowModal === true) bootbox.correctAnswerAlert();
           currentGame.isFinished = true;
-          this.nextGameAction();
+          this.nextGameAction(serverResponse.percentage);
         } else if (
           shouldShowModal === true
           && serverResponse.isCorrect === false
@@ -243,7 +244,7 @@ export default {
           else {
             bootbox.incorrectAnswerPreviousleSolvedAlert();
             currentGame.isFinished = true;
-            this.nextGameAction();
+            this.nextGameAction(serverResponse.percentage);
           }
         }
       }
@@ -259,7 +260,7 @@ export default {
         this.nextGameAction();
       }
     },
-    nextGameAction(serverResponse) {
+    nextGameAction(percentage) {
       if (this.category.currentGameIndex + 1 < this.category.games.length) {
         this.category.currentGameIndex += 1;
       } else {
@@ -269,7 +270,7 @@ export default {
           categoryName: this.category.categoryName,
           isTestCategory: this.category.isTestCategory,
           isMultiplayer: this.isMultiplayer,
-          percentage: serverResponse.percentage,
+          percentage,
         });
       }
     },

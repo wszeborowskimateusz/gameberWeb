@@ -1,6 +1,12 @@
 <template>
-  <div class="story__container">
-    <carousel class="tutorial__carousel" :perPage="1">
+  <div>
+    <carousel
+      class="carousel"
+      :perPage="1"
+      :paginationSize="30"
+      :paginationColor="'#427696'"
+      :paginationActiveColor="'#F4E5DD'"
+    >
       <slide v-for="(story) in gameInfo.stories" v-bind:key="story.storyEnglish">
         <div class="slide" :style="{'background-image' :
             'url(' + story.img +')'}">
@@ -20,18 +26,10 @@
 </template>
 
 <style scoped>
-.english__text {
-  font-size: 2em;
-  font-weight: bold;
+.carousel {
+  width: 98%;
 }
-.slide__text {
-  background-color: rgba(244, 229, 221, 0.5);
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-}
+
 .slide {
   background-position: center;
   background-repeat: no-repeat;
@@ -39,14 +37,25 @@
   width: 100%;
   height: 45vh;
 }
-.special-card {
-  background-color: rgba(245, 245, 245, 1);
-  opacity: 0.4;
-}
+
 .slide__container {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.slide__text {
+  background-color: rgba(244, 229, 221, 0.8);
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+.english__text {
+  font-size: 2em;
+  font-weight: bold;
 }
 </style>
 

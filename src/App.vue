@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top"
-      :class="[$route.path === '/map' ? 'zero_margin' : '' ]">
+    <nav
+      id="nav"
+      class="navbar navbar-default navbar-expand-xl sticky-top"
+      :class="[$route.path === '/map' ? 'zero_margin' : '' ]"
+    >
       <button
         class="navbar-toggler navbar-light"
         type="button"
@@ -44,16 +47,18 @@
             <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
         </ul>
-        <ul v-if="status.loggedIn && isUserProfileEmpty === false"
-        class="nav navbar-nav navbar-right">
-        <li class="nav-item">
+        <ul
+          v-if="status.loggedIn && isUserProfileEmpty === false"
+          class="nav navbar-nav navbar-right"
+        >
+          <li class="nav-item">
             <router-link
               to="/multiplayer"
               name="multiplayer"
               class="nav-link rounded-circle"
               title="Pojedynki"
             >
-            <notification-bell
+              <notification-bell
                 class="justify-content-center d-flex"
                 :size="25"
                 :count="amountOfClashesToPlay"
@@ -73,15 +78,13 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/store"
-            name="store" class="nav-link rounded-circle" title="Sklep">
+            <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
               <img width="25" :src="imagesGetter.getImgUrl('app/coins.png')" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/notifications"
-            class="nav-link rounded-circle" title="Powiadomienia">
+            <router-link to="/notifications" class="nav-link rounded-circle" title="Powiadomienia">
               <notification-bell
                 class="justify-content-center d-flex"
                 :size="25"
@@ -98,7 +101,7 @@
               class="nav-link rounded-circle"
               title="Profil"
             >
-              <img width="25" :src="pickedAvatar" class="rounded-circle"/>
+              <img width="25" :src="pickedAvatar" class="rounded-circle" />
               {{user.username}}
             </router-link>
           </li>
@@ -121,8 +124,10 @@
         </ul>
       </div>
     </nav>
-    <div :class="[$route.path === '/map' ||$route.path === '/tutorial'
-    ? ['zero_padding', 'container-fluid'] : 'container' ]">
+    <div
+      :class="[$route.path === '/map' ||$route.path === '/tutorial'
+    ? ['zero_padding', 'container-fluid'] : 'container' ]"
+    >
       <div class="row container__row">
         <router-view :key="$route.path"></router-view>
       </div>
@@ -139,38 +144,15 @@
 </template>
 
 <style>
-.navbar .divider-vertical {
-  height: 40px;
-  margin: 0 9px;
-  border-right: 1px solid #847d88;
-}
-
- @media (max-width: 1200px) {
-  .navbar .divider-vertical {
-    display: none;
-  }
-}
-
-footer {
-  width: 100%;
-  color: #2c3e50;
-  background-color: rgb(240,220,215);
-}
-
-footer a {
-  font-weight: bold;
-  color: #427696;
-}
-
-body {
-  background-color: #9dcadf;
-  width: 100%;
+html {
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
-html {
+body {
+  background-color: #9dcadf;
+  width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -187,28 +169,6 @@ html {
   padding: 0;
 }
 
-.zero_padding {
-  padding: 0;
-}
-
-.zero_margin {
-  margin: 0 !important;
-}
-
-.container-fluid {
-  overflow: hidden;
-  min-height: 100%;
-}
-
-.container {
-  min-height: 100%;
-}
-
-.container__row {
-  height: 100%;
-  overflow: auto;
-}
-
 #nav {
   margin-bottom: 2em;
   background-color: #f4e5dd;
@@ -221,6 +181,55 @@ html {
 
 #nav a.router-link-exact-active {
   color: #847d88;
+}
+
+.navbar .divider-vertical {
+  height: 40px;
+  margin: 0 9px;
+  border-right: 1px solid #847d88;
+}
+
+@media (max-width: 1200px) {
+  .navbar .divider-vertical {
+    display: none;
+  }
+}
+
+.container {
+  min-height: 100%;
+}
+
+.container-fluid {
+  overflow: hidden;
+  min-height: 100%;
+}
+
+.container__row {
+  height: 100%;
+  overflow: auto;
+}
+
+.zero_padding {
+  padding: 0;
+}
+
+.zero_margin {
+  margin: 0 !important;
+}
+
+.modal-open {
+  overflow: inherit;
+}
+
+footer {
+  width: 100%;
+  color: #2c3e50;
+  background-color: rgb(240, 220, 215);
+}
+
+footer a {
+  font-weight: bold;
+  color: #427696;
 }
 </style>
 
@@ -267,7 +276,10 @@ export default {
     },
     isUserProfileEmpty() {
       if (this.user == null) return true;
-      return Object.entries(this.user).length === 0 && this.user.constructor === Object;
+      return (
+        Object.entries(this.user).length === 0
+        && this.user.constructor === Object
+      );
     },
     pickedAvatar() {
       let result = null;

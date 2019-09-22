@@ -1,44 +1,50 @@
 <template>
-    <div class="wordMatching row">
-        <div class="game__info col-12">
-            <div class="row">
-                <div class="col-6 text-center offset-3">
-                    <span class="title" v-if="!gameInfo.isPhrase">
-                        Które z tych słów oznacza "{{gameInfo.polishName}}" ?
-                    </span>
-                    <span class="title" v-else>
-                        Która z tych fraz oznacza "{{gameInfo.polishName}}" ?
-                    </span>
-                </div>
-                <div class="col-3 text-right">
-                    <button type="button" class="btn btn-primary float-right"
-                        v-on:click="checkAnswer()">
-                        Sprawdź odpowiedź
-                    </button>
-                </div>
-            </div>
+  <div class="wordMatching row">
+    <div class="game__info col-12">
+      <div class="row">
+        <div class="col-6 text-center offset-3">
+          <span
+            class="title"
+            v-if="!gameInfo.isPhrase"
+          >Które z tych słów oznacza "{{gameInfo.polishName}}" ?</span>
+          <span class="title" v-else>Która z tych fraz oznacza "{{gameInfo.polishName}}" ?</span>
         </div>
-        <div class="answers col-12 row">
-            <div class="col-6 possibleAnswer mb-1" v-for="answer in gameInfo.answers"
-                 v-bind:key="answer.name">
-                <input type="radio" v-model="selectedAnswer" name="rGroup"
-                    :value="answer.name" :id="answer.name" v-on:click="playSound(answer.name)">
-                <label class="radioLabel" :for="answer.name">
-                    <div class="m-2">
-                        <img height="85" v-bind:src="answer.img" class="rounded">
-                    </div>
-                    <div class="font-weight-bold">
-                        <h2>
-                            <span class="text-center polishName">
-                                {{answer.name}}
-                            </span>
-                        </h2>
-                    </div>
-                </label>
-            </div>
+        <div class="col-3 text-right">
+          <button
+            type="button"
+            class="btn btn-primary float-right"
+            v-on:click="checkAnswer()"
+          >Sprawdź odpowiedź</button>
         </div>
-
+      </div>
     </div>
+    <div class="answers col-12 row">
+      <div
+        class="col-6 possibleAnswer mb-1"
+        v-for="answer in gameInfo.answers"
+        v-bind:key="answer.name"
+      >
+        <input
+          type="radio"
+          v-model="selectedAnswer"
+          name="rGroup"
+          :value="answer.name"
+          :id="answer.name"
+          v-on:click="playSound(answer.name)"
+        />
+        <label class="radioLabel" :for="answer.name">
+          <div class="m-2">
+            <img height="85" v-bind:src="answer.img" class="rounded" />
+          </div>
+          <div class="font-weight-bold">
+            <h2>
+              <span class="text-center polishName">{{answer.name}}</span>
+            </h2>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -46,20 +52,18 @@
   height: 10vh;
 }
 
-.answers input[type=radio] {
-    display: none;
-}
 .title {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
-.nopadding {
-   padding: 0 !important;
-   margin: 0 !important;
+
+.answers input[type="radio"] {
+  display: none;
 }
-.answers .radioLabel:hover{
+
+.answers input[type="radio"]:checked + .radioLabel {
   box-shadow: 3px 3px 15px #666;
-  border-color:#847D88;
-  background: #847D88;
+  border-color: #427696;
+  background: #427696;
   color: #fff;
   cursor: pointer;
 
@@ -69,10 +73,10 @@
   opacity: 1;
 }
 
-.answers input[type=radio]:checked + .radioLabel{
+.answers .radioLabel:hover {
   box-shadow: 3px 3px 15px #666;
-  border-color:#427696;
-  background: #427696;
+  border-color: #847d88;
+  background: #847d88;
   color: #fff;
   cursor: pointer;
 

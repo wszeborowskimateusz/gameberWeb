@@ -1,6 +1,7 @@
 <template>
   <div class="tutorial col-12">
-    <carousel class="tutorial__carousel" :perPage="1">
+    <carousel class="tutorial__carousel" :perPage="1"
+    :paginationSize="30" :paginationColor="'#427696'" :paginationActiveColor="'#F4E5DD'">
       <slide v-for="phase in phases" v-bind:key="phase.title">
         <div class="slide"
         :style="{'background-image' : 'url(' + imagesGetter.getImgUrl(phase.img) +')'}">
