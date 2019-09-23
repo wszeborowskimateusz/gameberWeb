@@ -57,15 +57,20 @@
                 :src="imagesGetter.getImgUrl('profile/change_image.png')"
               />
             </button>
-            <button v-else-if="!user.isFriend && !user.isFriendshipRequested"
-            class="btn btn-primary" v-on:click="addToFriends()">
-              Dodaj do znajomych
-              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
-            </button>
-            <button v-else-if="!user.isFriendshipRequested"
+            <button v-else-if="user.isFriend"
             class="btn btn-primary" v-on:click="sendMessage()">
               Wyślij wiadomość
               <img :src="imagesGetter.getImgUrl('profile/send_message.png')"/>
+            </button>
+            <button v-else-if="user.didUserFriendRequestedUs"
+            class="btn btn-primary" v-on:click="acceptFriendshipRequest()">
+              Zaakceptuj zaproszenie
+              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
+            </button>
+            <button v-else-if="!user.isFriendshipRequested"
+            class="btn btn-primary" v-on:click="addToFriends()">
+              Dodaj do znajomych
+              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
             </button>
             <span v-else>Twoje zaproszenie jest w drodze</span>
           </div>
@@ -421,6 +426,13 @@ export default {
     sendMessage() {
       const userToSendMessageToId = this.userId;
       this.$router.push(`/messages/${userToSendMessageToId}`);
+    },
+    acceptFriendshipRequest() {
+      usersInteractionsService.acceptFriendshipRequest(this.userToken, this.userId)
+        .then(() => {
+          this.user.isFriend = true;
+          this.$forceUpdate();
+        });
     },
   },
   components: {

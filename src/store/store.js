@@ -16,4 +16,7 @@ export default new Vuex.Store({
     notificationsStore,
     multiplayerStore,
   },
+  getters: {
+    user: () => localStorage.getItem('user'),
+  },
 });

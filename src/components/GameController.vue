@@ -252,7 +252,11 @@ export default {
       }
     },
     async finishGame(answer) {
-      this.checkAnswer(JSON.stringify(answer), true);
+      if (answer === '') {
+        this.checkAnswer('', true);
+      } else {
+        this.checkAnswer(JSON.stringify(answer), true);
+      }
     },
     nextGame() {
       const currentGame = this.category.games[this.category.currentGameIndex];
