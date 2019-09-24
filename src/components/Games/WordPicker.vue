@@ -1,27 +1,29 @@
 <template>
-    <div class="wordPicker row">
-        <div class="col-12">
-            <img width="250" v-bind:src="gameInfo.img"
-                class="wordPickerImage rounded">
-        </div>
-        <div class="col-12">
-            <button class="btn btn-primary m-3"
-                v-for="(answer, answerId) in gameInfo.answers" v-bind:key="answer"
-                v-on:click="checkAnswer(answerId, answer)">
-                    {{answer}}
-            </button>
-        </div>
+  <div class="wordPicker">
+    <div>
+      <img v-bind:src="gameInfo.img" class="wordPickerImage rounded mb-2" />
     </div>
+    <div>
+      <button
+        class="btn btn-primary m-3"
+        v-for="(answer, answerId) in gameInfo.answers"
+        v-bind:key="answer"
+        v-on:click="checkAnswer(answerId, answer)"
+      >{{answer}}</button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.btn:focus,.btn:active {
-   outline: none !important;
-   box-shadow: none;
+.btn:focus,
+.btn:active {
+  outline: none !important;
+  box-shadow: none;
 }
 
 img {
-  max-width: 100%;
+  width: 100%;
+  max-width: 800px;
 }
 </style>
 

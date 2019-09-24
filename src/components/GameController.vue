@@ -102,7 +102,7 @@
 }
 
 .game {
-  height: 60vh;
+  min-height: 60vh;
   padding: 1%;
   background: rgba(244, 229, 221, 0.5);
 }

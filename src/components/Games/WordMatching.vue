@@ -1,47 +1,43 @@
 <template>
   <div class="wordMatching row">
-    <div class="game__info col-12">
-      <div class="row">
-        <div class="col-6 text-center offset-3">
-          <span
-            class="title"
-            v-if="!gameInfo.isPhrase"
-          >Które z tych słów oznacza "{{gameInfo.polishName}}" ?</span>
-          <span class="title" v-else>Która z tych fraz oznacza "{{gameInfo.polishName}}" ?</span>
-        </div>
-        <div class="col-3 text-right">
-          <button
-            type="button"
-            class="btn btn-primary float-right"
-            v-on:click="checkAnswer()"
-          >Sprawdź odpowiedź</button>
-        </div>
+    <div class="game__info col-12 row">
+      <div class="col-12 col-sm-6 text-center offset-sm-3">
+        <span
+          class="title"
+          v-if="!gameInfo.isPhrase"
+        >Które z tych słów oznacza "{{gameInfo.polishName}}" ?</span>
+        <span class="title" v-else>Która z tych fraz oznacza "{{gameInfo.polishName}}" ?</span>
+      </div>
+      <div class="col-12 col-sm-3 m-2 m-sm-0">
+        <button type="button" class="btn btn-primary" v-on:click="checkAnswer()">Sprawdź odpowiedź</button>
       </div>
     </div>
-    <div class="answers col-12 row">
-      <div
-        class="col-6 possibleAnswer mb-1"
-        v-for="answer in gameInfo.answers"
-        v-bind:key="answer.name"
-      >
-        <input
-          type="radio"
-          v-model="selectedAnswer"
-          name="rGroup"
-          :value="answer.name"
-          :id="answer.name"
-          v-on:click="playSound(answer.name)"
-        />
-        <label class="radioLabel" :for="answer.name">
-          <div class="m-2">
-            <img height="85" v-bind:src="answer.img" class="rounded" />
-          </div>
-          <div class="font-weight-bold">
-            <h2>
-              <span class="text-center polishName">{{answer.name}}</span>
-            </h2>
-          </div>
-        </label>
+    <div class="answers col-12">
+      <div class="row">
+        <div
+          class="col-12 col-sm-6 possibleAnswer mb-1"
+          v-for="answer in gameInfo.answers"
+          v-bind:key="answer.name"
+        >
+          <input
+            type="radio"
+            v-model="selectedAnswer"
+            name="rGroup"
+            :value="answer.name"
+            :id="answer.name"
+            v-on:click="playSound(answer.name)"
+          />
+          <label class="radioLabel" :for="answer.name">
+            <div class="m-2">
+              <img v-bind:src="answer.img" class="rounded" />
+            </div>
+            <div class="font-weight-bold">
+              <h2>
+                <span class="text-center polishName">{{answer.name}}</span>
+              </h2>
+            </div>
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -49,11 +45,16 @@
 
 <style scoped>
 .game__info {
-  height: 10vh;
+  min-height: 10vh;
 }
 
 .title {
   font-size: 1.5em;
+}
+
+img {
+  width: 100%;
+  max-width: 800px;
 }
 
 .answers input[type="radio"] {

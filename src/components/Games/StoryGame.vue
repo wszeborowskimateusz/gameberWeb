@@ -5,11 +5,13 @@
       :perPage="1"
       :paginationSize="30"
       :paginationColor="'#427696'"
-      :paginationActiveColor="'#F4E5DD'"
+      :paginationActiveColor="'#847D88'"
     >
       <slide v-for="(story) in gameInfo.stories" v-bind:key="story.storyEnglish">
-        <div class="slide" :style="{'background-image' :
-            'url(' + story.img +')'}">
+        <!-- <div class="slide" :style="{'background-image' :
+            'url(' + story.img +')'}"> -->
+            <div class="slide" :style="{'background-image' :
+            'url(' + 'https://images.unsplash.com/photo-1494798109427-e44b68ca5a8b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80' +')'}">
           <div class="slide__container">
             <div class="slide__text p-3">
               <p class="english__text">{{story.storyEnglish}}</p>
@@ -27,13 +29,14 @@
 
 <style scoped>
 .carousel {
-  width: 98%;
+  width: 100%;
+  min-height: 44vh;
 }
 
 .slide {
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 80%;
+  background-size: 100%;
   width: 100%;
   height: 45vh;
 }

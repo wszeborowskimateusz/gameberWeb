@@ -22,7 +22,7 @@
       <ul class="list-group list-group-horizontal">
         <li
           v-on:click="unselectWord(word, index)"
-          class="list-group-item selected_item m-2 p-4 my-auto"
+          class="list-group-item selected_item m-md-2 p-md-4 my-auto"
           v-for="(word, index) in selectedWords"
           v-bind:key="word + index"
         >{{word}}</li>
@@ -32,7 +32,7 @@
       <ul class="list-group list-group-horizontal">
         <li
           v-on:click="selectWord(word, index)"
-          class="list-group-item item_to_select m-2 p-4"
+          class="list-group-item item_to_select m-md-2 p-md-4"
           v-for="(word, index) in wordsToSelect"
           v-bind:key="word + index"
         >{{word}}</li>

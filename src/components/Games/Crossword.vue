@@ -1,6 +1,6 @@
 <template>
   <div class="row no-gutters">
-    <div class="col-6 col-md-4 crossword">
+    <div class="col-12 col-sm-6 col-md-4 crossword">
       <canvas width="0" height="0" id="crosswordCanvas"></canvas>
       <form>
         <div class="crosswordRow" v-for="(row, x) in this.game.grid" v-bind:key="x">
@@ -24,7 +24,7 @@
         </div>
       </form>
     </div>
-    <div class="col-4 col-md-6 p-3">
+    <div class="col-12 col-md-4 col-md-6 p-3">
       <div class="m-2 text-center crosswordAnchors inline-block">
         <span class="h4 text-center">Pionowo</span>
         <ul class="text-left list-group" id="crosswordAnchorsAcross"></ul>
