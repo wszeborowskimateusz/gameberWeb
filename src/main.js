@@ -11,6 +11,7 @@ import toasts from '@/utilities/toasts'
 import '@trevoreyre/autocomplete-vue/dist/style.css';
 
 require('bootstrap');
+
 window.wordsearch = require('wordsearch');
 
 Validator.localize('pl', pl);

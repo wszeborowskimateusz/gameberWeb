@@ -68,11 +68,12 @@
 
 <script>
 /* eslint-env browser */
-/* global $ */
 /* global wordsearch */
 import arrayManipulation from '@/utilities/arrayManipulation';
 import bootbox from '@/utilities/bootbox';
 import imagesGetter from '@/utilities/imagesGetter';
+
+import $ from 'jquery';
 
 export default {
   data() {
