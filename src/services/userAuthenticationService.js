@@ -7,7 +7,7 @@ function logout() {
 
 function login(username, password) {
   const url = `${config.apiUrl}/accounts/signin`;
-  return requestSender.sendPostRequest(url, { login: username, password })
+  return requestSender.sendPostRequestWithoutAuthorization(url, { login: username, password })
     .then((user) => {
       if (user.jwtToken) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));
@@ -19,7 +19,7 @@ function login(username, password) {
 
 function loginWithGoogle(authCode) {
   const url = `${config.apiUrl}/accounts/signin/google`;
-  return requestSender.sendPostRequest(url, { authCode })
+  return requestSender.sendPostRequestWithoutAuthorization(url, { authCode })
     .then((user) => {
       if (user.jwtToken) {
         localStorage.setItem('user', JSON.stringify(user.jwtToken));

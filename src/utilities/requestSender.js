@@ -1,6 +1,9 @@
+function refreshToken(refreshedToken) {
+  localStorage.setItem('user', refreshedToken);
+}
+
 function handleResponse(response) {
   return response.text().then((text) => {
-    console.log(response);
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
@@ -10,33 +13,29 @@ function handleResponse(response) {
       const error = (data && data.message) || response.statusText;
       return Promise.reject(error);
     }
-
+    if (data.refreshedJwtToken) {
+      refreshToken(data.refreshedJwtToken);
+    }
     return data;
   });
 }
 
-// This function checks is token from localSorage is the one from a request
-function checkToken(token) {
-  const userToken = JSON.parse(localStorage.getItem('user'));
-  if (token !== userToken) {
-    localStorage.removeItem('user');
-  }
-}
-
 export default {
-  sendGetRequest(token, url) {
+  sendGetRequest(url) {
+    const token = JSON.parse(localStorage.getItem('user'));
     if (token !== null) {
       const requestOptions = {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       };
-      checkToken(token);
+
       return fetch(`${url}`, requestOptions)
         .then(response => handleResponse(response));
     }
     return Promise.reject(new Error('No token provided'));
   },
-  sendPostRequest(url, body, token) {
+  sendPostRequest(url, body) {
+    const token = JSON.parse(localStorage.getItem('user'));
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -45,11 +44,11 @@ export default {
 
     if (token) {
       requestOptions.headers.Authorization = `Bearer ${token}`;
-      checkToken(token);
+      return fetch(url, requestOptions)
+        .then(response => handleResponse(response));
     }
 
-    return fetch(url, requestOptions)
-      .then(response => handleResponse(response));
+    return Promise.reject(new Error('No token provided'));
   },
   sendGetRequestWithoutAuthorization(url) {
     const requestOptions = { method: 'GET' };

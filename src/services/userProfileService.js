@@ -2,24 +2,24 @@ import config from '@/../config';
 import requestSender from '@/utilities/requestSender';
 
 export default {
-  getUserData(token) {
+  getUserData() {
     const url = `${config.apiUrl}/users/profile`;
-    return requestSender.sendGetRequest(token, url);
+    return requestSender.sendGetRequest(url);
   },
-  changeAvatar(token, avatarId) {
+  changeAvatar(avatarId) {
     const url = `${config.apiUrl}/users/profile/change-avatar`;
-    return requestSender.sendPostRequest(url, avatarId, token);
+    return requestSender.sendPostRequest(url, avatarId);
   },
-  changeBackgroundImage(token, imageId) {
+  changeBackgroundImage(imageId) {
     const url = `${config.apiUrl}/users/profile/change-image`;
-    return requestSender.sendPostRequest(url, imageId, token);
+    return requestSender.sendPostRequest(url, imageId);
   },
-  buyAvatar(token, avatar) {
+  buyAvatar(avatar) {
     const url = `${config.apiUrl}/users/shop/avatars/buy`;
-    return requestSender.sendPostRequest(url, avatar, token);
+    return requestSender.sendPostRequest(url, avatar);
   },
-  buyBackgroundImage(token, image) {
+  buyBackgroundImage(image) {
     const url = `${config.apiUrl}/users/shop/images/buy`;
-    return requestSender.sendPostRequest(url, image, token);
+    return requestSender.sendPostRequest(url, image);
   },
 };

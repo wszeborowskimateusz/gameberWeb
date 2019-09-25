@@ -42,7 +42,7 @@
         <div
           v-for="notification in NotificationsStatus[pickedNotificationsStatus]"
           v-bind:key="notification.id"
-          class="notification__tile m-3"
+          class="notification__tile m-0 m-sm-3"
         >
           <img
             class="m-2 notification__icon"
@@ -66,15 +66,15 @@
               :src="imagesGetter.getImgUrl('notifications/mark_as_read.png')"
             />
           </button>
-          <p class="pt-3 font-weight-bold">{{getNotificationTitle(notification.type)}}</p>
-          <div class="row m-3">
+          <p class="pt-5 pt-sm-3 font-weight-bold">{{getNotificationTitle(notification.type)}}</p>
+          <div class="row m-sm-3 m-0">
             <div class="col-12 col-xl-2">
-              <img width="150" height="150"
-              class="m-3 notification__image" :src="notification.img" />
+              <img
+              class="m-0 m-sm-3 notification__image" :src="notification.img" />
             </div>
             <div class="col-12 col-xl-10">
-              <p class="m-4 text-left">{{getNotificationDescription(notification)}}</p>
-              <p class="m-4 text-left">
+              <p class="m-0 m-sm-4 my-4 text-left">{{getNotificationDescription(notification)}}</p>
+              <p class="m-0 m-sm-4 my-4 text-left">
                 Nazwa:
                 <span
                   v-if="notification.userId == null"
@@ -102,11 +102,11 @@
               notification.type === 'clash_request')
                 && (notification.isAlreadyAccepted === null
                  || notification.isAlreadyAccepted === undefined )"
-              class="d-flex justify-content-center w-100 m-2"
+              class="d-flex justify-content-center w-100 m-0 m-sm-2"
             >
               <button
                 v-if="notification.type === 'friendship_request'"
-                class="btn btn_default mr-5"
+                class="btn btn_default mr-0 mr-sm-5"
                 v-on:click="acceptFriendshipInvitation(notification.userId, notification)"
               >
                 Potwierdź
@@ -130,7 +130,7 @@
               </button>
               <button
                 v-if="notification.type === 'friendship_request'"
-                class="btn btn_default ml-5"
+                class="btn btn_default ml-0 ml-sm-5"
                 v-on:click="declineFriendshipInvitation(notification.userId, notification)"
               >
                 Odrzuć
@@ -175,6 +175,8 @@
 
 .notification__image {
   border-radius: 50%;
+  width: 100%;
+  max-width: 800px;
 }
 
 .notification__remove_button {
@@ -227,7 +229,6 @@ export default {
   },
   computed: {
     ...mapState('notificationsStore', ['notifications', 'isLoading']),
-    ...mapState('users', ['user']),
     amountOfReadNotifications() {
       if (this.notifications === undefined) {
         return [];
@@ -346,22 +347,22 @@ export default {
     },
     /* eslint-disable no-param-reassign */
     acceptFriendshipInvitation(userId, notification) {
-      userInteractionsService.acceptFriendshipRequest(this.user, userId);
+      userInteractionsService.acceptFriendshipRequest(userId);
       notification.isAlreadyAccepted = true;
       this.$forceUpdate();
     },
     declineFriendshipInvitation(userId, notification) {
-      userInteractionsService.declineFriendshipRequest(this.user, userId);
+      userInteractionsService.declineFriendshipRequest(userId);
       notification.isAlreadyAccepted = true;
       this.removeNotification(notification.id);
     },
     acceptClashInvitation(notification) {
-      multiplayerService.acceptClashRequest(this.user, notification.clashId);
+      multiplayerService.acceptClashRequest(notification.clashId);
       notification.isAlreadyAccepted = true;
       this.$forceUpdate();
     },
     declineClashInvitation(notification) {
-      multiplayerService.declineClashRequest(this.user, notification.clashId);
+      multiplayerService.declineClashRequest(notification.clashId);
       notification.isAlreadyAccepted = true;
       this.removeNotification(notification.id);
     },

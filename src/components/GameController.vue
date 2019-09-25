@@ -124,7 +124,7 @@
 </style>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
@@ -168,7 +168,6 @@ export default {
     this.fetchCategory();
   },
   computed: {
-    ...mapState('users', ['user']),
     gameProgress() {
       return (
         ((this.category.currentGameIndex + 1) / this.category.games.length)
@@ -191,7 +190,7 @@ export default {
     ...mapActions('userProfile', ['getCategoryRewards']),
     fetchCategory() {
       gameControllerService
-        .getCategoryData(this.user, this.categoryId)
+        .getCategoryData(this.categoryId)
         .then((category) => {
           this.isLoading = false;
           this.category = category;
@@ -224,7 +223,6 @@ export default {
       this.isAnswerLoading = true;
       const currentGame = this.category.games[this.category.currentGameIndex];
       const serverResponse = await gameControllerService.checkAnswer(
-        this.user,
         currentGame.gameId,
         answer,
       );
@@ -271,7 +269,6 @@ export default {
         this.category.currentGameIndex += 1;
       } else {
         this.getCategoryRewards({
-          token: this.user,
           categoryId: this.categoryId,
           categoryName: this.category.categoryName,
           isTestCategory: this.category.isTestCategory,

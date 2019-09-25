@@ -106,9 +106,8 @@ const multiplayerState = getDefaultState();
 
 const actions = {
   getAllClashes({ commit }, isRefreshing = false) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
     if (isRefreshing === false) commit('loading');
-    multiplayerService.getAllClashes(userToken)
+    multiplayerService.getAllClashes()
       .then(
         (clashes) => {
           commit('gettingClashesSuccess', { clashes, isRefreshing });

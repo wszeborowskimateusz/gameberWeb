@@ -9,7 +9,9 @@
         <span class="title" v-else>Która z tych fraz oznacza "{{gameInfo.polishName}}" ?</span>
       </div>
       <div class="col-12 col-sm-3 m-2 m-sm-0">
-        <button type="button" class="btn btn-primary" v-on:click="checkAnswer()">Sprawdź odpowiedź</button>
+        <button type="button" class="btn btn-primary" v-on:click="checkAnswer()">
+          Sprawdź odpowiedź
+        </button>
       </div>
     </div>
     <div class="answers col-12">
@@ -89,7 +91,7 @@ img {
 </style>
 
 <script>
-import shuffle from '../../utilities/arrayManipulation';
+import shuffle from '@/utilities/arrayManipulation';
 
 export default {
   data() {

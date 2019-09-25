@@ -67,7 +67,6 @@
 <style scoped>
 </style>
 <script>
-import { mapState } from 'vuex';
 import imagesGetter from '@/utilities/imagesGetter';
 import gameControllerService from '@/services/gameControllerService';
 
@@ -82,13 +81,10 @@ export default {
     testPath: String,
     testCategoryId: String,
   },
-  computed: {
-    ...mapState('users', ['user']),
-  },
   methods: {
     skipTest() {
       gameControllerService
-        .finishCategory(this.user, this.testCategoryId)
+        .finishCategory(this.testCategoryId)
         .then(() => {
           this.$parent.getUserStatus();
         })

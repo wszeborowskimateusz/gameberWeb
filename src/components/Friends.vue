@@ -2,37 +2,37 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div
-    v-else-if="friends != null && friends.length > 0"
-    class="col-12 friends__container row d-flex justify-content-center"
-  >
-    <p class="h1 col-12">Znajomi</p>
-    <div v-for="friend in friends" class="friends__row row" v-bind:key="friend.id">
-      <div class="col-12 col-lg-3 col-md-6 col-sm-6 store__item m-1 mb-3">
-        <figure class="mx-auto friend__figure">
-          <router-link :to="'users/' + friend.id" class="friend__link" :title="friend.name">
-            <img class="friend__avatar" width="350" height="400" :src="friend.avatar" />
-          </router-link>
-          <figcaption class="imgCaption">
+  <div v-else-if="friends != null && friends.length > 0" class="col-12 friends__container">
+    <div>
+      <p class="h1">Znajomi</p>
+    </div>
+    <div>
+      <div v-for="friend in friends" class="friends__row row" v-bind:key="friend.id">
+        <div class="col-12 col-lg-3 col-md-6 col-sm-6 store__item m-1 mb-3">
+          <figure class="mx-auto friend__figure">
             <router-link :to="'users/' + friend.id" class="friend__link" :title="friend.name">
-              <span class="m-3 h3 font-weight-bold">{{friend.name}}</span>
+              <img class="friend__avatar" :src="friend.avatar" />
             </router-link>
-            <br />
-            <button
-              class="m-2 btn btn-primary"
-              onclick="this.blur();"
-              data-toggle="modal"
-              data-target="#multiplayerModal"
-              v-on:click="pickUser(friend.id)"
-            >
-              Wyzwij na pojedynek
-              <img :src="imagesGetter.getImgUrl('friends/battle.png')" />
-            </button>
-          </figcaption>
-        </figure>
+            <figcaption class="imgCaption">
+              <router-link :to="'users/' + friend.id" class="friend__link" :title="friend.name">
+                <span class="m-3 h3 font-weight-bold">{{friend.name}}</span>
+              </router-link>
+              <br />
+              <button
+                class="m-2 btn btn-primary"
+                onclick="this.blur();"
+                data-toggle="modal"
+                data-target="#multiplayerModal"
+                v-on:click="pickUser(friend.id)"
+              >
+                Wyzwij na pojedynek
+                <img :src="imagesGetter.getImgUrl('friends/battle.png')" />
+              </button>
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </div>
-
     <div
       class="modal fade"
       id="multiplayerModal"
@@ -66,7 +66,7 @@
                   :id="clash.categoryName + index"
                 />
                 <label class="radioLabel" :for="clash.categoryName + index">
-                  <img width="300" height="200" :src="clash.img" />
+                  <img class="clash__image" :src="clash.img" />
                   <br />
                   <span class="font-weight-bold">{{clash.categoryName}}</span>
                 </label>
@@ -121,10 +121,17 @@ figcaption {
 
 .friend__avatar {
   border-radius: 50%;
+  width: 100%;
+  max-width: 800px;
 }
 
 .friend__image {
   border-radius: 50%;
+}
+
+.clash__image {
+  width: 100%;
+  max-width: 800px;
 }
 
 input[type="radio"] {
@@ -144,7 +151,6 @@ input[type="radio"]:checked + .radioLabel {
 </style>
 
 <script>
-import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
 import friendsService from '@/services/friendsService';
@@ -162,9 +168,6 @@ export default {
       pickedUserId: 0,
     };
   },
-  computed: {
-    ...mapState('users', ['user']),
-  },
   async created() {
     this.isLoading = true;
     this.friends = await this.fetchFriends();
@@ -174,17 +177,13 @@ export default {
   },
   methods: {
     fetchFriends() {
-      return friendsService.getFriends(this.user);
+      return friendsService.getFriends();
     },
     fetchClashCategories() {
-      return multiplayerService.getCategories(this.user);
+      return multiplayerService.getCategories();
     },
     pickClashCategory() {
-      multiplayerService.challenge(
-        this.user,
-        this.pickedUserId,
-        this.categoryIdToPick,
-      );
+      multiplayerService.challenge(this.pickedUserId, this.categoryIdToPick);
     },
     pickUser(userId) {
       this.pickedUserId = userId;

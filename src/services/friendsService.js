@@ -3,9 +3,9 @@ import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
 
 export default {
-  async getFriends(token) {
+  async getFriends() {
     const url = `${config.apiUrl}/users/friends`;
-    const result = await requestSender.sendGetRequest(token, url)
+    const result = await requestSender.sendGetRequest(url)
       .then(
         response => response,
         () => {

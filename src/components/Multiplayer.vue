@@ -155,7 +155,6 @@ export default {
     this.getAllClashes();
   },
   computed: {
-    ...mapState('users', ['user']),
     ...mapState('multiplayerStore', ['clashes', 'isLoading']),
     statistics() {
       let won = 0;

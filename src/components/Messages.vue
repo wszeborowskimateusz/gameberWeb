@@ -152,7 +152,6 @@ export default {
   },
   computed: {
     ...mapState('userProfile', { userFromStore: 'user' }),
-    ...mapState('users', ['user']),
     pickedAvatar() {
       let result = null;
       if (
@@ -191,7 +190,7 @@ export default {
   methods: {
     getMessages(limit, offset) {
       messagesService
-        .getMessages(this.user, this.userId, limit, offset)
+        .getMessages(this.userId, limit, offset)
         .then((messages) => {
           if (messages != null) {
             if (messages.length === 0) {
@@ -212,7 +211,7 @@ export default {
     },
     getConversationUser() {
       otherUsersProfileService
-        .getUser(this.user, this.userId)
+        .getUser(this.userId)
         .then((conversationUser) => {
           if (conversationUser == null) {
             this.conversation.user = null;
@@ -288,7 +287,7 @@ export default {
           isOurMessage: true,
         };
         messagesService
-          .sendMessage(this.user, this.userId, this.messageToSend)
+          .sendMessage(this.userId, this.messageToSend)
           .then(() => {
             this.conversation.messages.push(message);
           })

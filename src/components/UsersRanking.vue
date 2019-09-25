@@ -74,7 +74,6 @@
 </style>
 
 <script>
-import { mapState } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import usersRankingService from '../services/usersRankingService';
 import ErrorComponent from './Error.vue';
@@ -92,9 +91,6 @@ export default {
       ],
     };
   },
-  computed: {
-    ...mapState('users', ['user']),
-  },
   created() {
     this.isLoading = true;
     this.fetchRankings();
@@ -105,7 +101,7 @@ export default {
     },
     fetchRankings() {
       usersRankingService
-        .getUsersRanking(this.user)
+        .getUsersRanking()
         .then((rankings) => {
           this.isLoading = false;
           this.rankings = rankings;

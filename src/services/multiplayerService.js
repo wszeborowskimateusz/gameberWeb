@@ -21,13 +21,13 @@ const defaultCategories = [
 ];
 
 export default {
-  getAllClashes(token) {
+  getAllClashes() {
     const url = `${config.apiUrl}/multiplayer/clashes`;
-    return requestSender.sendGetRequest(token, url);
+    return requestSender.sendGetRequest(url);
   },
-  async getCategories(token) {
+  async getCategories() {
     const url = `${config.apiUrl}/multiplayer/categories`;
-    const result = await requestSender.sendGetRequest(token, url)
+    const result = await requestSender.sendGetRequest(url)
       .then(
         response => response,
         () => {
@@ -39,9 +39,9 @@ export default {
 
     return result;
   },
-  async challenge(token, userId, categoryId) {
+  async challenge(userId, categoryId) {
     const url = `${config.apiUrl}/multiplayer/challenge`;
-    const result = await requestSender.sendPostRequest(url, { userId, categoryId }, token)
+    const result = await requestSender.sendPostRequest(url, { userId, categoryId })
       .then(
         response => response,
         () => {
@@ -52,15 +52,15 @@ export default {
 
     return result;
   },
-  acceptClashRequest(token, clashId) {
+  acceptClashRequest(clashId) {
     const url = `${config.apiUrl}/multiplayer/accept-request`;
-    requestSender.sendPostRequest(url, { clashId }, token)
+    requestSender.sendPostRequest(url, { clashId })
       .then(() => {
         toasts.successToast('Pomyślnie zaakceptowano zaproszenie.');
       });
   },
-  declineClashRequest(token, clashId) {
+  declineClashRequest(clashId) {
     const url = `${config.apiUrl}/multiplayer/decline-request`;
-    requestSender.sendPostRequest(url, { clashId }, token);
+    requestSender.sendPostRequest(url, { clashId });
   },
 };

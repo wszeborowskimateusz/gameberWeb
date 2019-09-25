@@ -7,9 +7,8 @@ const notificationsState = getDefaultState();
 
 const actions = {
   getAllNotifications({ commit }, isRefreshing = false) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
     if (isRefreshing === false) commit('loading');
-    notificationService.getAllNotifications(userToken)
+    notificationService.getAllNotifications()
       .then(
         (notifications) => {
           commit('gettingNotificationsSuccess', { notifications, isRefreshing });
@@ -21,8 +20,7 @@ const actions = {
       );
   },
   markNotificationAsRead({ commit }, notificationId) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
-    notificationService.markNoificationAsRead(userToken, notificationId)
+    notificationService.markNoificationAsRead(notificationId)
       .then(
         () => {
           commit('markingNotificationAsReadSuccess', notificationId);
@@ -33,8 +31,7 @@ const actions = {
       );
   },
   removeNotification({ commit }, notificationId) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
-    notificationService.removeNotification(userToken, notificationId)
+    notificationService.removeNotification(notificationId)
       .then(
         () => {
           commit('removingNotificationSuccess', notificationId);

@@ -3,9 +3,9 @@ import requestSender from '@/utilities/requestSender';
 import toast from '@/utilities/toasts';
 
 export default {
-  async getMessages(token, userId, limit, offset) {
+  async getMessages(userId, limit, offset) {
     const url = `${config.apiUrl}/messages/${userId}?limit=${limit}&offset=${offset}`;
-    const result = await requestSender.sendGetRequest(token, url).then(
+    const result = await requestSender.sendGetRequest(url).then(
       results => results,
       () => {
         toast.errorToast('Nie udało się pobrać konwersacji');
@@ -15,9 +15,9 @@ export default {
 
     return result;
   },
-  sendMessage(token, userId, content) {
+  sendMessage(userId, content) {
     const url = `${config.apiUrl}/messages/send/${userId}`;
-    return requestSender.sendPostRequest(url, { content }, token).then(
+    return requestSender.sendPostRequest(url, { content }).then(
       () => {},
       () => {
         toast.errorToast('Nie udało się wysłać wiadomości');

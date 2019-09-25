@@ -45,6 +45,7 @@ function checkForWrongToken(to, from, next) {
   if (!loggedIn && store.state.users.status.loggedIn) {
     store.dispatch('users/logout', null, { root: true });
     toasts.errorToast('Twój token jest nieprawidłowy, dla bezpieczeństwa wylogowano cię z aplikacji');
+    return next('/login');
   } else if (authRequired && !loggedIn) {
     toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
     return next('/login');

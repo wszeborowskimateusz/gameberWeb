@@ -49,9 +49,8 @@ function formatMessage(rewards, categoryName, isTestCategory, isPassed, isMultip
 
 const actions = {
   getUserData({ commit }) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
     commit('loading');
-    userProfileService.getUserData(userToken)
+    userProfileService.getUserData()
       .then(
         (user) => {
           commit('gettingDataSuccess', user);
@@ -63,8 +62,7 @@ const actions = {
       );
   },
   changeAvatar({ commit }, avatarId) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
-    userProfileService.changeAvatar(userToken, { avatarId })
+    userProfileService.changeAvatar({ avatarId })
       .then(
         () => {
           toasts.successToast('Pomyślnie zmieniono avatar');
@@ -76,8 +74,7 @@ const actions = {
       );
   },
   changeBackgroundImage({ commit }, imageId) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
-    userProfileService.changeBackgroundImage(userToken, { imageId })
+    userProfileService.changeBackgroundImage({ imageId })
       .then(
         () => {
           toasts.successToast('Pomyślnie zmieniono zdjęcie w tle');
@@ -90,8 +87,7 @@ const actions = {
   },
   /* eslint-disable no-unused-vars */
   buyAvatar({ dispatch }, avatar) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
-    userProfileService.buyAvatar(userToken, avatar)
+    userProfileService.buyAvatar(avatar)
       .then(
         () => {
           toasts.successToast('Pomyślnie zakupiono avatar');
@@ -103,8 +99,7 @@ const actions = {
       );
   },
   buyBackgroundImage({ dispatch }, image) {
-    const userToken = JSON.parse(localStorage.getItem('user'));
-    userProfileService.buyBackgroundImage(userToken, image)
+    userProfileService.buyBackgroundImage(image)
       .then(
         () => {
           toasts.successToast('Pomyślnie zakupiono zdjęcie w tle');
@@ -117,9 +112,9 @@ const actions = {
   },
   /* eslint-enable no-unused-vars */
   getCategoryRewards({ dispatch }, {
-    token, categoryId, categoryName, isTestCategory, isMultiplayer, percentage,
+    categoryId, categoryName, isTestCategory, isMultiplayer, percentage,
   }) {
-    gameControllerService.finishCategory(token, categoryId)
+    gameControllerService.finishCategory(categoryId)
       .then(
         (rewards) => {
           bootbox.alert(

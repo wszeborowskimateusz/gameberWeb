@@ -40,7 +40,7 @@ function formatEverydayAwardsMessage(awards) {
 const userToken = JSON.parse(localStorage.getItem('user'));
 
 const userState = userToken
-  ? { status: { loggedIn: true }, user: userToken }
+  ? { status: { loggedIn: true } }
   : { status: {}, user: null };
 
 const actions = {
@@ -49,7 +49,7 @@ const actions = {
     userService.login(username, password)
       .then(
         (user) => {
-          commit('loginSuccess', user.jwtToken);
+          commit('loginSuccess');
           router.push('/');
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
@@ -69,7 +69,7 @@ const actions = {
     userService.loginWithGoogle(authCode)
       .then(
         (user) => {
-          commit('loginSuccess', user.jwtToken);
+          commit('loginSuccess');
           router.push('/');
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
@@ -113,21 +113,17 @@ const actions = {
 
 /* eslint-disable no-param-reassign */
 const mutations = {
-  loginSuccess(state, user) {
+  loginSuccess(state) {
     state.status = { loggedIn: true };
-    state.user = user;
   },
   loginInProgress(state) {
     state.status = { loginInProgress: true };
-    state.user = null;
   },
   loginFailure(state) {
     state.status = {};
-    state.user = null;
   },
   logout(state) {
     state.status = {};
-    state.user = null;
   },
   registerSuccess(state) {
     state.status = {};

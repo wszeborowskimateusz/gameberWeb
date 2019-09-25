@@ -245,7 +245,7 @@ export default {
     },
     fetchAvatars() {
       avatarsStoreService
-        .getAvatarsSupply(this.$store.state.users.user)
+        .getAvatarsSupply()
         .then((avatars) => {
           this.isLoading = false;
           this.avatars = avatars;
@@ -253,7 +253,7 @@ export default {
     },
     fetchBackgroundImages() {
       avatarsStoreService
-        .getBackgroundImagesSupply(this.$store.state.users.user)
+        .getBackgroundImagesSupply()
         .then((images) => {
           this.backgroundImages = images;
         })
