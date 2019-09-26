@@ -7,12 +7,17 @@
       class="background-image"
       :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}"
     ></div>
-    <div class="content">
-      <img width="50" :src="category.categoryCountryIcon" />
-      <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
-      <img width="50" :src="category.categoryIcon" />
+    <div class="">
+      <div class="">
+        <img width="50" :src="category.categoryCountryIcon" />
+        <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
+        <img width="50" :src="category.categoryIcon" />
+      </div>
       <div v-if="isAnswerLoading" class="answer_loading_indicator">
         <cube-spin class="m-2"></cube-spin>
+      </div>
+      <div v-if="isMultiplayer" class="multiplayer__timer mt-1">
+        <p>{{ammountOfSecondsTillTheEndOfGame}}</p>
       </div>
       <div class="progress m-2">
         <div
@@ -39,7 +44,9 @@
         role="toolbar"
         aria-label="Toolbar with button groups"
       >
-        <div class="btn-group mb-3 mr-12 p-1" role="group" aria-label="First group">
+        <div class="mb-3 mr-12 p-1">
+        <div v-if="!isMultiplayer"
+        class="btn-group mb-3" role="group" aria-label="First group">
           <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
             <img height="50" :src="imagesGetter.getImgUrl('game_controller/prev.png')" />
             Poprzedni
@@ -54,6 +61,7 @@
             Następny
             <img height="50" :src="imagesGetter.getImgUrl('game_controller/next.png')" />
           </button>
+        </div>
         </div>
       </div>
     </div>
@@ -73,6 +81,13 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.multiplayer__timer {
+  font-size: 3em;
+  color: #fff;
+  text-align: center;
+  background-color: rgba(255, 255, 255, .5);
 }
 
 .GameController {
@@ -158,6 +173,9 @@ export default {
         isTestCategory: true,
       },
       categoryId: this.$route.params.id,
+      timer: '',
+      ammountOfSecondsTillTheEndOfGame: 10,
+      secondsToSolveGame: 10,
     };
   },
   props: {
@@ -202,13 +220,13 @@ export default {
               || index < this.category.currentGameIndex;
 
           if (game.name === 'WordMatching') {
-            game.gameInfo.answers.forEach(
-              (a) => { a.img = imagesGetter.getImageServerUrl(a.img); },
-            );
+            game.gameInfo.answers.forEach((a) => {
+              a.img = imagesGetter.getImageServerUrl(a.img);
+            });
           } else if (game.name === 'StoryGame') {
-            game.gameInfo.stories.forEach(
-              (s) => { s.img = imagesGetter.getImageServerUrl(s.img); },
-            );
+            game.gameInfo.stories.forEach((s) => {
+              s.img = imagesGetter.getImageServerUrl(s.img);
+            });
           } else {
             game.gameInfo.img = imagesGetter.getImageServerUrl(
               game.gameInfo.img,
@@ -217,9 +235,17 @@ export default {
         }))
         /* eslint-enable no-param-reassign */
         /* eslint-enable no-return-assign */
-        .then(() => this.$forceUpdate());
+        .then(() => this.$forceUpdate())
+        .then(() => {
+          if (this.isMultiplayer) {
+            this.setTimer();
+          }
+        });
     },
     async checkAnswer(answer, shouldShowModal) {
+      if (this.isMultiplayer) {
+        this.clearTimer();
+      }
       this.isAnswerLoading = true;
       const currentGame = this.category.games[this.category.currentGameIndex];
       const serverResponse = await gameControllerService.checkAnswer(
@@ -227,7 +253,10 @@ export default {
         answer,
       );
       this.isAnswerLoading = false;
-      if (this.category.isTestCategory === true || this.isMultiplayer === true) {
+      if (
+        this.category.isTestCategory === true
+        || this.isMultiplayer === true
+      ) {
         currentGame.isFinished = true;
         const percentage = serverResponse != null ? serverResponse.percentage : null;
         this.nextGameAction(percentage);
@@ -267,7 +296,11 @@ export default {
     nextGameAction(percentage) {
       if (this.category.currentGameIndex + 1 < this.category.games.length) {
         this.category.currentGameIndex += 1;
+        if (this.isMultiplayer) {
+          this.resetTimer();
+        }
       } else {
+        this.clearTimer();
         this.getCategoryRewards({
           categoryId: this.categoryId,
           categoryName: this.category.categoryName,
@@ -282,6 +315,26 @@ export default {
         this.category.currentGameIndex -= 1;
       }
     },
+    setTimer() {
+      this.timer = setInterval(() => {
+        this.ammountOfSecondsTillTheEndOfGame -= 1;
+        if (this.ammountOfSecondsTillTheEndOfGame <= 0) {
+          this.checkAnswer('', false);
+          this.clearTimer();
+        }
+      }, 1000);
+    },
+    clearTimer() {
+      clearInterval(this.timer);
+      this.ammountOfSecondsTillTheEndOfGame = this.secondsToSolveGame;
+    },
+    resetTimer() {
+      this.clearTimer();
+      this.setTimer();
+    },
+  },
+  beforeDestroy() {
+    this.clearTimer();
   },
 };
 </script>

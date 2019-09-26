@@ -2,7 +2,7 @@
   <div class="card text-center">
     <div class="card-header">
       <img height="50" class="m-3" :src="imagesGetter.getImgUrl('game_map/backpack.png')" />
-      Witaj podróżniku!
+      <span>Witaj podróżniku!</span>
       <img
         height="50"
         class="m-3"
