@@ -31,7 +31,7 @@ function loginWithGoogle(authCode) {
 
 function register(user) {
   const url = `${config.apiUrl}/accounts/signup`;
-  return requestSender.sendPostRequest(url, user);
+  return requestSender.sendPostRequestWithoutAuthorization(url, user);
 }
 
 
