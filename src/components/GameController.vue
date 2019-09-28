@@ -45,7 +45,7 @@
         aria-label="Toolbar with button groups"
       >
         <div class="mb-3 mr-12 p-1">
-        <div v-if="!isMultiplayer"
+        <div v-if="!isMultiplayer && !category.isTestCategory"
         class="btn-group mb-3" role="group" aria-label="First group">
           <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
             <img height="50" :src="imagesGetter.getImgUrl('game_controller/prev.png')" />

@@ -86,10 +86,11 @@
 
 <script>
 /* eslint-env browser */
-/* global $ */
 import bootbox from '@/utilities/bootbox';
 import arrayManipulation from '@/utilities/arrayManipulation';
 import imagesGetter from '@/utilities/imagesGetter';
+
+import $ from 'jquery';
 
 export default {
   data() {

@@ -8,10 +8,8 @@
       :paginationActiveColor="'#847D88'"
     >
       <slide v-for="(story) in gameInfo.stories" v-bind:key="story.storyEnglish">
-        <!-- <div class="slide" :style="{'background-image' :
-            'url(' + story.img +')'}"> -->
-            <div class="slide" :style="{'background-image' :
-            'url(' + 'https://images.unsplash.com/photo-1494798109427-e44b68ca5a8b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80' +')'}">
+        <div class="slide" :style="{'background-image' :
+            'url(' + story.img +')'}">
           <div class="slide__container">
             <div class="slide__text p-3">
               <p class="english__text">{{story.storyEnglish}}</p>
