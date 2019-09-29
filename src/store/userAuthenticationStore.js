@@ -50,7 +50,11 @@ const actions = {
       .then(
         (user) => {
           commit('loginSuccess');
-          router.push('/');
+          if (user.isFirstLoginAttempt) {
+            router.push('/tutorial');
+          } else {
+            router.push('/');
+          }
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
           dispatch('multiplayerStore/getAllClashes', null, { root: true });
@@ -70,7 +74,11 @@ const actions = {
       .then(
         (user) => {
           commit('loginSuccess');
-          router.push('/');
+          if (user.isFirstLoginAttempt) {
+            router.push('/tutorial');
+          } else {
+            router.push('/');
+          }
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
           dispatch('multiplayerStore/getAllClashes', null, { root: true });
