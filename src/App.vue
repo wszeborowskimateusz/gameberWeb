@@ -106,7 +106,7 @@
             </router-link>
           </li>
           <autocomplete
-            class="ml-3 h-25"
+            class="ml-3 h-25 mb-xl-0 mb-2"
             :search="search"
             placeholder="Szukaj znajomych"
             aria-label="Szukaj znajomych"
