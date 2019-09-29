@@ -20,6 +20,7 @@
     "core-js": "^2.6.5",
     "crossword": "^1.2.4",
     "d3": "^5.9.7",
+    "fetch-timeout": "0.0.2",
     "jquery": "^3.4.1",
     "latest": "^0.2.0",
     "myanmar-numbers": "^2.1.3",

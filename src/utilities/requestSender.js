@@ -1,9 +1,15 @@
+import fetchTimeout from 'fetch-timeout';
+import config from '@/../config';
+
 function refreshToken(refreshedToken) {
   localStorage.setItem('user', refreshedToken);
 }
 
 function handleResponse(response) {
+  console.log('I AM HANDLING');
   return response.text().then((text) => {
+    console.log('I AM IN');
+    console.log(response);
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
@@ -13,6 +19,7 @@ function handleResponse(response) {
       const error = (data && data.message) || response.statusText;
       return Promise.reject(error);
     }
+
     if (data.refreshedJwtToken) {
       refreshToken(data.refreshedJwtToken);
     }
@@ -29,7 +36,7 @@ export default {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      return fetch(`${url}`, requestOptions)
+      return fetchTimeout(`${url}`, requestOptions, config.requestTimeout, 'TIMEOUT')
         .then(response => handleResponse(response));
     }
     return Promise.reject(new Error('No token provided'));
@@ -44,7 +51,7 @@ export default {
 
     if (token) {
       requestOptions.headers.Authorization = `Bearer ${token}`;
-      return fetch(url, requestOptions)
+      return fetchTimeout(url, requestOptions, config.requestTimeout, 'TIMEOUT')
         .then(response => handleResponse(response));
     }
 
@@ -53,7 +60,7 @@ export default {
   sendGetRequestWithoutAuthorization(url) {
     const requestOptions = { method: 'GET' };
 
-    return fetch(`${url}`, requestOptions)
+    return fetchTimeout(`${url}`, requestOptions, config.requestTimeout, 'TIMEOUT')
       .then(response => handleResponse(response));
   },
   sendPostRequestWithoutAuthorization(url, body) {
@@ -63,7 +70,7 @@ export default {
       body: JSON.stringify(body),
     };
 
-    return fetch(`${url}`, requestOptions)
+    return fetchTimeout(`${url}`, requestOptions, config.requestTimeout, 'TIMEOUT')
       .then(response => handleResponse(response));
   },
 };
