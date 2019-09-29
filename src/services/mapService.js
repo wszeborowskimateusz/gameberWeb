@@ -3,9 +3,9 @@ import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
 
 export default {
-  async getUserStatus(token) {
+  async getUserStatus() {
     const url = `${config.apiUrl}/users/status`;
-    return requestSender.sendGetRequest(token, url)
+    return requestSender.sendGetRequest(url)
       .then(
         result => result,
         () => {
@@ -14,9 +14,9 @@ export default {
         },
       );
   },
-  async getMapCountries(token) {
+  async getMapCountries() {
     const url = `${config.apiUrl}/map/countries`;
-    return requestSender.sendGetRequest(token, url)
+    return requestSender.sendGetRequest(url)
       .then(
         r => r.availableCountries,
         () => {
@@ -26,9 +26,9 @@ export default {
       );
   },
 
-  async getUnlockedCountries(token) {
+  async getUnlockedCountries() {
     const url = `${config.apiUrl}/map/unlockedcountries`;
-    return requestSender.sendGetRequest(token, url)
+    return requestSender.sendGetRequest(url)
       .then(
         r => r.unlockedCountries,
         () => {
@@ -38,12 +38,12 @@ export default {
       );
   },
 
-  async buyCountry(token, countryId) {
+  async buyCountry(countryId) {
     const url = `${config.apiUrl}/map/buyCountry`;
     const body = {
       countryId,
     };
-    return requestSender.sendPostRequest(url, body, token)
+    return requestSender.sendPostRequest(url, body)
       .then(
         (r) => {
           const result = {};
@@ -60,17 +60,17 @@ export default {
       );
   },
   /* eslint-disable no-underscore-dangle */
-  async getAllCategories(token, countries) {
+  async getAllCategories(countries) {
     const url = `${config.apiUrl}/map/getCategories`;
     const body = {
       countriesIds: countries.map(c => c._id),
     };
-    return requestSender.sendPostRequest(url, body, token)
+    return requestSender.sendPostRequest(url, body)
       .then(
         r => r.categories,
         () => {
           toasts.errorToast('Bład pobierania kategorii');
-          return null;
+          return [];// null;
         },
       );
   },

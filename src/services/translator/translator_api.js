@@ -1,5 +1,5 @@
-import config from '../../../config';
-import requestSender from '../../utilities/requestSender';
+import config from '@/../config';
+import requestSender from '@/utilities/requestSender';
 
 const apiBaseUrl = 'https://translate.yandex.net/api/v1.5/tr.json/translate';
 

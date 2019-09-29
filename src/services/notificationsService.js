@@ -2,16 +2,16 @@ import config from '@/../config';
 import requestSender from '@/utilities/requestSender';
 
 export default {
-  getAllNotifications(token) {
+  getAllNotifications() {
     const url = `${config.apiUrl}/notifications`;
-    return requestSender.sendGetRequest(token, url);
+    return requestSender.sendGetRequest(url);
   },
-  markNoificationAsRead(token, notificationId) {
+  markNoificationAsRead(notificationId) {
     const url = `${config.apiUrl}/notifications/mark-as-read`;
-    return requestSender.sendPostRequest(url, { notificationId }, token);
+    return requestSender.sendPostRequest(url, { notificationId });
   },
-  removeNotification(token, notificationId) {
+  removeNotification(notificationId) {
     const url = `${config.apiUrl}/notifications/remove`;
-    return requestSender.sendPostRequest(url, { notificationId }, token);
+    return requestSender.sendPostRequest(url, { notificationId });
   },
 };

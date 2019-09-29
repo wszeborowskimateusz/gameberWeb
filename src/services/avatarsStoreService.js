@@ -3,9 +3,9 @@ import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
 
 export default {
-  async getAvatarsSupply(token) {
+  async getAvatarsSupply() {
     const url = `${config.apiUrl}/shop/avatars`;
-    const result = await requestSender.sendGetRequest(token, url)
+    const result = await requestSender.sendGetRequest(url)
       .then(
         avatars => avatars.avatars,
         () => {
@@ -16,9 +16,9 @@ export default {
 
     return result;
   },
-  async getBackgroundImagesSupply(token) {
+  async getBackgroundImagesSupply() {
     const url = `${config.apiUrl}/shop/images`;
-    const result = await requestSender.sendGetRequest(token, url)
+    const result = await requestSender.sendGetRequest(url)
       .then(
         images => images.backgroundImages,
         () => {

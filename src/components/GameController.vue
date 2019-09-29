@@ -7,12 +7,17 @@
       class="background-image"
       :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}"
     ></div>
-    <div class="content">
-      <img width="50" :src="category.categoryCountryIcon" />
-      <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
-      <img width="50" :src="category.categoryIcon" />
+    <div class="">
+      <div class="">
+        <img width="50" :src="category.categoryCountryIcon" />
+        <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
+        <img width="50" :src="category.categoryIcon" />
+      </div>
       <div v-if="isAnswerLoading" class="answer_loading_indicator">
         <cube-spin class="m-2"></cube-spin>
+      </div>
+      <div v-if="isMultiplayer" class="multiplayer__timer mt-1">
+        <p>{{ammountOfSecondsTillTheEndOfGame}}</p>
       </div>
       <div class="progress m-2">
         <div
@@ -39,7 +44,9 @@
         role="toolbar"
         aria-label="Toolbar with button groups"
       >
-        <div class="btn-group mb-3 mr-12 p-1" role="group" aria-label="First group">
+        <div class="mb-3 mr-12 p-1">
+        <div v-if="!isMultiplayer && !category.isTestCategory"
+        class="btn-group mb-3" role="group" aria-label="First group">
           <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
             <img height="50" :src="imagesGetter.getImgUrl('game_controller/prev.png')" />
             Poprzedni
@@ -54,6 +61,7 @@
             Następny
             <img height="50" :src="imagesGetter.getImgUrl('game_controller/next.png')" />
           </button>
+        </div>
         </div>
       </div>
     </div>
@@ -75,6 +83,13 @@
   right: 0;
 }
 
+.multiplayer__timer {
+  font-size: 3em;
+  color: #fff;
+  text-align: center;
+  background-color: rgba(255, 255, 255, .5);
+}
+
 .GameController {
   text-align: center;
   color: #000;
@@ -85,22 +100,24 @@
 }
 
 .background-image {
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
+  color: #fff;
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: -1;
-  /* background-size: 100% 100%; */
   width: 100%;
   height: 100%;
 }
 
 .game {
-  height: 60vh;
+  min-height: 60vh;
   padding: 1%;
   background: rgba(244, 229, 221, 0.5);
 }
@@ -122,7 +139,7 @@
 </style>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 
@@ -157,14 +174,19 @@ export default {
         isTestCategory: true,
       },
       categoryId: this.$route.params.id,
+      timer: '',
+      ammountOfSecondsTillTheEndOfGame: 10,
+      secondsToSolveGame: 10,
     };
+  },
+  props: {
+    isMultiplayer: Boolean,
   },
   created() {
     this.isLoading = true;
     this.fetchCategory();
   },
   computed: {
-    ...mapState('users', ['user']),
     gameProgress() {
       return (
         ((this.category.currentGameIndex + 1) / this.category.games.length)
@@ -187,7 +209,7 @@ export default {
     ...mapActions('userProfile', ['getCategoryRewards']),
     fetchCategory() {
       gameControllerService
-        .getCategoryData(this.user, this.categoryId)
+        .getCategoryData(this.categoryId)
         .then((category) => {
           this.isLoading = false;
           this.category = category;
@@ -198,41 +220,52 @@ export default {
           game.isFinished = this.categoriesWithoutFinishing.includes(game.name)
               || index < this.category.currentGameIndex;
 
-          if (game.name === 'WordMatching')
-          {
-              game.gameInfo.answers.forEach(a => a.img = imagesGetter.getImageServerUrl(a.img));
-          }
-          else if (game.name === 'StoryGame')
-          {
-              game.gameInfo.stories.forEach(s => s.img = imagesGetter.getImageServerUrl(s.img));
-          }
-          else
-          {
-              game.gameInfo.img = imagesGetter.getImageServerUrl(game.gameInfo.img);
+          if (game.name === 'WordMatching') {
+            game.gameInfo.answers.forEach((a) => {
+              a.img = imagesGetter.getImageServerUrl(a.img);
+            });
+          } else if (game.name === 'StoryGame') {
+            game.gameInfo.stories.forEach((s) => {
+              s.img = imagesGetter.getImageServerUrl(s.img);
+            });
+          } else {
+            game.gameInfo.img = imagesGetter.getImageServerUrl(
+              game.gameInfo.img,
+            );
           }
         }))
         /* eslint-enable no-param-reassign */
         /* eslint-enable no-return-assign */
-        .then(() => this.$forceUpdate());
+        .then(() => this.$forceUpdate())
+        .then(() => {
+          if (this.isMultiplayer) {
+            this.setTimer();
+          }
+        });
     },
     async checkAnswer(answer, shouldShowModal) {
+      if (this.isMultiplayer) {
+        this.clearTimer();
+      }
       this.isAnswerLoading = true;
       const currentGame = this.category.games[this.category.currentGameIndex];
       const serverResponse = await gameControllerService.checkAnswer(
-        this.user,
         currentGame.gameId,
         answer,
       );
       this.isAnswerLoading = false;
-      if (this.category.isTestCategory === true) {
+      if (
+        this.category.isTestCategory === true
+        || this.isMultiplayer === true
+      ) {
         currentGame.isFinished = true;
-        this.nextGameAction();
-      }
-      if (serverResponse != null) {
+        const percentage = serverResponse != null ? serverResponse.percentage : null;
+        this.nextGameAction(percentage);
+      } else if (serverResponse != null) {
         if (serverResponse.isCorrect === true) {
           if (shouldShowModal === true) bootbox.correctAnswerAlert();
           currentGame.isFinished = true;
-          this.nextGameAction();
+          this.nextGameAction(serverResponse.percentage);
         } else if (
           shouldShowModal === true
           && serverResponse.isCorrect === false
@@ -241,13 +274,17 @@ export default {
           else {
             bootbox.incorrectAnswerPreviousleSolvedAlert();
             currentGame.isFinished = true;
-            this.nextGameAction();
+            this.nextGameAction(serverResponse.percentage);
           }
         }
       }
     },
     async finishGame(answer) {
-      this.checkAnswer(JSON.stringify(answer), true);
+      if (answer === '') {
+        this.checkAnswer('', true);
+      } else {
+        this.checkAnswer(JSON.stringify(answer), true);
+      }
     },
     nextGame() {
       const currentGame = this.category.games[this.category.currentGameIndex];
@@ -257,15 +294,20 @@ export default {
         this.nextGameAction();
       }
     },
-    nextGameAction() {
+    nextGameAction(percentage) {
       if (this.category.currentGameIndex + 1 < this.category.games.length) {
         this.category.currentGameIndex += 1;
+        if (this.isMultiplayer) {
+          this.resetTimer();
+        }
       } else {
+        this.clearTimer();
         this.getCategoryRewards({
-          token: this.user,
           categoryId: this.categoryId,
           categoryName: this.category.categoryName,
           isTestCategory: this.category.isTestCategory,
+          isMultiplayer: this.isMultiplayer,
+          percentage,
         });
       }
     },
@@ -274,6 +316,26 @@ export default {
         this.category.currentGameIndex -= 1;
       }
     },
+    setTimer() {
+      this.timer = setInterval(() => {
+        this.ammountOfSecondsTillTheEndOfGame -= 1;
+        if (this.ammountOfSecondsTillTheEndOfGame <= 0) {
+          this.checkAnswer('', false);
+          this.clearTimer();
+        }
+      }, 1000);
+    },
+    clearTimer() {
+      clearInterval(this.timer);
+      this.ammountOfSecondsTillTheEndOfGame = this.secondsToSolveGame;
+    },
+    resetTimer() {
+      this.clearTimer();
+      this.setTimer();
+    },
+  },
+  beforeDestroy() {
+    this.clearTimer();
   },
 };
 </script>

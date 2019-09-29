@@ -3,9 +3,9 @@ import requestSender from '@/utilities/requestSender';
 import toasts from '@/utilities/toasts';
 
 export default {
-  async getCategoryData(token, categoryId) {
+  async getCategoryData(categoryId) {
     const url = `${config.apiUrl}/games/categories/${categoryId}`;
-    const result = await requestSender.sendGetRequest(token, url)
+    const result = await requestSender.sendGetRequest(url)
       .then(
         (response) => {
           for (let i = 0; i < response.games.length; i += 1) {
@@ -14,7 +14,6 @@ export default {
           if (response.currentGameIndex === undefined) {
             response.currentGameIndex = 0;
           }
-          console.log(response);
           return response;
         },
         () => {
@@ -24,9 +23,9 @@ export default {
       );
     return result;
   },
-  async checkAnswer(token, gameId, answer) {
+  async checkAnswer(gameId, answer) {
     const url = `${config.apiUrl}/games/check-answer`;
-    const result = await requestSender.sendPostRequest(url, { answer, gameId }, token)
+    const result = await requestSender.sendPostRequest(url, { answer, gameId })
       .then(
         response => response,
         () => {
@@ -36,8 +35,8 @@ export default {
       );
     return result;
   },
-  finishCategory(token, categoryId) {
+  finishCategory(categoryId) {
     const url = `${config.apiUrl}/games/categories/finish`;
-    return requestSender.sendPostRequest(url, { categoryId }, token);
+    return requestSender.sendPostRequest(url, { categoryId });
   },
 };

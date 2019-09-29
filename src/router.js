@@ -1,20 +1,21 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './components/Home.vue';
-import Login from './components/Login.vue';
-import Register from './components/Register.vue';
-import UserProfile from './components/UserProfile.vue';
-import GameMap from './components/Map/GameMap.vue';
-import GameController from './components/GameController.vue';
-import AvatarsStore from './components/AvatarsStore.vue';
-import UsersRanking from './components/UsersRanking.vue';
-import Translator from './components/Translator.vue';
-import Tutorial from './components/Tutorial.vue';
-import Notifications from './components/Notifications.vue';
-import Messages from './components/Messages.vue';
-import Friends from './components/Friends.vue';
-import ErrorPage from './components/Error.vue';
-import Toasts from './utilities/toasts';
+import Home from '@/components/Home.vue';
+import Login from '@/components/Login.vue';
+import Register from '@/components/Register.vue';
+import UserProfile from '@/components/UserProfile.vue';
+import GameMap from '@/components/Map/GameMap.vue';
+import GameController from '@/components/GameController.vue';
+import AvatarsStore from '@/components/AvatarsStore.vue';
+import UsersRanking from '@/components/UsersRanking.vue';
+import Translator from '@/components/Translator.vue';
+import Tutorial from '@/components/Tutorial.vue';
+import Notifications from '@/components/Notifications.vue';
+import Messages from '@/components/Messages.vue';
+import Friends from '@/components/Friends.vue';
+import ErrorPage from '@/components/Error.vue';
+import Multiplayer from '@/components/Multiplayer.vue';
 
 Vue.use(Router);
 
@@ -42,29 +43,10 @@ const router = new Router({
     { path: '/tutorial', component: Tutorial },
     { path: '/friends', component: Friends },
     { path: '/error', component: ErrorPage, props: { message: '' } },
+    { path: '/multiplayer', component: Multiplayer },
+    { path: '/multiplayer/:id', component: GameController, props: { isMultiplayer: true } },
     { path: '*', redirect: '/' },
   ],
-});
-
-// Prevent accessing restricted pages if not logged in
-router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/', '/about', '/ranking'];
-  const authRequired = !publicPages.includes(to.path);
-
-  // See if there is a JWT in local storage
-  const loggedIn = localStorage.getItem('user');
-
-  if (authRequired && !loggedIn) {
-    Toasts.errorToast('Aby dostać się na tę stronę musisz się zalogować');
-    return next('/login');
-  }
-
-  if (loggedIn && (to.path === '/login' || to.path === '/register')) {
-    return next('/');
-  }
-
-  return next();
 });
 
 export default router;

@@ -20,7 +20,7 @@
       <img
         height="500"
         :src="imagesGetter.getImgUrl('home_page/home_page_motto.jpg')"
-        class="rounded"
+        class="rounded img-fluid"
       />
       <ul class="list-group mb-5 mt-5" id="features-list">
         <li class="list-group-item">
@@ -80,7 +80,6 @@ export default {
     ...mapState('users', ['status']),
   },
   mounted() {
-    console.log(this.user);
     if (this.status.loggedIn) {
       this.getUserData();
     }

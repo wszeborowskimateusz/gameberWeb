@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-    <nav id="nav" class="navbar navbar-default navbar-expand-xl sticky-top"
-      :class="[$route.path === '/map' ? 'zero_margin' : '' ]">
+    <nav
+      id="nav"
+      class="navbar navbar-default navbar-expand-xl sticky-top"
+      :class="[$route.path === '/map' ? 'zero_margin' : '' ]"
+    >
       <button
         class="navbar-toggler navbar-light"
         type="button"
@@ -44,8 +47,26 @@
             <router-link class="nav-link" to="/translator">Tłumacz</router-link>
           </li>
         </ul>
-        <ul v-if="status.loggedIn && isUserProfileEmpty === false"
-        class="nav navbar-nav navbar-right">
+        <ul
+          v-if="status.loggedIn && isUserProfileEmpty === false"
+          class="nav navbar-nav navbar-right"
+        >
+          <li class="nav-item">
+            <router-link
+              to="/multiplayer"
+              name="multiplayer"
+              class="nav-link rounded-circle"
+              title="Pojedynki"
+            >
+              <notification-bell
+                class="justify-content-center d-flex"
+                :size="25"
+                :count="amountOfClashesToPlay"
+                counterBackgroundColor="#fa323c"
+                :icon="imagesGetter.getImgUrl('app/battle.png')"
+              />
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link
               to="/friends"
@@ -57,15 +78,13 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/store"
-            name="store" class="nav-link rounded-circle" title="Sklep">
+            <router-link to="/store" name="store" class="nav-link rounded-circle" title="Sklep">
               <img width="25" :src="imagesGetter.getImgUrl('app/coins.png')" />
               {{user.numberOfCoins}}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/notifications"
-            class="nav-link rounded-circle" title="Powiadomienia">
+            <router-link to="/notifications" class="nav-link rounded-circle" title="Powiadomienia">
               <notification-bell
                 class="justify-content-center d-flex"
                 :size="25"
@@ -82,12 +101,12 @@
               class="nav-link rounded-circle"
               title="Profil"
             >
-              <img width="25" :src="imagesGetter.getImgUrl('app/user.png')" />
+              <img width="25" :src="pickedAvatar" class="rounded-circle" />
               {{user.username}}
             </router-link>
           </li>
           <autocomplete
-            class="ml-3 h-25"
+            class="ml-3 h-25 mb-xl-0 mb-2"
             :search="search"
             placeholder="Szukaj znajomych"
             aria-label="Szukaj znajomych"
@@ -95,6 +114,8 @@
             @submit="handleSubmit"
             auto-select
           ></autocomplete>
+        </ul>
+        <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
             <button class="btn btn-info ml-3" @click="logout()">
               <i class="fas fa-sign-out-alt"></i> Wyloguj się
@@ -103,7 +124,10 @@
         </ul>
       </div>
     </nav>
-    <div :class="[$route.path === '/map' ? ['zero_padding', 'container-fluid'] : 'container' ]">
+    <div
+      :class="[$route.path === '/map' ||$route.path === '/tutorial'
+    ? ['zero_padding', 'container-fluid'] : 'container' ]"
+    >
       <div class="row container__row">
         <router-view :key="$route.path"></router-view>
       </div>
@@ -120,38 +144,15 @@
 </template>
 
 <style>
-.navbar .divider-vertical {
-  height: 40px;
-  margin: 0 9px;
-  border-right: 1px solid #847d88;
-}
-
- @media (max-width: 1200px) {
-  .navbar .divider-vertical {
-    display: none;
-  }
-}
-
-footer {
-  width: 100%;
-  color: #2c3e50;
-  background-color: rgb(240,220,215);
-}
-
-footer a {
-  font-weight: bold;
-  color: #427696;
-}
-
-body {
-  background-color: #9dcadf;
-  width: 100%;
+html {
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
-html {
+body {
+  background-color: #9dcadf;
+  width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -168,28 +169,6 @@ html {
   padding: 0;
 }
 
-.zero_padding {
-  padding: 0;
-}
-
-.zero_margin {
-  margin: 0 !important;
-}
-
-.container-fluid {
-  overflow: hidden;
-  min-height: 100%;
-}
-
-.container {
-  min-height: 100%;
-}
-
-.container__row {
-  height: 100%;
-  overflow: auto;
-}
-
 #nav {
   margin-bottom: 2em;
   background-color: #f4e5dd;
@@ -202,6 +181,55 @@ html {
 
 #nav a.router-link-exact-active {
   color: #847d88;
+}
+
+.navbar .divider-vertical {
+  height: 40px;
+  margin: 0 9px;
+  border-right: 1px solid #847d88;
+}
+
+@media (max-width: 1200px) {
+  .navbar .divider-vertical {
+    display: none;
+  }
+}
+
+.container {
+  min-height: 100%;
+}
+
+.container-fluid {
+  overflow: hidden;
+  min-height: 100%;
+}
+
+.container__row {
+  height: 100%;
+  overflow: auto;
+}
+
+.zero_padding {
+  padding: 0;
+}
+
+.zero_margin {
+  margin: 0 !important;
+}
+
+.modal-open {
+  overflow: inherit;
+}
+
+footer {
+  width: 100%;
+  color: #2c3e50;
+  background-color: rgb(240, 220, 215);
+}
+
+footer a {
+  font-weight: bold;
+  color: #427696;
 }
 </style>
 
@@ -230,35 +258,58 @@ export default {
     if (this.status.loggedIn) {
       this.getUserData();
       this.getAllNotifications();
+      this.getAllClashes();
     }
   },
   computed: {
     ...mapState('users', ['status']),
     ...mapState('userProfile', ['user']),
     ...mapState('notificationsStore', ['notifications']),
+    ...mapState('multiplayerStore', ['clashes']),
     amountOfUnReadNotifications() {
       if (this.notifications === undefined || this.notifications === null) return 0;
       return this.notifications.filter(x => !x.isRead).length;
     },
+    amountOfClashesToPlay() {
+      if (this.clashes === undefined || this.clashes === null) return 0;
+      return this.clashes.startedNotFinishedByUs.length;
+    },
     isUserProfileEmpty() {
-      return Object.entries(this.user).length === 0 && this.user.constructor === Object;
+      if (this.user == null) return true;
+      return (
+        Object.entries(this.user).length === 0
+        && this.user.constructor === Object
+      );
+    },
+    pickedAvatar() {
+      let result = null;
+      this.user.avatars.forEach((avatar) => {
+        if (avatar.id === this.user.avatarId) {
+          result = avatar;
+          return false;
+        }
+        return true;
+      });
+      return result.img;
     },
   },
   methods: {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
     ...mapActions('notificationsStore', ['getAllNotifications']),
+    ...mapActions('multiplayerStore', ['getAllClashes']),
     pollNotifications() {
       // TODO: You can set notifications getting interval here
       this.polling = setInterval(() => {
         if (this.status.loggedIn) {
           this.getAllNotifications(true);
+          this.getAllClashes(true);
         }
       }, 30000);
     },
     search(input) {
       if (input.length < 1) return [];
-      return searchService.searchForUsers(this.$store.state.users.user, input);
+      return searchService.searchForUsers(input);
     },
     getResultValue(result) {
       return `${result.userName}`;

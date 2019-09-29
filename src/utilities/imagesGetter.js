@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from '@/../config';
 
 export default {
   getImgUrl(src) {
@@ -7,5 +7,5 @@ export default {
   },
   getImageServerUrl(imgPath) {
     return `${config.apiUrl}/images/${imgPath}`;
-  }
+  },
 };

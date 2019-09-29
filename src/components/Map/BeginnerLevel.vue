@@ -12,18 +12,21 @@
     </div>
     <div v-for="(category, index) in categories" v-bind:key="category.id">
       <div class="category__card m-2 shadow-lg rounded">
-        <img
-          class="category__lock"
-          :src="imagesGetter.getImgUrl(
+        <div>
+          <img
+            :src="imagesGetter.getImgUrl(
                 category.isUnlocked === true ?
                     'game_map/unlocked.png':'game_map/map_lock_icon.png')"
-        />
-        <button v-on:click="routeToCategory(category)" class="m-2 btn btn-default">
-          <p class="h3 p-2">{{category.name}}</p>
-          <div class="category__image">
-            <img height="250" class="rounded-circle m-2" :src="category.img" />
-          </div>
-        </button>
+          />
+        </div>
+        <div>
+          <button v-on:click="routeToCategory(category)" class="m-2 btn btn-default">
+            <p class="h3 p-2">{{category.name}}</p>
+            <div class="category__image">
+              <img height="250" class="rounded m-2 category__img" :src="category.img" />
+            </div>
+          </button>
+        </div>
       </div>
       <img
         v-if="index !== categories.length - 1"
@@ -36,25 +39,6 @@
 </template>
 
 <style scoped>
-.category__card {
-  background-color: rgba(255, 255, 255, 0.7);
-  position: relative;
-}
-
-.level_container {
-  position: relative;
-}
-
-.level__title {
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.category__lock {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
 .level__background {
   position: fixed;
   top: 0;
@@ -62,6 +46,20 @@
   right: 0;
   bottom: 0;
   z-index: -1;
+}
+
+.level__title {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.category__card {
+  background-color: rgba(255, 255, 255, 0.7);
+  position: relative;
+}
+
+.category__img {
+  width: 100%;
+  max-width: 400px;
 }
 </style>
 

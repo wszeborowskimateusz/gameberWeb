@@ -57,15 +57,20 @@
                 :src="imagesGetter.getImgUrl('profile/change_image.png')"
               />
             </button>
-            <button v-else-if="!user.isFriend && !user.isFriendshipRequested"
-            class="btn btn-primary" v-on:click="addToFriends()">
-              Dodaj do znajomych
-              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
-            </button>
-            <button v-else-if="!user.isFriendshipRequested"
+            <button v-else-if="user.isFriend"
             class="btn btn-primary" v-on:click="sendMessage()">
               Wyślij wiadomość
               <img :src="imagesGetter.getImgUrl('profile/send_message.png')"/>
+            </button>
+            <button v-else-if="user.didUserFriendRequestedUs"
+            class="btn btn-primary" v-on:click="acceptFriendshipRequest()">
+              Zaakceptuj zaproszenie
+              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
+            </button>
+            <button v-else-if="!user.isFriendshipRequested"
+            class="btn btn-primary" v-on:click="addToFriends()">
+              Dodaj do znajomych
+              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
             </button>
             <span v-else>Twoje zaproszenie jest w drodze</span>
           </div>
@@ -123,7 +128,7 @@
                   :id="index"
                 />
                 <label class="radioLabel" :for="index">
-                  <img width="300" height="200" :src="image.img" />
+                  <img class="modal__image" :src="image.img" />
                   <br />
                   <span class="font-weight-bold">{{image.name}}</span>
                 </label>
@@ -181,7 +186,7 @@
                   :id="avatar.name + index"
                 />
                 <label class="radioLabel" :for="avatar.name + index">
-                  <img class="avatar_modal__img" width="300" height="300" :src="avatar.img" />
+                  <img class="modal__image avatar_modal__img" :src="avatar.img" />
                   <br />
                   <span class="font-weight-bold">{{avatar.name}}</span>
                 </label>
@@ -219,6 +224,10 @@
 <style scoped>
 .avatar_modal__img {
   border-radius: 50%;
+}
+
+.modal__image {
+  width: 100%;
 }
 
 input[type="radio"] {
@@ -342,7 +351,6 @@ export default {
 
       return this.otherUser;
     },
-    ...mapState('users', { userToken: 'user' }),
     ...mapState('userProfile', {
       userFromStore: 'user',
       isLoading: 'isLoading',
@@ -380,7 +388,7 @@ export default {
     this.avatarIdToChange = this.user.avatarId;
     if (!this.isOurOwnProfile) {
       otherUsersProfileService
-        .getUser(this.userToken, this.userId)
+        .getUser(this.userId)
         .then((user) => {
           this.otherUser = user;
         });
@@ -409,18 +417,23 @@ export default {
     },
     addToFriends() {
       const userToAddId = this.userId;
-      usersInteractionsService.sendFriendshipRequest(
-        this.userToken,
-        userToAddId,
-      ).then(() => {
-        this.user.isFriendshipRequested = true;
-      }).then(() => {
-        this.$forceUpdate();
-      });
+      usersInteractionsService.sendFriendshipRequest(userToAddId)
+        .then(() => {
+          this.user.isFriendshipRequested = true;
+        }).then(() => {
+          this.$forceUpdate();
+        });
     },
     sendMessage() {
       const userToSendMessageToId = this.userId;
       this.$router.push(`/messages/${userToSendMessageToId}`);
+    },
+    acceptFriendshipRequest() {
+      usersInteractionsService.acceptFriendshipRequest(this.userId)
+        .then(() => {
+          this.user.isFriend = true;
+          this.$forceUpdate();
+        });
     },
   },
   components: {

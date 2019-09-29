@@ -2,8 +2,10 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div v-else-if="notifications != null && notifications.length > 0"
-    class="notifications__container col-12" >
+  <div
+    v-else-if="notifications != null && notifications.length > 0"
+    class="notifications__container col-12"
+  >
     <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
       <li class="nav-item">
         <a
@@ -40,7 +42,7 @@
         <div
           v-for="notification in NotificationsStatus[pickedNotificationsStatus]"
           v-bind:key="notification.id"
-          class="notification__tile m-3"
+          class="notification__tile m-0 m-sm-3"
         >
           <img
             class="m-2 notification__icon"
@@ -51,11 +53,7 @@
             class="btn btn_default notification__remove_button"
             v-on:click="onRemoveNotification(notification.id)"
           >
-            <img
-              width="35"
-              height="35"
-              :src="imagesGetter.getImgUrl('notifications/delete.png')"
-            />
+            <img width="35" height="35" :src="imagesGetter.getImgUrl('notifications/delete.png')" />
           </button>
           <button
             v-if="!notification.isRead"
@@ -68,39 +66,47 @@
               :src="imagesGetter.getImgUrl('notifications/mark_as_read.png')"
             />
           </button>
-          <p class="pt-3 font-weight-bold">{{getNotificationTitle(notification.type)}}</p>
-          <div class="row m-3">
+          <p class="pt-5 pt-sm-3 font-weight-bold">{{getNotificationTitle(notification.type)}}</p>
+          <div class="row m-sm-3 m-0">
             <div class="col-12 col-xl-2">
               <img
-                width="150" height="150"
-                class="m-3 notification__image"
-                :src="notification.img"
-              />
+              class="m-0 m-sm-3 notification__image" :src="notification.img" />
             </div>
             <div class="col-12 col-xl-10">
-              <p class="m-4 text-left">{{getNotificationDescription(notification)}}</p>
-              <p class="m-4 text-left">
+              <p class="m-0 m-sm-4 my-4 text-left">{{getNotificationDescription(notification)}}</p>
+              <p class="m-0 m-sm-4 my-4 text-left">
                 Nazwa:
-                <span v-if="notification.userId == null"
-                class="font-weight-bold">
-                  {{notification.name}}
-                </span>
+                <span
+                  v-if="notification.userId == null"
+                  class="font-weight-bold"
+                >{{notification.name}}</span>
                 <a v-else :href="'users/' + notification.userId">
-                  <span v-if="notification.userId != null"
-                  class="font-weight-bold">
-                    {{notification.name}}
+                  <span
+                    v-if="notification.userId != null"
+                    class="font-weight-bold"
+                  >{{notification.name}}</span>
+                </a>
+                <br />
+                <a
+                  v-if="notification.type === 'message_received'"
+                  :href="'messages/' + notification.userId"
+                >
+                  <span v-if="notification.userId != null" class="font-weight-bold">
+                    Konwersacja
                   </span>
                 </a>
               </p>
             </div>
             <div
-              v-if="notification.type === 'friendship_request'
+              v-if="(notification.type === 'friendship_request' ||
+              notification.type === 'clash_request')
                 && (notification.isAlreadyAccepted === null
                  || notification.isAlreadyAccepted === undefined )"
-              class="d-flex justify-content-center w-100 m-2"
+              class="d-flex justify-content-center w-100 m-0 m-sm-2"
             >
               <button
-                class="btn btn_default mr-5"
+                v-if="notification.type === 'friendship_request'"
+                class="btn btn_default mr-0 mr-sm-5"
                 v-on:click="acceptFriendshipInvitation(notification.userId, notification)"
               >
                 Potwierdź
@@ -111,8 +117,33 @@
                 />
               </button>
               <button
-                class="btn btn_default ml-5"
+                v-if="notification.type === 'clash_request'"
+                class="btn btn_default mr-5"
+                v-on:click="acceptClashInvitation(notification)"
+              >
+                Potwierdź
+                <img
+                  width="35"
+                  height="35"
+                  :src="imagesGetter.getImgUrl('notifications/accept.png')"
+                />
+              </button>
+              <button
+                v-if="notification.type === 'friendship_request'"
+                class="btn btn_default ml-0 ml-sm-5"
                 v-on:click="declineFriendshipInvitation(notification.userId, notification)"
+              >
+                Odrzuć
+                <img
+                  width="35"
+                  height="35"
+                  :src="imagesGetter.getImgUrl('notifications/decline.png')"
+                />
+              </button>
+              <button
+                v-if="notification.type === 'clash_request'"
+                class="btn btn_default ml-5"
+                v-on:click="declineClashInvitation(notification)"
               >
                 Odrzuć
                 <img
@@ -130,8 +161,8 @@
   <div class="col-12" v-else>
     <p class="h1">Niestety nie masz żadnych powiadomień</p>
     <img class="m-5" :src="imagesGetter.getImgUrl('notifications/crying.png')" />
-    <img class="m-5" :src="imagesGetter.getImgUrl('notifications/nothing_found.png')"  />
-    <img class="m-5" :src="imagesGetter.getImgUrl('notifications/crying.png')"  />
+    <img class="m-5" :src="imagesGetter.getImgUrl('notifications/nothing_found.png')" />
+    <img class="m-5" :src="imagesGetter.getImgUrl('notifications/crying.png')" />
   </div>
 </template>
 
@@ -144,6 +175,8 @@
 
 .notification__image {
   border-radius: 50%;
+  width: 100%;
+  max-width: 800px;
 }
 
 .notification__remove_button {
@@ -181,6 +214,7 @@
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import userInteractionsService from '@/services/usersInteractionsService';
+import multiplayerService from '@/services/multiplayerService';
 import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
@@ -195,21 +229,28 @@ export default {
   },
   computed: {
     ...mapState('notificationsStore', ['notifications', 'isLoading']),
-    ...mapState('users', ['user']),
     amountOfReadNotifications() {
-      if (this.notifications === undefined) { return []; }
+      if (this.notifications === undefined) {
+        return [];
+      }
       return this.notifications.filter(x => x.isRead).length;
     },
     amountOfUnReadNotifications() {
-      if (this.notifications === undefined) { return []; }
+      if (this.notifications === undefined) {
+        return [];
+      }
       return this.notifications.filter(x => !x.isRead).length;
     },
     ReadNotifications() {
-      if (this.notifications === undefined) { return []; }
+      if (this.notifications === undefined) {
+        return [];
+      }
       return this.notifications.filter(x => x.isRead);
     },
     UnReadNotifications() {
-      if (this.notifications === undefined) { return []; }
+      if (this.notifications === undefined) {
+        return [];
+      }
       return this.notifications.filter(x => !x.isRead);
     },
     NotificationsStatus() {
@@ -239,13 +280,27 @@ export default {
         case 'friendship_request':
           return imagesGetter.getImgUrl('notifications/friendship_request.png');
         case 'achievement_receive':
-          return imagesGetter.getImgUrl('notifications/achievement_receive.png');
+          return imagesGetter.getImgUrl(
+            'notifications/achievement_receive.png',
+          );
         case 'friendship_accepted':
-          return imagesGetter.getImgUrl('notifications/friendship_accepted.png');
+          return imagesGetter.getImgUrl(
+            'notifications/friendship_accepted.png',
+          );
         case 'message_received':
           return imagesGetter.getImgUrl('notifications/new_message.png');
+        case 'clash_request':
+          return imagesGetter.getImgUrl('notifications/clash.png');
+        case 'clash_won':
+          return imagesGetter.getImgUrl('notifications/clash_won.png');
+        case 'clash_lost':
+          return imagesGetter.getImgUrl('notifications/clash_lost.png');
+        case 'clash_draw':
+          return imagesGetter.getImgUrl('notifications/clash_draw.png');
         default:
-          return imagesGetter.getImgUrl('notifications/default_notification.png');
+          return imagesGetter.getImgUrl(
+            'notifications/default_notification.png',
+          );
       }
     },
     getNotificationTitle(notificationType) {
@@ -258,6 +313,12 @@ export default {
           return 'Zaproszenie zaakceptowane';
         case 'message_received':
           return 'Otrzymałeś wiadomość';
+        case 'clash_request':
+          return 'Otrzymałeś wyzwanie';
+        case 'clash_won':
+        case 'clash_lost':
+        case 'clash_draw':
+          return 'Zakończył się właśnie pojedynek';
         default:
           return 'Otrzymałeś powiadomienie';
       }
@@ -272,17 +333,36 @@ export default {
           return 'Twoje zaproszenie zostało potwierdzone przez użytkownika';
         case 'message_received':
           return `Otrzymałeś właśnie wiadomość do użytkownika: ${notification.name}`;
+        case 'clash_request':
+          return `Otrzymałeś właśnie wyzwanie od użytkownika: ${notification.name}`;
+        case 'clash_won':
+          return `Wygrałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
+        case 'clash_lost':
+          return `Przegrałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
+        case 'clash_draw':
+          return `Zremisowałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
         default:
           return 'Otrzymałeś właśnie powiadomienie. Czym prędzej je przeczytaj';
       }
     },
     /* eslint-disable no-param-reassign */
     acceptFriendshipInvitation(userId, notification) {
-      userInteractionsService.acceptFriendshipRequest(this.user, userId);
+      userInteractionsService.acceptFriendshipRequest(userId);
       notification.isAlreadyAccepted = true;
+      this.$forceUpdate();
     },
     declineFriendshipInvitation(userId, notification) {
-      userInteractionsService.declineFriendshipRequest(this.user, userId);
+      userInteractionsService.declineFriendshipRequest(userId);
+      notification.isAlreadyAccepted = true;
+      this.removeNotification(notification.id);
+    },
+    acceptClashInvitation(notification) {
+      multiplayerService.acceptClashRequest(notification.clashId);
+      notification.isAlreadyAccepted = true;
+      this.$forceUpdate();
+    },
+    declineClashInvitation(notification) {
+      multiplayerService.declineClashRequest(notification.clashId);
       notification.isAlreadyAccepted = true;
       this.removeNotification(notification.id);
     },

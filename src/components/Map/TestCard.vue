@@ -2,7 +2,7 @@
   <div class="card text-center">
     <div class="card-header">
       <img height="50" class="m-3" :src="imagesGetter.getImgUrl('game_map/backpack.png')" />
-      Witaj podróżniku!
+      <span>Witaj podróżniku!</span>
       <img
         height="50"
         class="m-3"
@@ -28,8 +28,8 @@
         </li>
         <li class="list-group-item list-group-item-warning">
           Łatwiejsza trasa wiodąca przez dolinę.
-          To jest droga na skróty, przyznanie się do braku umiejętności
-          i odmówienie podjęcia wyzwania - tym samym przejście do kategorii dla początkujących.
+          To jest droga na skróty, dla osób które nie mają dobrze opanowanych podstaw
+          aby przeprawić się przez góry - tym samym przejście do kategorii dla początkujących
         </li>
       </ul>
       <p>
@@ -67,7 +67,6 @@
 <style scoped>
 </style>
 <script>
-import { mapState } from 'vuex';
 import imagesGetter from '@/utilities/imagesGetter';
 import gameControllerService from '@/services/gameControllerService';
 
@@ -82,13 +81,10 @@ export default {
     testPath: String,
     testCategoryId: String,
   },
-  computed: {
-    ...mapState('users', ['user']),
-  },
   methods: {
     skipTest() {
       gameControllerService
-        .finishCategory(this.user, this.testCategoryId)
+        .finishCategory(this.testCategoryId)
         .then(() => {
           this.$parent.getUserStatus();
         })

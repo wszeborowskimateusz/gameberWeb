@@ -4,7 +4,8 @@
       <cube-spin class="m-2"></cube-spin>
     </div>
     <div v-else-if="userStatus != null">
-      <div v-if="userStatus.status === 'map'" id="mapdiv" ref="chartdiv"></div>
+      <div id="mapdiv" :style="userStatus.status !== 'map'
+      ? 'width: 0; height: 0;' : 'width: 100vw; height: 100vh;'" ref="chartdiv"></div>
       <div v-if="userStatus.status === 'test'" class="p-5">
         <TestCard :testCategoryId="userStatus.testCategoryId"
         :testPath="'/games/' + userStatus.testCategoryId"></TestCard>
@@ -23,10 +24,6 @@
 </template>
 
 <style scoped>
-#mapdiv {
-  width: 100vw;
-  height: 100vh;
-}
 </style>
 
 
@@ -37,7 +34,7 @@ import * as am4maps from "@amcharts/amcharts4/maps";
 import am4themesAnimated from "@amcharts/amcharts4/themes/animated";
 import am4chartsGeodataWorld from "@amcharts/amcharts4-geodata/worldLow";
 
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 import mapService from "@/services/mapService";
 import bootbox from "@/utilities/bootbox";
 import toasts from "@/utilities/toasts";
@@ -88,13 +85,10 @@ export default {
       this.chart.dispose();
     }
   },
-  computed: {
-    ...mapState("users", ["user"])
-  },
   methods: {
     ...mapActions("userProfile", ["getUserData"]),
     async getUserStatus() {
-      this.userStatus = await mapService.getUserStatus(this.user);
+      this.userStatus = await mapService.getUserStatus();
     },
     async onUserStatusLoaded() {
       if(this.userStatus == null) {
@@ -102,17 +96,58 @@ export default {
       }
       if (this.userStatus.status === "map") {
         await this.prepareMap();
-      } else if (this.userStatus.status === "test") {
       } else if (this.userStatus.status === "testStarted") {
         this.$router.push(`/games/${this.userStatus.testCategoryId}`);
-      } else if (this.userStatus.status === "beginner") {
       }
+      this.isLoading = false; 
     },
     async prepareMap() {
       // Download required info from server
       await this.getMapCountries();
+      this.isLoading = false;
       await this.getCategories();
       await this.mapLoaded();
+    },
+    async getMapCountries() {
+      const allCountries = await mapService.getMapCountries();
+
+      const allIds = allCountries.map(c => c._id);
+
+      const unlockedCountries = await mapService.getUnlockedCountries();
+      const unlockedIds = unlockedCountries.map(c => c.country_id);
+
+      const lockedIds = allIds.filter(c => !unlockedIds.includes(c));
+
+      this.unlockedCountries = allCountries.filter(c =>
+        unlockedIds.includes(c._id)
+      );
+      this.lockedCountries = allCountries.filter(c =>
+        lockedIds.includes(c._id)
+      );
+    },
+    async getCategories() {
+      this.categories = await mapService.getAllCategories(this.unlockedCountries);
+
+      this.unlockedCountries.forEach(c => {
+        const countryCategories = this.categories.filter(
+          cat => cat.country_id === c._id
+        );
+
+        const points = this.getCirclePoints(
+          countryCategories.length,
+          mapConsts.categoryIconsSpacing,
+          0,
+          0
+        );
+
+        for (let i = 0; i < countryCategories.length; i += 1) {
+          countryCategories[i].longitude = c.centerLongitude + points[i][0];
+          countryCategories[i].latitude = c.centerLatitude + points[i][1];
+        }
+      });
+      this.categories.forEach(c => {
+        c.category_icon = `${config.apiUrl}/images/${c.category_icon}`;
+      });
     },
     async mapLoaded() {
       // Choose theme
@@ -154,52 +189,6 @@ export default {
             this.isInterfaceHidden = true;
           }
         }
-      });
-    },
-    async getMapCountries() {
-      const allCountries = await mapService.getMapCountries(this.user);
-
-      const allIds = allCountries.map(c => c._id);
-
-      const unlockedCountries = await mapService.getUnlockedCountries(
-        this.user
-      );
-      const unlockedIds = unlockedCountries.map(c => c.country_id);
-
-      const lockedIds = allIds.filter(c => !unlockedIds.includes(c));
-
-      this.unlockedCountries = allCountries.filter(c =>
-        unlockedIds.includes(c._id)
-      );
-      this.lockedCountries = allCountries.filter(c =>
-        lockedIds.includes(c._id)
-      );
-    },
-    async getCategories() {
-      this.categories = await mapService.getAllCategories(
-        this.user,
-        this.unlockedCountries
-      );
-
-      this.unlockedCountries.forEach(c => {
-        const countryCategories = this.categories.filter(
-          cat => cat.country_id === c._id
-        );
-
-        const points = this.getCirclePoints(
-          countryCategories.length,
-          mapConsts.categoryIconsSpacing,
-          0,
-          0
-        );
-
-        for (let i = 0; i < countryCategories.length; i += 1) {
-          countryCategories[i].longitude = c.centerLongitude + points[i][0];
-          countryCategories[i].latitude = c.centerLatitude + points[i][1];
-        }
-      });
-      this.categories.forEach(c => {
-        c.category_icon = `${config.apiUrl}/images/${c.category_icon}`;
       });
     },
     async redrawMap() {
@@ -332,10 +321,24 @@ export default {
 
       const countryISO = ev.target.dataItem.dataContext.id;
 
-      if (countryISO === 'RU') {
-        this.map.zoomToRectangle(this.map.north, this.map.east, 45, 28, this.interfaceShowZoomLevel, true);
-      } else if (countryISO === 'US') {
-        this.map.zoomToRectangle(49, -66, 25, -124, this.interfaceShowZoomLevel, true);
+      if (countryISO === "RU") {
+        this.map.zoomToRectangle(
+          this.map.north,
+          this.map.east,
+          45,
+          28,
+          this.interfaceShowZoomLevel,
+          true
+        );
+      } else if (countryISO === "US") {
+        this.map.zoomToRectangle(
+          49,
+          -66,
+          25,
+          -124,
+          this.interfaceShowZoomLevel,
+          true
+        );
       } else {
         ev.target.series.chart.zoomToMapObject(ev.target);
       }
@@ -352,7 +355,7 @@ export default {
                   <img width="25" src="${coinsUrl}"> ?`,
         async bought => {
           if (bought) {
-            const result = await mapService.buyCountry(this.user, country._id);
+            const result = await mapService.buyCountry(country._id);
 
             if (result.status) {
               toasts.successToast(`Kupiono kraj ${country.country_name}`);
