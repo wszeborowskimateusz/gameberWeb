@@ -309,7 +309,7 @@ export default {
     },
     search(input) {
       if (input.length < 1) return [];
-      return searchService.searchForUsers(this.$store.state.users.user, input);
+      return searchService.searchForUsers(input);
     },
     getResultValue(result) {
       return `${result.userName}`;

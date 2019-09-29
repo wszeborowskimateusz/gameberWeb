@@ -62,7 +62,7 @@
                   type="radio"
                   v-model="categoryIdToPick"
                   name="rGroup"
-                  :value="clash.categoryId"
+                  :value="clash.id"
                   :id="clash.categoryName + index"
                 />
                 <label class="radioLabel" :for="clash.categoryName + index">
@@ -82,7 +82,7 @@
               data-dismiss="modal"
               :disabled="categoryIdToPick === 0 || pickedUserId === 0"
               v-on:click="pickClashCategory()"
-            >Zapisz zmiany</button>
+            >Wyzwij</button>
           </div>
         </div>
       </div>
@@ -172,6 +172,7 @@ export default {
     this.isLoading = true;
     this.friends = await this.fetchFriends();
     this.clashCategories = await this.fetchClashCategories();
+    console.log(this.clashCategories);
     this.isLoading = false;
     this.$forceUpdate();
   },
