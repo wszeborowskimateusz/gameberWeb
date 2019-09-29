@@ -2,14 +2,11 @@ import fetchTimeout from 'fetch-timeout';
 import config from '@/../config';
 
 function refreshToken(refreshedToken) {
-  localStorage.setItem('user', refreshedToken);
+  localStorage.setItem('user', JSON.stringify(refreshedToken));
 }
 
 function handleResponse(response) {
-  console.log('I AM HANDLING');
   return response.text().then((text) => {
-    console.log('I AM IN');
-    console.log(response);
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
@@ -20,8 +17,8 @@ function handleResponse(response) {
       return Promise.reject(error);
     }
 
-    if (data.refreshedJwtToken) {
-      refreshToken(data.refreshedJwtToken);
+    if (response.headers.get('Refreshed-Jwt-Token')) {
+      refreshToken(response.headers.get('Refreshed-Jwt-Token'));
     }
     return data;
   });
