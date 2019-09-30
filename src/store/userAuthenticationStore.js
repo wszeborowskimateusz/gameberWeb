@@ -52,13 +52,15 @@ const actions = {
           commit('loginSuccess');
           if (user.isFirstLoginAttempt) {
             router.push('/tutorial');
+            toasts.successToast(`Witaj ${username}`);
           } else {
             router.push('/');
+            toasts.successToast(`Witaj z powrotem ${username}`);
           }
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
           dispatch('multiplayerStore/getAllClashes', null, { root: true });
-          toasts.successToast(`Witaj z powrotem ${username}`);
+
           if (user.everydayAwards != null) {
             bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
           }
@@ -76,13 +78,15 @@ const actions = {
           commit('loginSuccess');
           if (user.isFirstLoginAttempt) {
             router.push('/tutorial');
+            toasts.successToast('Witaj podróżniku!');
           } else {
             router.push('/');
+            toasts.successToast('Witaj z powrotem!');
           }
           dispatch('userProfile/getUserData', null, { root: true });
           dispatch('notificationsStore/getAllNotifications', null, { root: true });
           dispatch('multiplayerStore/getAllClashes', null, { root: true });
-          toasts.successToast('Witaj z powrotem!');
+
           if (user.everydayAwards != null) {
             bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
           }
