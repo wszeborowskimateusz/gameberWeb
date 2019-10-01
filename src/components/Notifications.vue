@@ -357,12 +357,12 @@ export default {
       this.removeNotification(notification.id);
     },
     acceptClashInvitation(notification) {
-      multiplayerService.acceptClashRequest(notification.clashId);
+      multiplayerService.acceptClashRequest(notification.data.clashId);
       notification.isAlreadyAccepted = true;
       this.$forceUpdate();
     },
     declineClashInvitation(notification) {
-      multiplayerService.declineClashRequest(notification.clashId);
+      multiplayerService.declineClashRequest(notification.data.clashId);
       notification.isAlreadyAccepted = true;
       this.removeNotification(notification.id);
     },
