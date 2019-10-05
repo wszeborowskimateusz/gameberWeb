@@ -7,8 +7,8 @@
       class="background-image"
       :style="{'background-image' : 'url(' + category.categoryBackgroundImage +')'}"
     ></div>
-    <div class="">
-      <div class="">
+    <div class>
+      <div class>
         <img width="50" :src="category.categoryCountryIcon" />
         <h2 class="title pl-3 pr-3">Kategoria: {{category.categoryName}}</h2>
         <img width="50" :src="category.categoryIcon" />
@@ -45,23 +45,27 @@
         aria-label="Toolbar with button groups"
       >
         <div class="mb-3 mr-12 p-1">
-        <div v-if="!isMultiplayer && !category.isTestCategory"
-        class="btn-group mb-3" role="group" aria-label="First group">
-          <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
-            <img height="50" :src="imagesGetter.getImgUrl('game_controller/prev.png')" />
-            Poprzedni
-          </button>
-          <button
-            type="button"
-            class="m-3 btn btn-primary"
-            :disabled="category.games[category.currentGameIndex]
-                          && category.games[category.currentGameIndex].isFinished === false"
-            v-on:click="nextGame()"
+          <div
+            v-if="!isMultiplayer && !category.isTestCategory"
+            class="btn-group mb-3"
+            role="group"
+            aria-label="First group"
           >
-            Następny
-            <img height="50" :src="imagesGetter.getImgUrl('game_controller/next.png')" />
-          </button>
-        </div>
+            <button type="button" class="m-3 btn btn-primary" v-on:click="prevGame()">
+              <img height="50" :src="imagesGetter.getImgUrl('game_controller/prev.png')" />
+              Poprzedni
+            </button>
+            <button
+              type="button"
+              class="m-3 btn btn-primary"
+              :disabled="category.games[category.currentGameIndex]
+                          && category.games[category.currentGameIndex].isFinished === false"
+              v-on:click="nextGame()"
+            >
+              Następny
+              <img height="50" :src="imagesGetter.getImgUrl('game_controller/next.png')" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -87,7 +91,7 @@
   font-size: 3em;
   color: #fff;
   text-align: center;
-  background-color: rgba(255, 255, 255, .5);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .GameController {
@@ -253,15 +257,15 @@ export default {
         answer,
       );
       this.isAnswerLoading = false;
-      if (
-        this.category.isTestCategory === true
-        || this.isMultiplayer === true
-      ) {
-        currentGame.isFinished = true;
-        const percentage = serverResponse != null ? serverResponse.percentage : null;
-        this.nextGameAction(percentage);
-      } else if (serverResponse != null) {
-        if (serverResponse.isCorrect === true) {
+      if (serverResponse != null) {
+        if (
+          this.category.isTestCategory === true
+          || this.isMultiplayer === true
+        ) {
+          currentGame.isFinished = true;
+          const percentage = serverResponse != null ? serverResponse.percentage : null;
+          this.nextGameAction(percentage);
+        } else if (serverResponse.isCorrect === true) {
           if (shouldShowModal === true) bootbox.correctAnswerAlert();
           currentGame.isFinished = true;
           this.nextGameAction(serverResponse.percentage);
