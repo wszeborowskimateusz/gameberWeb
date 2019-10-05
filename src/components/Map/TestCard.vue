@@ -39,13 +39,13 @@
         bądź też nie zdołasz przeprawić się przez góry
         będziesz musiał pozostać na szkoleniu, by później móc wyruszyć w świat.
       </p>
-      <a :href="testPath" class="btn btn-primary m-2">
+      <button v-on:click="pickOption(testPath)" class="btn btn-primary m-2">
         Wybieram drogę przez góry
         <img
           height="50"
           :src="imagesGetter.getImgUrl('game_map/mountain.png')"
         />
-      </a>
+      </button>
       <button v-on:click="skipTest()" class="btn btn-primary m-2">
         Wybieram drogę przez dolinę
         <img
@@ -91,6 +91,9 @@ export default {
         .then(() => {
           this.$forceUpdate();
         });
+    },
+    pickOption(path) {
+      this.$router.push(path);
     },
   },
 };
