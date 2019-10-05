@@ -254,6 +254,7 @@ export default {
   },
   created() {
     this.pollNotifications();
+    this.checkIfLoggedOut();
   },
   mounted() {
     if (this.status.loggedIn) {
@@ -296,6 +297,12 @@ export default {
     ...mapActions('userProfile', ['getUserData']),
     ...mapActions('notificationsStore', ['setNotificationsCount']),
     ...mapActions('multiplayerStore', ['setClashesToPlayAmount']),
+    checkIfLoggedOut() {
+      const token = localStorage.getItem('user');
+      if (this.status.loggedIn && !token) {
+        this.logout();
+      }
+    },
     pollNotifications() {
       // TODO: You can set notifications getting interval here
       this.polling = setInterval(() => {
