@@ -31,16 +31,22 @@
             <h2 v-else>Osiągnięcia</h2>
             <a
               href="#"
-              v-for="achievement in user.achievements"
+              v-for="achievement in user.achievements.slice(0, 3)"
               v-bind:key="achievement.name"
               :title="achievement.name"
             >
               <img :src="achievement.src" />
             </a>
+            <br />
+            <button
+              v-if="user.achievements.length > amountOfAchievementsToCalapse"
+              class="btn btn-primary mt-3"
+              data-toggle="modal"
+              data-target="#achievementsModal"
+            >Zobacz wszystkie osiągnięcia</button>
             <div v-if="!user.achievements || user.achievements.length === 0">
-
               <h4 v-if="user.isOurOwnProfile">Niestety nie posiadasz jeszcze żadnych osiągnięć</h4>
-              <h4 v-else >Brak osiągnięć</h4>
+              <h4 v-else>Brak osiągnięć</h4>
               <img :src="imagesGetter.getImgUrl('profile/no_achievements.png')" />
             </div>
           </div>
@@ -57,18 +63,25 @@
                 :src="imagesGetter.getImgUrl('profile/change_image.png')"
               />
             </button>
-            <button v-else-if="user.isFriend"
-            class="btn btn-primary" v-on:click="sendMessage()">
+            <button v-else-if="user.isFriend" class="btn btn-primary" v-on:click="sendMessage()">
               Wyślij wiadomość
-              <img :src="imagesGetter.getImgUrl('profile/send_message.png')"/>
+              <img :src="imagesGetter.getImgUrl('profile/send_message.png')" />
             </button>
-            <button v-else-if="user.didUserFriendRequestedUs"
-            class="btn btn-primary" v-on:click="acceptFriendshipRequest()">
+            <button
+              v-else-if="user.didUserFriendRequestedUs"
+              class="btn btn-primary"
+              v-on:click="acceptFriendshipRequest()"
+            >
               Zaakceptuj zaproszenie
-              <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
+              <img
+                :src="imagesGetter.getImgUrl('profile/add_to_friends.png')"
+              />
             </button>
-            <button v-else-if="!user.isFriendshipRequested"
-            class="btn btn-primary" v-on:click="addToFriends()">
+            <button
+              v-else-if="!user.isFriendshipRequested"
+              class="btn btn-primary"
+              v-on:click="addToFriends()"
+            >
               Dodaj do znajomych
               <img :src="imagesGetter.getImgUrl('profile/add_to_friends.png')" />
             </button>
@@ -93,125 +106,9 @@
         </div>
       </div>
     </div>
-    <!-- Background Images Change modal -->
-    <div
-      class="modal fade"
-      id="backgroundImagesModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="backgroundImagesModalTitle"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="backgroundImagesModalTitle">Wybierz nowe zdjęcie w tle</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <span
-              v-if="!user || user.backgroundImages.length === 0"
-            >Niestety nie masz żadnych zdjęć profilowych</span>
-            <div class="row">
-              <div
-                class="col-12"
-                v-for="(image, index) in user.backgroundImages"
-                v-bind:key="image.id"
-              >
-                <input
-                  type="radio"
-                  v-model="backgroundImageIdToChange"
-                  name="rGroup"
-                  :value="image.id"
-                  :id="index"
-                />
-                <label class="radioLabel" :for="index">
-                  <img class="modal__image" :src="image.img" />
-                  <br />
-                  <span class="font-weight-bold">{{image.name}}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <router-link to="/store" data-dismiss="modal">Zakup więcej obrazków</router-link>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-              v-on:click="reverseImageChange()"
-            >Anuluj</button>
-            <button
-              v-if="user && user.backgroundImages.length > 0"
-              type="button"
-              class="btn btn-primary"
-              data-dismiss="modal"
-              v-on:click="exchangeBackgroundImage()"
-            >Zapisz zmiany</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Avatar Change modal -->
-    <div
-      class="modal fade"
-      id="avatarModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="avatarModalTitle"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="avatarModalTitle">Wybierz swój nowy avatar</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <span v-if="!user || user.avatars.length === 0">
-              Niestety nie masz żadnych avatarów
-            </span>
-            <div class="row">
-              <div class="col-12" v-for="(avatar, index) in user.avatars" v-bind:key="avatar.id">
-                <input
-                  type="radio"
-                  v-model="avatarIdToChange"
-                  name="rGroup"
-                  :value="avatar.id"
-                  :id="avatar.name + index"
-                />
-                <label class="radioLabel" :for="avatar.name + index">
-                  <img class="modal__image avatar_modal__img" :src="avatar.img" />
-                  <br />
-                  <span class="font-weight-bold">{{avatar.name}}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <router-link to="/store" data-dismiss="modal">Zakup więcej avatarów</router-link>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-              v-on:click="reverseAvatarChange()"
-            >Anuluj</button>
-            <button
-              v-if="user && user.backgroundImages.length > 0"
-              type="button"
-              class="btn btn-primary"
-              data-dismiss="modal"
-              v-on:click="exchangeAvatar()"
-            >Zapisz zmiany</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AchievementsModal :achievements="user.achievements"></AchievementsModal>
+    <BackgroundImagesModal :user="user"></BackgroundImagesModal>
+    <AvatarsModal :user="user"></AvatarsModal>
   </div>
   <div v-else class="col-12">
     <h1 class="mb-5">Nie znaleziono użytkownika o wskazanym identyfikatorze</h1>
@@ -222,29 +119,6 @@
 </template>
 
 <style scoped>
-.avatar_modal__img {
-  border-radius: 50%;
-}
-
-.modal__image {
-  width: 100%;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:checked + .radioLabel {
-  box-shadow: 3px 3px 15px #666;
-  border-color: #427696;
-  background: #427696;
-  color: #fff;
-  cursor: pointer;
-  zoom: 1;
-  filter: alpha(opacity=100);
-  opacity: 1;
-}
-
 .bottom {
   position: absolute;
   bottom: 0;
@@ -337,14 +211,17 @@ import otherUsersProfileService from '@/services/otherUsersProfileService';
 import usersInteractionsService from '@/services/usersInteractionsService';
 import imagesGetter from '@/utilities/imagesGetter';
 
+import AchievementsModal from '@/components/ProfileHelpers/AchievementsModal.vue';
+import BackgroundImagesModal from '@/components/ProfileHelpers/BackgroundImagesModal.vue';
+import AvatarsModal from '@/components/ProfileHelpers/AvatarsModal.vue';
+
 export default {
   data() {
     return {
       imagesGetter,
-      backgroundImageIdToChange: 0,
-      avatarIdToChange: 0,
       userId: this.$route.params.id,
       otherUser: {},
+      amountOfAchievementsToCalapse: 3,
     };
   },
   computed: {
@@ -389,11 +266,9 @@ export default {
     this.backgroundImageIdToChange = this.user.backgroundImageId;
     this.avatarIdToChange = this.user.avatarId;
     if (!this.isOurOwnProfile) {
-      otherUsersProfileService
-        .getUser(this.userId)
-        .then((user) => {
-          this.otherUser = user;
-        });
+      otherUsersProfileService.getUser(this.userId).then((user) => {
+        this.otherUser = user;
+      });
     }
     this.$forceUpdate();
   },
@@ -403,26 +278,14 @@ export default {
       'changeBackgroundImage',
       'getUserData',
     ]),
-    exchangeAvatar() {
-      this.changeAvatar(this.avatarIdToChange);
-    },
-    reverseAvatarChange() {
-      this.avatarIdToChange = this.user.avatarId;
-      this.$forceUpdate();
-    },
-    exchangeBackgroundImage() {
-      this.changeBackgroundImage(this.backgroundImageIdToChange);
-    },
-    reverseImageChange() {
-      this.backgroundImageIdToChange = this.user.backgroundImageId;
-      this.$forceUpdate();
-    },
     addToFriends() {
       const userToAddId = this.userId;
-      usersInteractionsService.sendFriendshipRequest(userToAddId)
+      usersInteractionsService
+        .sendFriendshipRequest(userToAddId)
         .then(() => {
           this.user.isFriendshipRequested = true;
-        }).then(() => {
+        })
+        .then(() => {
           this.$forceUpdate();
         });
     },
@@ -431,15 +294,17 @@ export default {
       this.$router.push(`/messages/${userToSendMessageToId}`);
     },
     acceptFriendshipRequest() {
-      usersInteractionsService.acceptFriendshipRequest(this.userId)
-        .then(() => {
-          this.user.isFriend = true;
-          this.$forceUpdate();
-        });
+      usersInteractionsService.acceptFriendshipRequest(this.userId).then(() => {
+        this.user.isFriend = true;
+        this.$forceUpdate();
+      });
     },
   },
   components: {
     CubeSpin,
+    AchievementsModal,
+    BackgroundImagesModal,
+    AvatarsModal,
   },
 };
 </script>
