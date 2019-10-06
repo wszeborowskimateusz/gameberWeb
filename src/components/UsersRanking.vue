@@ -2,49 +2,58 @@
   <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
     <cube-spin class="m-2"></cube-spin>
   </div>
-  <div v-else-if="rankings != null &&
+  <div
+    v-else-if="rankings != null &&
     Object.entries(rankings).length !== 0 && rankings.constructor === Object"
-    class="ranking__container col-12  mb-5">
-    <div class="btn-group special mb-2" role="group" aria-label="Basic example">
+    class="col-12 mb-5"
+  >
+    <div class="btn-group special mb-2" role="group" aria-label="Users ranking">
       <button
         v-for="type in rankingTypes"
         v-bind:key="type.pol"
         type="button"
         class="btn btn-primary"
+        :class="[pickedRanking === type.eng ? 'active' : '']"
         v-on:click="changeRanging(type)"
       >{{type.pl}}</button>
     </div>
-    <table class="table">
-      <tr class="ranking__entry thead-dark">
-        <th scope="col">Miejsce</th>
-        <th scope="col">Avatar</th>
-        <th scope="col">Nazwa użytkownika</th>
-        <th scope="col">Punkty doświadczenia</th>
-        <th scope="col">Poziom</th>
-      </tr>
-      <tbody>
-        <tr
-          class="ranking__entry m-1"
-          v-for="(user, index) in rankings[pickedRanking]"
-          v-bind:key="user.name"
-        >
-          <td>{{index + 1}}.</td>
-          <td>
-            <img class="ranking__entry__image" :src="user.img" width="100" height="100" />
-          </td>
-          <td>
-            <router-link :to="'/users/' + user.userId">{{user.name}}</router-link>
-          </td>
-          <td>{{user.experiencePoints}}</td>
-          <td>{{user.level}}</td>
+    <div class="table-responsive" v-if="rankings[pickedRanking].length > 0">
+      <table class="table">
+        <tr class="ranking__entry thead-dark">
+          <th scope="col">Miejsce</th>
+          <th scope="col">Avatar</th>
+          <th scope="col">Nazwa użytkownika</th>
+          <th scope="col">Punkty doświadczenia</th>
+          <th scope="col">Poziom</th>
         </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr
+            class="ranking__entry m-1"
+            v-for="(user, index) in rankings[pickedRanking]"
+            v-bind:key="user.name"
+          >
+            <td>{{index + 1}}.</td>
+            <td>
+              <img class="ranking__entry__image" :src="user.img" width="100" height="100" />
+            </td>
+            <td>
+              <router-link :to="'/users/' + user.userId">{{user.name}}</router-link>
+            </td>
+            <td>{{user.experiencePoints}}</td>
+            <td>{{user.level}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ErrorComponent
+      v-else
+      :message="'Ranking ' + pickedRankingObject.pl + ' nie został jeszcze przygotowany'"
+    />
   </div>
   <div class="col-12" v-else>
     <ErrorComponent
-      message='Nie udało się wczytać rankingu graczy.
-              Być może ranking nie został jeszcze przygotowany'
+      message="Nie udało się wczytać rankingu graczy.
+              Być może ranking nie został jeszcze przygotowany"
     />
   </div>
 </template>
@@ -94,6 +103,13 @@ export default {
   created() {
     this.isLoading = true;
     this.fetchRankings();
+  },
+  computed: {
+    pickedRankingObject() {
+      return this.rankingTypes.filter(
+        type => type.eng === this.pickedRanking,
+      )[0];
+    },
   },
   methods: {
     changeRanging(type) {

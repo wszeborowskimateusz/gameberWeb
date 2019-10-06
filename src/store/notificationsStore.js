@@ -1,23 +1,26 @@
 import toasts from '@/utilities/toasts';
 import notificationService from '@/services/notificationsService';
 
-const getDefaultState = () => ({ notifications: [], isLoading: false });
+const getDefaultState = () => ({ notifications: [], isLoading: false, notificationsCount: 0 });
 
 const notificationsState = getDefaultState();
 
 const actions = {
-  getAllNotifications({ commit }, isRefreshing = false) {
-    if (isRefreshing === false) commit('loading');
+  getAllNotifications({ commit }) {
+    commit('loading');
     notificationService.getAllNotifications()
       .then(
         (notifications) => {
-          commit('gettingNotificationsSuccess', { notifications, isRefreshing });
+          commit('gettingNotificationsSuccess', notifications);
         },
         () => {
           toasts.errorToast('Nie udało się wczytać informacji o powiadomieniach. Spróbuj odświeżyć stronę');
-          commit('gettingNotificationsFailure', isRefreshing);
+          commit('gettingNotificationsFailure');
         },
       );
+  },
+  setNotificationsCount({ commit }, amount) {
+    commit('settingNotificationsAmountSuccess', amount);
   },
   markNotificationAsRead({ commit }, notificationId) {
     notificationService.markNoificationAsRead(notificationId)
@@ -51,13 +54,17 @@ const mutations = {
   loading(state) {
     state.isLoading = true;
   },
-  gettingNotificationsSuccess(state, { notifications, isRefreshing }) {
+  gettingNotificationsSuccess(state, notifications) {
     state.notifications = notifications;
-    if (isRefreshing === false) { state.isLoading = false; }
+    state.notificationsCount = notifications.length;
+    state.isLoading = false;
   },
-  gettingNotificationsFailure(state, isRefreshing) {
+  gettingNotificationsFailure(state) {
     state.notifications = null;
-    if (isRefreshing === false) state.isLoading = false;
+    state.isLoading = false;
+  },
+  settingNotificationsAmountSuccess(state, amount) {
+    state.notificationsCount = amount;
   },
   markingNotificationAsReadSuccess(state, notificationId) {
     state.notifications.find(x => x.id === notificationId).isRead = true;

@@ -1,14 +1,28 @@
 <template>
   <div class="tutorial col-12">
-    <carousel class="tutorial__carousel" :perPage="1"
-    :paginationSize="30" :paginationColor="'#427696'" :paginationActiveColor="'#F4E5DD'">
+    <carousel
+      class="tutorial__carousel"
+      :perPage="1"
+      :paginationSize="30"
+      :paginationColor="'#427696'"
+      :paginationActiveColor="'#F4E5DD'"
+    >
       <slide v-for="phase in phases" v-bind:key="phase.title">
-        <div class="slide"
-        :style="{'background-image' : 'url(' + imagesGetter.getImgUrl(phase.img) +')'}">
-           <div class="slide__container">
-             <br/>
-            <div class="slide__text__container p-3 ">
-              <p class="slide__text__paragraph">{{phase.text}}</p>
+        <div
+          class="slide"
+          :style="{'background-image' : 'url(' + imagesGetter.getImgUrl(phase.img) +')'}"
+        >
+          <div class="slide__container">
+            <br />
+            <div class="slide__text__container p-3">
+              <p v-if="!phase.isLast" class="slide__text__paragraph">{{phase.text}}</p>
+              <router-link
+                v-else
+                to="/map"
+                class="btn btn-primary m-2"
+              >Przejdź do mapy
+              <img width="25" :src="imagesGetter.getImgUrl('Tutorial/arrow.png')">
+              </router-link>
             </div>
           </div>
         </div>
@@ -93,6 +107,10 @@ export default {
           zaś te zablokowane kolorem szarym. Za zdobywaną gotówkę możemy odblokowywać 
           kolejne kraje. W każdym kraju do dyspozycji mamy kilka kategorii, zaś w każdej 
           kategorii kilka gier mających nauczyć nas danego tematu`,
+        },
+        {
+          img: 'Tutorial/map.jpg',
+          isLast: true,
         },
       ],
     };

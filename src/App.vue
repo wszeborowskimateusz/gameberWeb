@@ -115,6 +115,11 @@
             auto-select
           ></autocomplete>
         </ul>
+        <ul v-else-if="isLoading" class="nav navbar-nav navbar-right">
+          <li class="nav-item">
+            <cube-spin class></cube-spin>
+          </li>
+        </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
             <button class="btn btn-info ml-3" @click="logout()">
@@ -236,8 +241,10 @@ footer a {
 <script>
 import { mapState, mapActions } from 'vuex';
 import NotificationBell from 'vue-notification-bell';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
 import searchService from '@/services/searchService';
+import newNotificationsService from '@/services/newNotificationsService';
 
 import imagesGetter from '@/utilities/imagesGetter';
 
@@ -253,26 +260,24 @@ export default {
   },
   created() {
     this.pollNotifications();
+    this.checkIfLoggedOut();
   },
   mounted() {
     if (this.status.loggedIn) {
       this.getUserData();
-      this.getAllNotifications();
-      this.getAllClashes();
+      this.fetchNewNotificationsStatus();
     }
   },
   computed: {
     ...mapState('users', ['status']),
-    ...mapState('userProfile', ['user']),
-    ...mapState('notificationsStore', ['notifications']),
-    ...mapState('multiplayerStore', ['clashes']),
+    ...mapState('userProfile', ['user', 'isLoading']),
+    ...mapState('notificationsStore', ['notificationsCount']),
+    ...mapState('multiplayerStore', ['clashesToPlayCount']),
     amountOfUnReadNotifications() {
-      if (this.notifications === undefined || this.notifications === null) return 0;
-      return this.notifications.filter(x => !x.isRead).length;
+      return this.notificationsCount;
     },
     amountOfClashesToPlay() {
-      if (this.clashes === undefined || this.clashes === null) return 0;
-      return this.clashes.startedNotFinishedByUs.length;
+      return this.clashesToPlayCount;
     },
     isUserProfileEmpty() {
       if (this.user == null) return true;
@@ -296,15 +301,18 @@ export default {
   methods: {
     ...mapActions('users', ['logout']),
     ...mapActions('userProfile', ['getUserData']),
-    ...mapActions('notificationsStore', ['getAllNotifications']),
-    ...mapActions('multiplayerStore', ['getAllClashes']),
+    ...mapActions('notificationsStore', ['setNotificationsCount']),
+    ...mapActions('multiplayerStore', ['setClashesToPlayAmount']),
+    checkIfLoggedOut() {
+      const token = localStorage.getItem('user');
+      if (this.status.loggedIn && !token) {
+        this.logout();
+      }
+    },
     pollNotifications() {
       // TODO: You can set notifications getting interval here
       this.polling = setInterval(() => {
-        if (this.status.loggedIn) {
-          this.getAllNotifications(true);
-          this.getAllClashes(true);
-        }
+        this.fetchNewNotificationsStatus();
       }, 30000);
     },
     search(input) {
@@ -317,10 +325,19 @@ export default {
     handleSubmit(result) {
       this.$router.push(`/users/${result.userId}`);
     },
+    fetchNewNotificationsStatus() {
+      if (this.status.loggedIn) {
+        newNotificationsService.getNewNotificationsCounts().then((status) => {
+          this.setNotificationsCount(status.unreadNotificationsNumber);
+          this.setClashesToPlayAmount(status.clashesNotFinishedByUsNumber);
+        });
+      }
+    },
   },
   components: {
     NotificationBell,
     Autocomplete,
+    CubeSpin,
   },
 };
 </script>

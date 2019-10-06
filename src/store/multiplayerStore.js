@@ -7,6 +7,7 @@ const getDefaultState = () => ({
     startedFinishedByUs: [],
     finished: [],
   },
+  clashesToPlayCount: 0,
   isLoading: false,
 });
 
@@ -32,19 +33,22 @@ function getClashesCategoriesFromArray(clashesArray) {
 const multiplayerState = getDefaultState();
 
 const actions = {
-  getAllClashes({ commit }, isRefreshing = false) {
-    if (isRefreshing === false) commit('loading');
+  getAllClashes({ commit }) {
+    commit('loading');
     multiplayerService.getAllClashes()
       .then(
         (clashesArray) => {
           const clashes = getClashesCategoriesFromArray(clashesArray);
-          commit('gettingClashesSuccess', { clashes, isRefreshing });
+          commit('gettingClashesSuccess', clashes);
         },
         () => {
           toasts.errorToast('Nie udało się wczytać informacji o pojedynkach. Spróbuj odświeżyć stronę');
-          commit('gettingClashesFailure', isRefreshing);
+          commit('gettingClashesFailure');
         },
       );
+  },
+  setClashesToPlayAmount({ commit }, amount) {
+    commit('settingClashesToPlayAmountSuccess', amount);
   },
   resetState({ commit }) {
     commit('resetState');
@@ -56,13 +60,17 @@ const mutations = {
   loading(state) {
     state.isLoading = true;
   },
-  gettingClashesSuccess(state, { clashes, isRefreshing }) {
+  gettingClashesSuccess(state, clashes) {
     state.clashes = clashes;
-    if (isRefreshing === false) { state.isLoading = false; }
+    state.clashesToPlayCount = clashes.startedNotFinishedByUs.length;
+    state.isLoading = false;
   },
-  gettingClashesFailure(state, isRefreshing) {
+  gettingClashesFailure(state) {
     state.clashes = null;
-    if (isRefreshing === false) state.isLoading = false;
+    state.isLoading = false;
+  },
+  settingClashesToPlayAmountSuccess(state, amount) {
+    state.clashesToPlayCount = amount;
   },
   resetState(state) {
     Object.assign(state, getDefaultState());

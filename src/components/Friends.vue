@@ -172,7 +172,6 @@ export default {
     this.isLoading = true;
     this.friends = await this.fetchFriends();
     this.clashCategories = await this.fetchClashCategories();
-    console.log(this.clashCategories);
     this.isLoading = false;
     this.$forceUpdate();
   },
