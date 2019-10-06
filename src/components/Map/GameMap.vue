@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
       <cube-spin class="m-2"></cube-spin>
     </div>
-    <div v-else-if="userStatus != null">
+    <div v-if="userStatus != null">
       <div id="mapdiv" :style="userStatus.status !== 'map'
       ? 'width: 0; height: 0;' : 'width: 100vw; height: 100vh;'" ref="chartdiv"></div>
       <div v-if="userStatus.status === 'test'" class="p-5">
@@ -77,7 +77,6 @@ export default {
   async mounted() {
     this.isLoading = true;
     await this.getUserStatus();
-    this.isLoading = false;
     await this.onUserStatusLoaded();
   },
   beforeDestroy() {
@@ -104,8 +103,7 @@ export default {
     async prepareMap() {
       // Download required info from server
       await this.getMapCountries();
-      await this.getCategories();      
-      this.isLoading = false;
+      await this.getCategories();
       await this.mapLoaded();
     },
     async getMapCountries() {
@@ -148,8 +146,7 @@ export default {
 
       this.categories.forEach(c => {
         c.category_icon = imagesGetter.getImageServerUrl(c.category_icon);
-        if (c.is_completed)
-        {
+        if (c.is_completed) {
           c.completition_icon = imagesGetter.getImgUrl(mapConsts.completitionIconPath);
         }
       });

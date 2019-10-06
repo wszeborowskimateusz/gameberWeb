@@ -9,14 +9,7 @@ export default {
       .then(
         (response) => {
           for (let i = 0; i < response.games.length; i += 1) {
-            try
-            {
               response.games[i].gameInfo = JSON.parse(response.games[i].gameInfo);
-            }
-            catch(err)
-            {
-              console.log('error parsing json');
-            }
           }
           if (response.currentGameIndex === undefined) {
             response.currentGameIndex = 0;

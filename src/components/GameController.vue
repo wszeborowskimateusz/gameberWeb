@@ -159,7 +159,6 @@ import PhraseLearning from '@/components/Games/PhraseLearning.vue';
 import gameControllerService from '@/services/gameControllerService';
 import bootbox from '@/utilities/bootbox';
 import imagesGetter from '@/utilities/imagesGetter';
-import config from '../../config';
 
 export default {
   data() {

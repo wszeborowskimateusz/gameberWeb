@@ -1,7 +1,7 @@
 <template>
   <div class="wordGuesser row">
     <div class="col-sm-12 col-md-6 my-auto">
-      <img width="250px" v-bind:src="gameInfo.img" class="wordPickerImage rounded" />
+      <img v-bind:src="gameInfo.img" class="wordPickerImage rounded" />
     </div>
     <div class="col-sm-12 col-md-6 my-auto">
       <form @submit.prevent="checkAnswer">
