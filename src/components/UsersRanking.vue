@@ -13,6 +13,7 @@
         v-bind:key="type.pol"
         type="button"
         class="btn btn-primary"
+        :class="[pickedRanking === type.eng ? 'active' : '']"
         v-on:click="changeRanging(type)"
       >{{type.pl}}</button>
     </div>
