@@ -68,7 +68,7 @@
             v-if="categoryName === 'startedFinishedByUs'"
           >Twój wynik: {{clash.percentage}}%</p>
           <div v-if="categoryName === 'startedNotFinishedByUs'" class="p-3">
-            <router-link :to="'games/' + clash.categoryId">
+            <router-link :to="'games/' + clash.categoryId + '/' + clash.clashId">
               <button class="btn btn-primary">Rozegraj pojedynek</button>
             </router-link>
           </div>

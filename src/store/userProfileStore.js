@@ -110,9 +110,9 @@ const actions = {
   },
   /* eslint-enable no-unused-vars */
   getCategoryRewards({ dispatch }, {
-    categoryId, categoryName, isTestCategory, isMultiplayer, percentage,
+    categoryId, categoryName, isTestCategory, isMultiplayer, percentage, clashId,
   }) {
-    gameControllerService.finishCategory(categoryId)
+    gameControllerService.finishCategory(categoryId, clashId)
       .then(
         (rewards) => {
           bootbox.alert(
@@ -140,42 +140,6 @@ const mutations = {
   gettingDataSuccess(state, user) {
     state.user = user.user;
     state.isLoading = false;
-
-    // TODO: Remove this after testing
-    state.user.achievements = [
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-      { src: 'https://img.icons8.com/dusk/100/000000/prize.png', name: 'nagroda' },
-      { src: 'https://img.icons8.com/dusk/100/000000/trophy.png', name: 'trofeum' },
-      { src: 'https://img.icons8.com/dusk/100/000000/medal2.png', name: 'medal' },
-      { src: 'https://img.icons8.com/dusk/100/000000/diploma.png', name: 'dyplom' },
-    ];
   },
   gettingDataFailure(state) {
     state.user = null;

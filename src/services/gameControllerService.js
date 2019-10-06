@@ -35,8 +35,8 @@ export default {
       );
     return result;
   },
-  finishCategory(categoryId) {
+  finishCategory(categoryId, clashId) {
     const url = `${config.apiUrl}/games/categories/finish`;
-    return requestSender.sendPostRequest(url, { categoryId });
+    return requestSender.sendPostRequest(url, { categoryId, clashId });
   },
 };

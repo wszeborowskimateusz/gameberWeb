@@ -177,6 +177,7 @@ export default {
         isTestCategory: true,
       },
       categoryId: this.$route.params.id,
+      clashId: this.$route.params.clashId,
       timer: '',
       ammountOfSecondsTillTheEndOfGame: 10,
       secondsToSolveGame: 10,
@@ -311,6 +312,7 @@ export default {
           isTestCategory: this.category.isTestCategory,
           isMultiplayer: this.isMultiplayer,
           percentage,
+          clashId: this.clashId,
         });
       }
     },
