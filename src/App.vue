@@ -115,6 +115,11 @@
             auto-select
           ></autocomplete>
         </ul>
+        <ul v-else-if="isLoading" class="nav navbar-nav navbar-right">
+          <li class="nav-item">
+            <cube-spin class></cube-spin>
+          </li>
+        </ul>
         <ul v-if="status.loggedIn" class="nav navbar-nav navbar-right">
           <li class="nav-item">
             <button class="btn btn-info ml-3" @click="logout()">
@@ -236,6 +241,7 @@ footer a {
 <script>
 import { mapState, mapActions } from 'vuex';
 import NotificationBell from 'vue-notification-bell';
+import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
 import searchService from '@/services/searchService';
 import newNotificationsService from '@/services/newNotificationsService';
@@ -264,7 +270,7 @@ export default {
   },
   computed: {
     ...mapState('users', ['status']),
-    ...mapState('userProfile', ['user']),
+    ...mapState('userProfile', ['user', 'isLoading']),
     ...mapState('notificationsStore', ['notificationsCount']),
     ...mapState('multiplayerStore', ['clashesToPlayCount']),
     amountOfUnReadNotifications() {
@@ -331,6 +337,7 @@ export default {
   components: {
     NotificationBell,
     Autocomplete,
+    CubeSpin,
   },
 };
 </script>
