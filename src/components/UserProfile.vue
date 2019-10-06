@@ -13,7 +13,7 @@
         <div class="row profile__content">
           <div class="avatar col-sm-12 col-lg-3 col-md-12 p-4">
             <div class="avatar__image">
-              <img width="250" class="avatar__image__img" :src="pickedAvatar.img" />
+              <img class="avatar__image__img" :src="pickedAvatar.img" />
               <button
                 v-if="user.isOurOwnProfile"
                 class="image_badge btn btn-default"
@@ -303,6 +303,8 @@ input[type="radio"]:checked + .radioLabel {
 
 .avatar__image__img {
   border-radius: 50%;
+  height: auto;
+  width: 100%;
 }
 
 .image_badge {

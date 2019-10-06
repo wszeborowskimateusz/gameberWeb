@@ -68,9 +68,11 @@ const mutations = {
   },
   markingNotificationAsReadSuccess(state, notificationId) {
     state.notifications.find(x => x.id === notificationId).isRead = true;
+    state.notificationsCount = state.notifications.length;
   },
   removingNotificationSuccess(state, notificationId) {
     state.notifications = state.notifications.filter(x => x.id !== notificationId);
+    state.notificationsCount = state.notifications.length;
   },
   resetState(state) {
     Object.assign(state, getDefaultState());

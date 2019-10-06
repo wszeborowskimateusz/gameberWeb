@@ -101,7 +101,7 @@
               class="nav-link rounded-circle"
               title="Profil"
             >
-              <img width="25" :src="pickedAvatar" class="rounded-circle" />
+              <img width="50" :src="pickedAvatar" class="rounded-circle" />
               {{user.username}}
             </router-link>
           </li>

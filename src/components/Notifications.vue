@@ -47,7 +47,7 @@
           <img
             class="m-2 notification__icon"
             width="35"
-            :src="getNotificationIcon(notification.type)"
+            :src="getNotificationInfo(notification).icon"
           />
           <button
             class="btn btn_default notification__remove_button"
@@ -66,14 +66,15 @@
               :src="imagesGetter.getImgUrl('notifications/mark_as_read.png')"
             />
           </button>
-          <p class="pt-5 pt-sm-3 font-weight-bold">{{getNotificationTitle(notification.type)}}</p>
+          <p class="pt-5 pt-sm-3 font-weight-bold">{{getNotificationInfo(notification).title}}</p>
           <div class="row m-sm-3 m-0">
             <div class="col-12 col-xl-2">
-              <img
-              class="m-0 m-sm-3 notification__image" :src="notification.img" />
+              <img class="m-0 m-sm-3 notification__image" :src="notification.img" />
             </div>
             <div class="col-12 col-xl-10">
-              <p class="m-0 m-sm-4 my-4 text-left">{{getNotificationDescription(notification)}}</p>
+              <p class="m-0 m-sm-4 my-4 text-left">
+                {{getNotificationInfo(notification).description}}
+              </p>
               <p class="m-0 m-sm-4 my-4 text-left">
                 Nazwa:
                 <span
@@ -275,74 +276,62 @@ export default {
     onRemoveNotification(id) {
       this.removeNotification(id);
     },
-    getNotificationIcon(notificationType) {
-      switch (notificationType) {
-        case 'friendship_request':
-          return imagesGetter.getImgUrl('notifications/friendship_request.png');
-        case 'achievement_receive':
-          return imagesGetter.getImgUrl(
-            'notifications/achievement_receive.png',
-          );
-        case 'friendship_accepted':
-          return imagesGetter.getImgUrl(
-            'notifications/friendship_accepted.png',
-          );
-        case 'message_received':
-          return imagesGetter.getImgUrl('notifications/new_message.png');
-        case 'clash_request':
-          return imagesGetter.getImgUrl('notifications/clash.png');
-        case 'clash_won':
-          return imagesGetter.getImgUrl('notifications/clash_won.png');
-        case 'clash_lost':
-          return imagesGetter.getImgUrl('notifications/clash_lost.png');
-        case 'clash_draw':
-          return imagesGetter.getImgUrl('notifications/clash_draw.png');
-        default:
-          return imagesGetter.getImgUrl(
-            'notifications/default_notification.png',
-          );
-      }
-    },
-    getNotificationTitle(notificationType) {
-      switch (notificationType) {
-        case 'friendship_request':
-          return 'Zaproszenie do znajomych';
-        case 'achievement_receive':
-          return 'Otrzymałeś osiągnięcie';
-        case 'friendship_accepted':
-          return 'Zaproszenie zaakceptowane';
-        case 'message_received':
-          return 'Otrzymałeś wiadomość';
-        case 'clash_request':
-          return 'Otrzymałeś wyzwanie';
-        case 'clash_won':
-        case 'clash_lost':
-        case 'clash_draw':
-          return 'Zakończył się właśnie pojedynek';
-        default:
-          return 'Otrzymałeś powiadomienie';
-      }
-    },
-    getNotificationDescription(notification) {
+    getNotificationInfo(notification) {
       switch (notification.type) {
         case 'friendship_request':
-          return `Otrzymałeś właśnie zaproszenie do grona znajomych od użytkownika: ${notification.name}`;
+          return {
+            icon: imagesGetter.getImgUrl('notifications/friendship_request.png'),
+            title: 'Zaproszenie do znajomych',
+            description: `Otrzymałeś właśnie zaproszenie do grona znajomych od użytkownika: ${notification.name}`,
+          };
         case 'achievement_receive':
-          return `Otrzymałeś właśnie osiągnięcie: ${notification.name}`;
+          return {
+            icon: imagesGetter.getImgUrl('notifications/achievement_receive.png'),
+            title: 'Otrzymałeś osiągnięcie',
+            description: `Otrzymałeś właśnie osiągnięcie: ${notification.name}`,
+          };
         case 'friendship_accepted':
-          return 'Twoje zaproszenie zostało potwierdzone przez użytkownika';
+          return {
+            icon: imagesGetter.getImgUrl('notifications/friendship_accepted.png'),
+            title: 'Zaproszenie zaakceptowane',
+            description: 'Twoje zaproszenie zostało potwierdzone przez użytkownika',
+          };
         case 'message_received':
-          return `Otrzymałeś właśnie wiadomość do użytkownika: ${notification.name}`;
+          return {
+            icon: imagesGetter.getImgUrl('notifications/new_message.png'),
+            title: 'Otrzymałeś wiadomość',
+            description: `Otrzymałeś właśnie wiadomość do użytkownika: ${notification.name}`,
+          };
         case 'clash_request':
-          return `Otrzymałeś właśnie wyzwanie od użytkownika: ${notification.name}`;
+          return {
+            icon: imagesGetter.getImgUrl('notifications/clash.png'),
+            title: 'Otrzymałeś wyzwanie',
+            description: `Otrzymałeś właśnie wyzwanie od użytkownika: ${notification.name}`,
+          };
         case 'clash_won':
-          return `Wygrałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
+          return {
+            icon: imagesGetter.getImgUrl('notifications/clash_won.png'),
+            title: 'Zakończył się właśnie pojedynek',
+            description: `Wygrałeś właśnie pojedynek z użytkownikiem ${notification.name}`,
+          };
         case 'clash_lost':
-          return `Przegrałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
+          return {
+            icon: imagesGetter.getImgUrl('notifications/clash_lost.png'),
+            title: 'Zakończył się właśnie pojedynek',
+            description: `Przegrałeś właśnie pojedynek z użytkownikiem ${notification.name}`,
+          };
         case 'clash_draw':
-          return `Zremisowałeś właśnie pojedynek z użytkownikiem ${notification.name}`;
+          return {
+            icon: imagesGetter.getImgUrl('notifications/clash_draw.png'),
+            title: 'Zakończył się właśnie pojedynek',
+            description: `Zremisowałeś właśnie pojedynek z użytkownikiem ${notification.name}`,
+          };
         default:
-          return 'Otrzymałeś właśnie powiadomienie. Czym prędzej je przeczytaj';
+          return {
+            icon: imagesGetter.getImgUrl('notifications/default_notification.png'),
+            title: 'Otrzymałeś powiadomienie',
+            description: 'Otrzymałeś właśnie powiadomienie. Czym prędzej je przeczytaj',
+          };
       }
     },
     /* eslint-disable no-param-reassign */
