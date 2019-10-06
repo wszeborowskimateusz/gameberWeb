@@ -7,7 +7,7 @@ export default {
     const url = `${config.apiUrl}/users/status`;
     return requestSender.sendGetRequest(url)
       .then(
-        result => result,
+          result => result,
         () => {
           toasts.errorToast('Niestety nie udało się wczytać statusu użytkownika. Spróbuj odświeżyć stronę.');
           return null;
