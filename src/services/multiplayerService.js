@@ -25,7 +25,7 @@ export default {
     const result = await requestSender.sendPostRequest(url, { userId, categoryId })
       .then(
         (response) => {
-          toasts.errorToast('Pomyślnie wyzwano na pojedynek. Musisz teraz poczekać na akceptację przez przeciwnika');
+          toasts.successToast('Pomyślnie wyzwano na pojedynek. Musisz teraz poczekać na akceptację przez przeciwnika');
           return response;
         },
         () => {

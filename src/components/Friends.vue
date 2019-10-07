@@ -47,7 +47,7 @@
             <h5
               class="modal-title"
               id="multiplayerModalTitle"
-            >Wybierz kategorię, w której chciałbyś się pojedynkować</h5>
+            >Czy na pewno chcesz wyzwać tego użytkownika na pojedynek</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>

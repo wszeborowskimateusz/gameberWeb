@@ -66,17 +66,17 @@
           <p
             class="h3 p-3"
             v-if="categoryName === 'startedFinishedByUs'"
-          >Twój wynik: {{clash.percentage}}%</p>
+          >Twój wynik: {{Math.round(clash.percentage)}}%</p>
           <div v-if="categoryName === 'startedNotFinishedByUs'" class="p-3">
-            <router-link :to="'games/' + clash.categoryId + '/' + clash.clashId">
+            <router-link :to="'multiplayer/' + clash.categoryId + '/' + clash.clashId">
               <button class="btn btn-primary">Rozegraj pojedynek</button>
             </router-link>
           </div>
           <div v-if="categoryName === 'finished'" class="m-2">
             <p class="h4">
-              Twój wynik: {{clash.percentage}}%
+              Twój wynik: {{Math.round(clash.percentage)}}%
               <br />
-              Wynik przeciwnika: {{clash.opponentsPercentage}}%
+              Wynik przeciwnika: {{Math.round(clash.opponentsPercentage)}}%
             </p>
             <p v-if="clash.percentage > clash.opponentsPercentage" class="h3">
               <b>Wygrana</b>

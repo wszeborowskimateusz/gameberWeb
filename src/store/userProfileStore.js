@@ -18,7 +18,7 @@ function formatMessage(rewards, categoryName, isTestCategory, isPassed, isMultip
     dla Ciebie dodatkowe poziomy, które pomogą Ci poznać podstawowe słówka i zwroty z języka angielskiego`;
   }
   if (isMultiplayer === true) {
-    return `Zakończyłeś właśnie swoją część pojedynku. Zdobyłeś <b>${percentage}%</b>.
+    return `Zakończyłeś właśnie swoją część pojedynku. Zdobyłeś <b>${Math.round(percentage)}%</b>.
     Teraz musisz poczekać na ruch przeciwnika`;
   }
   if (isPassed === false) {
@@ -110,17 +110,21 @@ const actions = {
   },
   /* eslint-enable no-unused-vars */
   getCategoryRewards({ dispatch }, {
-    categoryId, categoryName, isTestCategory, isMultiplayer, percentage, clashId,
+    categoryId, categoryName, isTestCategory, isMultiplayer, clashId,
   }) {
     gameControllerService.finishCategory(categoryId, clashId)
       .then(
         (rewards) => {
           bootbox.alert(
             formatMessage(rewards, categoryName, isTestCategory,
-              rewards.isPassed, isMultiplayer, percentage),
+              rewards.isPassed, isMultiplayer, rewards.percentage),
           );
           dispatch('getUserData');
-          router.push('/map');
+          if (clashId) {
+            router.push('/multiplayer');
+          } else {
+            router.push('/map');
+          }
         },
         () => {
           toasts.errorToast('Niestety nie udało się ukończyć kategorii. Wystąpił problem z serwerem');
