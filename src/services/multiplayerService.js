@@ -24,7 +24,10 @@ export default {
     const url = `${config.apiUrl}/multiplayer/challenge`;
     const result = await requestSender.sendPostRequest(url, { userId, categoryId })
       .then(
-        response => response,
+        (response) => {
+          toasts.errorToast('Pomyślnie wyzwano na pojedynek. Musisz teraz poczekać na akceptację przez przeciwnika');
+          return response;
+        },
         () => {
           toasts.errorToast('Niestety nie udało się wyzwać gracza na pojedynek. Spróbuj odświeżyć stronę.');
           return null;

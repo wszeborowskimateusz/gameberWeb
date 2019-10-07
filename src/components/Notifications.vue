@@ -346,12 +346,12 @@ export default {
       this.removeNotification(notification.id);
     },
     acceptClashInvitation(notification) {
-      multiplayerService.acceptClashRequest(notification.data.clashId);
+      multiplayerService.acceptClashRequest(JSON.parse(notification.data).clashId);
       notification.isAlreadyAccepted = true;
       this.$forceUpdate();
     },
     declineClashInvitation(notification) {
-      multiplayerService.declineClashRequest(notification.data.clashId);
+      multiplayerService.declineClashRequest(JSON.parse(notification.data).clashId);
       notification.isAlreadyAccepted = true;
       this.removeNotification(notification.id);
     },
