@@ -1,5 +1,6 @@
 <template>
   <div class="tutorial col-12">
+    <p class="h2 font-weight-bold">Tutorial dla nowych graczy</p>
     <carousel
       class="tutorial__carousel"
       :perPage="1"
