@@ -11,6 +11,7 @@ export default {
   categoryIconsSpacing: 1.5,
   categoryTootltipDyOffset: 0,
   completitionIconPath: 'game_map/categoryCompletitionIcon.png',
+  startedIconPath: 'game_map/categoryInProgressIcon.png',
   completitionIconSize: 2,
   completitionIconDxOffset: 1,
   completitionIconDyOffset: 1,

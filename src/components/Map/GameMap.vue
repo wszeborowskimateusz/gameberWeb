@@ -146,8 +146,11 @@ export default {
 
       this.categories.forEach(c => {
         c.category_icon = imagesGetter.getImageServerUrl(c.category_icon);
-        if (c.is_completed) {
+        if (c.status === "completed") {
           c.completition_icon = imagesGetter.getImgUrl(mapConsts.completitionIconPath);
+        }
+        else if (c.status === "started") {
+          c.completition_icon = imagesGetter.getImgUrl(mapConsts.startedIconPath);
         }
       });
     },
@@ -214,7 +217,6 @@ export default {
       this.drawUnlockedCountries();
 
       this.map.invalidateData();
-      this.map.goHome();
     },
     drawLockedCountries() {
       this.lockedCountriesSeries = new am4maps.MapPolygonSeries();
@@ -284,7 +286,9 @@ export default {
 
       // unlocked country interface
       this.unlockedCountriesInterfaceSeries = new am4maps.MapImageSeries();
-      this.unlockedCountriesInterfaceSeries.hidden = true; // initialy hidden (map zoomed out)
+      if (this.map.zoomLevel < mapConsts.interfaceShowZoomLevel) {
+        this.unlockedCountriesInterfaceSeries.hidden = true;
+      }
       this.unlockedCountriesInterfaceSeries.tooltip.dy = mapConsts.categoryTootltipDyOffset;
 
       const unlockedCountryInterfaceTemplate = this
