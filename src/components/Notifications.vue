@@ -73,7 +73,7 @@
             </div>
             <div class="col-12 col-xl-10">
               <p class="m-0 m-sm-4 my-4 text-left">
-                {{getNotificationInfo(notification).description}}
+                <span v-html="getNotificationInfo(notification).description"></span>
               </p>
               <p class="m-0 m-sm-4 my-4 text-left">
                 Nazwa:
@@ -280,21 +280,28 @@ export default {
       switch (notification.type) {
         case 'friendship_request':
           return {
-            icon: imagesGetter.getImgUrl('notifications/friendship_request.png'),
+            icon: imagesGetter.getImgUrl(
+              'notifications/friendship_request.png',
+            ),
             title: 'Zaproszenie do znajomych',
             description: `Otrzymałeś właśnie zaproszenie do grona znajomych od użytkownika: ${notification.name}`,
           };
         case 'achievement_receive':
           return {
-            icon: imagesGetter.getImgUrl('notifications/achievement_receive.png'),
+            icon: imagesGetter.getImgUrl(
+              'notifications/achievement_receive.png',
+            ),
             title: 'Otrzymałeś osiągnięcie',
             description: `Otrzymałeś właśnie osiągnięcie: ${notification.name}`,
           };
         case 'friendship_accepted':
           return {
-            icon: imagesGetter.getImgUrl('notifications/friendship_accepted.png'),
+            icon: imagesGetter.getImgUrl(
+              'notifications/friendship_accepted.png',
+            ),
             title: 'Zaproszenie zaakceptowane',
-            description: 'Twoje zaproszenie zostało potwierdzone przez użytkownika',
+            description:
+              'Twoje zaproszenie zostało potwierdzone przez użytkownika',
           };
         case 'message_received':
           return {
@@ -308,29 +315,68 @@ export default {
             title: 'Otrzymałeś wyzwanie',
             description: `Otrzymałeś właśnie wyzwanie od użytkownika: ${notification.name}`,
           };
-        case 'clash_won':
+        case 'clash_accepted':
+          return {
+            icon: imagesGetter.getImgUrl('notifications/clash_accepted.png'),
+            title: 'Zaproszenie na wyzwanie zaakceptowane',
+            description: `Twoje zaproszenie na wyzwanie zostało potwierdzone przez użytkownika: ${notification.name}`,
+          };
+        case 'clash_won': {
+          const notificationData = JSON.parse(notification.data);
           return {
             icon: imagesGetter.getImgUrl('notifications/clash_won.png'),
             title: 'Zakończył się właśnie pojedynek',
-            description: `Wygrałeś właśnie pojedynek z użytkownikiem ${notification.name}`,
+            description: `Wygrałeś właśnie pojedynek z użytkownikiem ${
+              notification.name
+            }.
+            <br>Twoje nagrody to:<br>
+            ${
+  notificationData.coinsPrize
+} <img width="25" src="${imagesGetter.getImgUrl(
+  'notifications/coins.png',
+)}"><br>
+            ${
+  notificationData.pointsPrize
+} <img width="25" src="${imagesGetter.getImgUrl(
+  'notifications/experience.png',
+)}">`,
           };
+        }
         case 'clash_lost':
           return {
             icon: imagesGetter.getImgUrl('notifications/clash_lost.png'),
             title: 'Zakończył się właśnie pojedynek',
             description: `Przegrałeś właśnie pojedynek z użytkownikiem ${notification.name}`,
           };
-        case 'clash_draw':
+        case 'clash_draw': {
+          const notificationDataDraw = JSON.parse(notification.data);
           return {
             icon: imagesGetter.getImgUrl('notifications/clash_draw.png'),
             title: 'Zakończył się właśnie pojedynek',
-            description: `Zremisowałeś właśnie pojedynek z użytkownikiem ${notification.name}`,
+            description: `Zremisowałeś właśnie pojedynek z użytkownikiem ${
+              notification.name
+            }.
+            <br>Twoje nagrody to:<br>
+            ${
+  notificationDataDraw.coinsPrize
+} <img width="25" src="${imagesGetter.getImgUrl(
+  'notifications/coins.png',
+)}"><br>
+            ${
+  notificationDataDraw.pointsPrize
+} <img width="25" src="${imagesGetter.getImgUrl(
+  'notifications/experience.png',
+)}">`,
           };
+        }
         default:
           return {
-            icon: imagesGetter.getImgUrl('notifications/default_notification.png'),
+            icon: imagesGetter.getImgUrl(
+              'notifications/default_notification.png',
+            ),
             title: 'Otrzymałeś powiadomienie',
-            description: 'Otrzymałeś właśnie powiadomienie. Czym prędzej je przeczytaj',
+            description:
+              'Otrzymałeś właśnie powiadomienie. Czym prędzej je przeczytaj',
           };
       }
     },
@@ -346,12 +392,16 @@ export default {
       this.removeNotification(notification.id);
     },
     acceptClashInvitation(notification) {
-      multiplayerService.acceptClashRequest(JSON.parse(notification.data).clashId);
+      multiplayerService.acceptClashRequest(
+        JSON.parse(notification.data).clashId,
+      );
       notification.isAlreadyAccepted = true;
       this.$forceUpdate();
     },
     declineClashInvitation(notification) {
-      multiplayerService.declineClashRequest(JSON.parse(notification.data).clashId);
+      multiplayerService.declineClashRequest(
+        JSON.parse(notification.data).clashId,
+      );
       notification.isAlreadyAccepted = true;
       this.removeNotification(notification.id);
     },
