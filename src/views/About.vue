@@ -13,6 +13,13 @@
         <a href="https://github.com/maciejgrzywacz" target="_blank">Maciej Grzywacz</a>
       </li>
     </ul>
+    <div class="m-5">
+      <p>Jeżeli zauważyłeś jakieś błędy możesz je nam zgłosić na adres email:
+        <a href="mailto://gameberproject.bugreport@gmail.com">
+          gameberproject.bugreport@gmail.com
+        </a>
+      </p>
+    </div>
   </div>
 </template>
 
