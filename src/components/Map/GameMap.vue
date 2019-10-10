@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="col-12 p-2 d-flex justify-content-center">
       <cube-spin class="m-2"></cube-spin>
     </div>
-    <div v-else-if="userStatus != null">
+    <div v-if="userStatus != null">
       <div id="mapdiv" :style="userStatus.status !== 'map'
       ? 'width: 0; height: 0;' : 'width: 100vw; height: 100vh;'" ref="chartdiv"></div>
       <div v-if="userStatus.status === 'test'" class="p-5">
@@ -103,7 +103,6 @@ export default {
     async prepareMap() {
       // Download required info from server
       await this.getMapCountries();
-      this.isLoading = false;
       await this.getCategories();
       await this.mapLoaded();
     },
@@ -144,8 +143,15 @@ export default {
           countryCategories[i].latitude = c.centerLatitude + points[i][1];
         }
       });
+
       this.categories.forEach(c => {
-        c.category_icon = `${config.apiUrl}/images/${c.category_icon}`;
+        c.category_icon = imagesGetter.getImageServerUrl(c.category_icon);
+        if (c.status === "completed") {
+          c.completition_icon = imagesGetter.getImgUrl(mapConsts.completitionIconPath);
+        }
+        else if (c.status === "started") {
+          c.completition_icon = imagesGetter.getImgUrl(mapConsts.startedIconPath);
+        }
       });
     },
     async mapLoaded() {
@@ -195,20 +201,25 @@ export default {
         .removeIndex(this.map.series.indexOf(this.unlockedCountriesSeries))
         .dispose();
       this.map.series
+        .removeIndex(this.map.series.indexOf(this.unlockedCountriesInterfaceSeries))
+        .dispose();
+      this.map.series
         .removeIndex(this.map.series.indexOf(this.lockedCountriesSeries))
         .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(this.lockedCountriesInterfaceSeries))
+        .dispose();
+
       await this.getMapCountries();
       await this.getCategories();
+
       this.drawLockedCountries();
       this.drawUnlockedCountries();
-      this.map.invalidateData();
 
-      this.map.goHome();
+      this.map.invalidateData();
     },
     drawLockedCountries() {
-      this.lockedCountriesSeries = this.map.series.push(
-        new am4maps.MapPolygonSeries()
-      );
+      this.lockedCountriesSeries = new am4maps.MapPolygonSeries();
       this.lockedCountriesSeries.useGeodata = true;
       this.lockedCountriesSeries.include = this.lockedCountries.map(c => c.ISO);
       this.lockedCountriesSeries.mapPolygons.template.fill =
@@ -220,9 +231,7 @@ export default {
       );
 
       // locked country interface
-      this.lockedCountriesInterfaceSeries = this.map.series.push(
-        new am4maps.MapImageSeries()
-      );
+      this.lockedCountriesInterfaceSeries = new am4maps.MapImageSeries();
       this.lockedCountriesInterfaceSeries.hidden = true; // initialy hidden (map zoomed out)
 
       const lockedCountryInterfaceTemplate = this.lockedCountriesInterfaceSeries
@@ -234,11 +243,11 @@ export default {
       lockedCountryInterfaceTemplate.events.on("hit", this.lockIconClick, this);
 
       // add lock icon
-      const lockImage = lockedCountryInterfaceTemplate.createChild(am4core.Image);
-      lockImage.href = imagesGetter.getImgUrl('game_map/map_lock_icon.png');
-      lockImage.width = mapConsts.lockIconSize;
-      lockImage.verticalCenter = 'middle';
-      lockImage.horizontalCenter = 'middle';
+      const categoryIcon = lockedCountryInterfaceTemplate.createChild(am4core.Image);
+      categoryIcon.href = imagesGetter.getImgUrl('game_map/map_lock_icon.png');
+      categoryIcon.width = mapConsts.lockIconSize;
+      categoryIcon.verticalCenter = 'middle';
+      categoryIcon.horizontalCenter = 'middle';
 
       // add price label
       const priceLabel = lockedCountryInterfaceTemplate.createChild(
@@ -257,11 +266,12 @@ export default {
         // this.lockedCountriesInterfaceSeries.addData(country);
       });
       this.lockedCountriesInterfaceSeries.addData(this.lockedCountries);
+      
+      this.map.series.push(this.lockedCountriesSeries);
+      this.map.series.push(this.lockedCountriesInterfaceSeries);
     },
     drawUnlockedCountries() {
-      this.unlockedCountriesSeries = this.map.series.push(
-        new am4maps.MapPolygonSeries()
-      );
+      this.unlockedCountriesSeries = new am4maps.MapPolygonSeries();
       this.unlockedCountriesSeries.useGeodata = true;
       this.unlockedCountriesSeries.include = this.unlockedCountries.map(
         c => c.ISO
@@ -275,10 +285,10 @@ export default {
       );
 
       // unlocked country interface
-      this.unlockedCountriesInterfaceSeries = this.map.series.push(
-        new am4maps.MapImageSeries()
-      );
-      this.unlockedCountriesInterfaceSeries.hidden = true; // initialy hidden (map zoomed out)
+      this.unlockedCountriesInterfaceSeries = new am4maps.MapImageSeries();
+      if (this.map.zoomLevel < mapConsts.interfaceShowZoomLevel) {
+        this.unlockedCountriesInterfaceSeries.hidden = true;
+      }
       this.unlockedCountriesInterfaceSeries.tooltip.dy = mapConsts.categoryTootltipDyOffset;
 
       const unlockedCountryInterfaceTemplate = this
@@ -296,18 +306,31 @@ export default {
       unlockedCountryInterfaceTemplate.events.on("out", ev => {
         ev.target.scale = 1.0;
       });
+      
       unlockedCountryInterfaceTemplate.events.on('hit', (ev) => {
         this.$router.push('games/' + ev.target.dataItem.dataContext._id);
       });
 
-      const lockImage = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
-      lockImage.propertyFields.href = 'category_icon';
-      lockImage.width = mapConsts.categoryIconSize;
-      lockImage.height = mapConsts.categoryIconSize;
-      lockImage.verticalCenter = 'middle';
-      lockImage.horizontalCenter = 'middle';
+      const categoryIcon = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
+      categoryIcon.propertyFields.href = 'category_icon';
+      categoryIcon.width = mapConsts.categoryIconSize;
+      categoryIcon.height = mapConsts.categoryIconSize;
+      categoryIcon.verticalCenter = 'middle';
+      categoryIcon.horizontalCenter = 'middle';
 
+      const completedCategoryIcon = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
+      completedCategoryIcon.propertyFields.href = 'completition_icon';
+      completedCategoryIcon.width = mapConsts.completitionIconSize;
+      completedCategoryIcon.height = mapConsts.completitionIconSize;
+      completedCategoryIcon.dx = mapConsts.completitionIconDxOffset;
+      completedCategoryIcon.dy = mapConsts.completitionIconDxOffset;
+      completedCategoryIcon.verticalCenter = 'middle';
+      completedCategoryIcon.horizontalCenter = 'middle';
+      
       this.unlockedCountriesInterfaceSeries.addData(this.categories);
+      
+      this.map.series.push(this.unlockedCountriesSeries);
+      this.map.series.push(this.unlockedCountriesInterfaceSeries);
     },
     countryPolygonClick(ev) {
       // Reset zoom if already zoomed to country

@@ -9,7 +9,7 @@ export default {
       .then(
         (response) => {
           for (let i = 0; i < response.games.length; i += 1) {
-            response.games[i].gameInfo = JSON.parse(response.games[i].gameInfo);
+              response.games[i].gameInfo = JSON.parse(response.games[i].gameInfo);
           }
           if (response.currentGameIndex === undefined) {
             response.currentGameIndex = 0;
