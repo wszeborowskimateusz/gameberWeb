@@ -37,6 +37,28 @@ function formatEverydayAwardsMessage(awards) {
   return message;
 }
 
+function onLoginSuccess(commit, dispatch, user, username) {
+  commit('loginSuccess');
+  if (user.isFirstLoginAttempt) {
+    router.push('/tutorial');
+    toasts.successToast(`Witaj ${username}`);
+  } else {
+    router.push('/');
+    if (username) {
+      toasts.successToast(`Witaj z powrotem ${username}`);
+    } else {
+      toasts.successToast('Witaj z powrotem');
+    }
+  }
+  dispatch('userProfile/getUserData', null, { root: true });
+  dispatch('notificationsStore/getAllNotifications', null, { root: true });
+  dispatch('multiplayerStore/getAllClashes', null, { root: true });
+
+  if (user.everydayAwards != null) {
+    bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
+  }
+}
+
 const userToken = JSON.parse(localStorage.getItem('user'));
 
 const userState = userToken
@@ -48,23 +70,7 @@ const actions = {
     commit('loginInProgress');
     userService.login(username, password)
       .then(
-        (user) => {
-          commit('loginSuccess');
-          if (user.isFirstLoginAttempt) {
-            router.push('/tutorial');
-            toasts.successToast(`Witaj ${username}`);
-          } else {
-            router.push('/');
-            toasts.successToast(`Witaj z powrotem ${username}`);
-          }
-          dispatch('userProfile/getUserData', null, { root: true });
-          dispatch('notificationsStore/getAllNotifications', null, { root: true });
-          dispatch('multiplayerStore/getAllClashes', null, { root: true });
-
-          if (user.everydayAwards != null) {
-            bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
-          }
-        },
+        user => onLoginSuccess(commit, dispatch, user, username),
         (error) => {
           toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
           commit('loginFailure', error);
@@ -74,23 +80,7 @@ const actions = {
   loginWithGoogle({ commit, dispatch }, { authCode }) {
     userService.loginWithGoogle(authCode)
       .then(
-        (user) => {
-          commit('loginSuccess');
-          if (user.isFirstLoginAttempt) {
-            router.push('/tutorial');
-            toasts.successToast('Witaj podróżniku!');
-          } else {
-            router.push('/');
-            toasts.successToast('Witaj z powrotem!');
-          }
-          dispatch('userProfile/getUserData', null, { root: true });
-          dispatch('notificationsStore/getAllNotifications', null, { root: true });
-          dispatch('multiplayerStore/getAllClashes', null, { root: true });
-
-          if (user.everydayAwards != null) {
-            bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
-          }
-        },
+        user => onLoginSuccess(commit, dispatch, user),
         (error) => {
           toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
           commit('loginFailure', error);
