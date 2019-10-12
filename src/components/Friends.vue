@@ -172,6 +172,9 @@ export default {
     this.isLoading = true;
     this.friends = await this.fetchFriends();
     this.clashCategories = await this.fetchClashCategories();
+    if (this.clashCategories != null && this.clashCategories.length > 0) {
+      this.categoryIdToPick = this.clashCategories[0].id;
+    }
     this.isLoading = false;
     this.$forceUpdate();
   },
