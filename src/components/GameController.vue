@@ -181,6 +181,7 @@ export default {
       timer: '',
       ammountOfSecondsTillTheEndOfGame: 10,
       secondsToSolveGame: 10,
+      wasCategoryFinishedNormally: false,
     };
   },
   props: {
@@ -305,6 +306,7 @@ export default {
         }
       } else {
         this.clearTimer();
+        this.wasCategoryFinishedNormally = true;
         this.getCategoryRewards({
           categoryId: this.categoryId,
           categoryName: this.category.categoryName,
@@ -339,13 +341,15 @@ export default {
   },
   beforeDestroy() {
     this.clearTimer();
-    this.getCategoryRewards({
-      categoryId: this.categoryId,
-      categoryName: this.category.categoryName,
-      isTestCategory: this.category.isTestCategory,
-      isMultiplayer: this.isMultiplayer,
-      clashId: this.clashId,
-    });
+    if (this.clashId && !this.wasCategoryFinishedNormally) {
+      this.getCategoryRewards({
+        categoryId: this.categoryId,
+        categoryName: this.category.categoryName,
+        isTestCategory: this.category.isTestCategory,
+        isMultiplayer: this.isMultiplayer,
+        clashId: this.clashId,
+      });
+    }
   },
 };
 </script>
