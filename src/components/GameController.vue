@@ -339,6 +339,13 @@ export default {
   },
   beforeDestroy() {
     this.clearTimer();
+    this.getCategoryRewards({
+      categoryId: this.categoryId,
+      categoryName: this.category.categoryName,
+      isTestCategory: this.category.isTestCategory,
+      isMultiplayer: this.isMultiplayer,
+      clashId: this.clashId,
+    });
   },
 };
 </script>
