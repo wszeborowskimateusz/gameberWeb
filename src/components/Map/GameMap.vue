@@ -197,24 +197,28 @@ export default {
       });
     },
     async redrawMap() {
-      this.map.series
-        .removeIndex(this.map.series.indexOf(this.unlockedCountriesSeries))
-        .dispose();
-      this.map.series
-        .removeIndex(this.map.series.indexOf(this.unlockedCountriesInterfaceSeries))
-        .dispose();
-      this.map.series
-        .removeIndex(this.map.series.indexOf(this.lockedCountriesSeries))
-        .dispose();
-      this.map.series
-        .removeIndex(this.map.series.indexOf(this.lockedCountriesInterfaceSeries))
-        .dispose();
-
+      const unlockedCountriesSeriesIndex = this.map.series.indexOf(this.unlockedCountriesSeries);
+      const unlockedCountriesInterfaceSeriesIndex = this.map.series.indexOf(this.unlockedCountriesInterfaceSeries);
+      const lockedCountriesSeriesIndex = this.map.series.indexOf(this.lockedCountriesSeries);
+      const lockedCountriesInterfaceSeriesIndex = this.map.series.indexOf(this.lockedCountriesInterfaceSeries);
+      
       await this.getMapCountries();
       await this.getCategories();
-
       this.drawLockedCountries();
       this.drawUnlockedCountries();
+
+      this.map.series
+        .removeIndex(this.map.series.indexOf(unlockedCountriesSeriesIndex))
+        .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(unlockedCountriesInterfaceSeriesIndex))
+        .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(lockedCountriesSeriesIndex))
+        .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(lockedCountriesInterfaceSeriesIndex))
+        .dispose();
 
       this.map.invalidateData();
     },
@@ -232,7 +236,9 @@ export default {
 
       // locked country interface
       this.lockedCountriesInterfaceSeries = new am4maps.MapImageSeries();
-      this.lockedCountriesInterfaceSeries.hidden = true; // initialy hidden (map zoomed out)
+      if (this.map.zoomLevel < mapConsts.interfaceShowZoomLevel) {
+        this.lockedCountriesInterfaceSeries.hidden = true;
+      }
 
       const lockedCountryInterfaceTemplate = this.lockedCountriesInterfaceSeries
         .mapImages.template;
