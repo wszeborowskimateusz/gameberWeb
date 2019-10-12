@@ -29,7 +29,7 @@ export default {
           return response;
         },
         () => {
-          toasts.errorToast('Niestety nie udało się wyzwać gracza na pojedynek. Spróbuj odświeżyć stronę.');
+          toasts.errorToast('Niestety nie udało się wyzwać gracza na pojedynek. Może to oznaczać, że pojedynek z danym graczem już trwa.');
           return null;
         },
       );
