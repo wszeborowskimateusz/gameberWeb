@@ -37,6 +37,11 @@ function formatEverydayAwardsMessage(awards) {
   return message;
 }
 
+function formatSeasonalCategoryMessage(seasonalCategoryName, seasonalCategoryImg) {
+  return `Dostępna jest nowe wyzwanie sezonowe<br/><b>${seasonalCategoryName}<b>
+  <br/><img class="img-fluid" src="${seasonalCategoryImg}"/>`;
+}
+
 function onLoginSuccess(commit, dispatch, user, username) {
   commit('loginSuccess');
   if (user.isFirstLoginAttempt) {
@@ -56,6 +61,18 @@ function onLoginSuccess(commit, dispatch, user, username) {
 
   if (user.everydayAwards != null) {
     bootbox.alert(formatEverydayAwardsMessage(user.everydayAwards));
+  }
+  if (user.seasonalCategoryId != null) {
+    bootbox.customConfirmationDialog(
+      formatSeasonalCategoryMessage(user.seasonalCategoryName, user.seasonalCategoryImg),
+      (result) => {
+        if (result) {
+          router.push(`/games/${user.seasonalCategoryId}`);
+        }
+      },
+      'Przyjmuję wyzwania',
+      'Odrzucam wyzwanie',
+    );
   }
 }
 

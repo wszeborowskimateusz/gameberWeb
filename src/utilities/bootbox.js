@@ -48,4 +48,21 @@ export default {
       className: 'modal-open',
     });
   },
+  customConfirmationDialog(message, callback, confirmTitle, declineTitle) {
+    bootbox.confirm({
+      message,
+      callback,
+      backdrop: true,
+      centerVertical: true,
+      className: 'modal-open',
+      buttons: {
+        confirm: {
+          label: `<i class="fa fa-check"></i> ${confirmTitle}`,
+        },
+        cancel: {
+          label: `<i class="fa fa-times"></i> ${declineTitle}`,
+        },
+      },
+    });
+  },
 };
