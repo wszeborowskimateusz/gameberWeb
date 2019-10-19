@@ -3,15 +3,18 @@
     <div class="col-12 col-sm-6 col-md-4 crossword">
       <canvas width="0" height="0" id="crosswordCanvas"></canvas>
       <form>
-        <div class="crosswordRow" v-for="(row, x) in this.game.grid" v-bind:key="x">
+        <div class="crosswordRow" v-for="(row, x) in game.grid" v-bind:key="x">
           <div class="m-1 crosswordElem" v-for="(letter, y) in row" v-bind:key="x + ',' + y">
             <input
               type="text"
+              :id="x + ',' + y"
+              :ref="x + ',' + y"
               :class="[ letter !== null ?
                             'crosswordElemWithLetter'
                             : 'crosswordElemWithoutLetter']"
               :disabled="letter === null"
               minlength="1"
+              @focus="onFocusChange"
               maxlength="1"
               pattern="[A-Za-z]{1}"
               class="crosswordElemInput form-control"
@@ -86,20 +89,52 @@
 
 <script>
 /* eslint-env browser */
+import $ from 'jquery';
 import bootbox from '@/utilities/bootbox';
 import arrayManipulation from '@/utilities/arrayManipulation';
 import imagesGetter from '@/utilities/imagesGetter';
 
-import $ from 'jquery';
 
 export default {
   data() {
     return {
       game: Object,
+      currentFocus: {
+        x: 0,
+        y: 0,
+      },
     };
   },
   props: {
     gameInfo: Object,
+  },
+  created() {
+    document.onkeydown = (event) => {
+      let wasArrowPressed = false;
+      switch (event.keyCode) {
+        case 37:
+          this.moveFocusLeft();
+          wasArrowPressed = true;
+          break;
+        case 38:
+          this.moveFocusUp();
+          wasArrowPressed = true;
+          break;
+        case 39:
+          this.moveFocusRight();
+          wasArrowPressed = true;
+          break;
+        case 40:
+          this.moveFocusDown();
+          wasArrowPressed = true;
+          break;
+        default:
+          break;
+      }
+      if (wasArrowPressed) {
+        this.$refs[`${this.currentFocus.x},${this.currentFocus.y}`][0].focus();
+      }
+    };
   },
   mounted() {
     const canvas = document.getElementById('crosswordCanvas');
@@ -166,6 +201,51 @@ export default {
       if (isCorrect) {
         this.$parent.finishGame('');
       }
+    },
+    moveFocusUp() {
+      for (let i = this.currentFocus.x - 1; i >= 0; i -= 1) {
+        if (
+          this.game.grid[i][this.currentFocus.y] != null
+        ) {
+          this.currentFocus.x = i;
+          break;
+        }
+      }
+    },
+    moveFocusDown() {
+      for (let i = this.currentFocus.x + 1; i < this.game.grid.length; i += 1) {
+        if (
+          this.game.grid[i][this.currentFocus.y] != null
+        ) {
+          this.currentFocus.x = i;
+          break;
+        }
+      }
+    },
+    moveFocusLeft() {
+      for (let i = this.currentFocus.y - 1; i >= 0; i -= 1) {
+        if (
+          this.game.grid[this.currentFocus.x][i] != null
+        ) {
+          this.currentFocus.y = i;
+          break;
+        }
+      }
+    },
+    moveFocusRight() {
+      for (let i = this.currentFocus.y + 1; i < this.game.grid[0].length; i += 1) {
+        if (
+          this.game.grid[this.currentFocus.x][i] != null
+        ) {
+          this.currentFocus.y = i;
+          break;
+        }
+      }
+    },
+    onFocusChange(event) {
+      const focusedInputId = event.target.id;
+      this.currentFocus.x = Number(focusedInputId.split(',')[0]);
+      this.currentFocus.y = Number(focusedInputId.split(',')[1]);
     },
   },
 };

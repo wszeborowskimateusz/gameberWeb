@@ -1,11 +1,12 @@
 <template>
   <div>
     <carousel
-      class="carousel"
+      class="carousel mx-auto"
       :perPage="1"
       :paginationSize="30"
       :paginationColor="'#427696'"
       :paginationActiveColor="'#847D88'"
+      :navigationEnabled="true"
     >
       <slide v-for="(story) in gameInfo.stories" v-bind:key="story.storyEnglish">
         <div class="slide" :style="{'background-image' :
@@ -22,12 +23,13 @@
         </div>
       </slide>
     </carousel>
+
   </div>
 </template>
 
 <style scoped>
 .carousel {
-  width: 100%;
+  width: 90%;
   min-height: 44vh;
 }
 
