@@ -1,4 +1,8 @@
 /*eslint-disable */
+import Es6Promise from 'es6-promise';
+import 'babel-polyfill';
+Es6Promise.polyfill()
+
 import pl from 'vee-validate/dist/locale/pl';
 import Vue from 'vue';
 import VeeValidate, { Validator } from 'vee-validate';

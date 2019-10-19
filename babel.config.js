@@ -1,5 +1,12 @@
 module.exports = {
   presets: [
-    '@vue/app',
+    [
+      '@vue/app',
+      {
+        targets: {
+          ie: '11',
+        },
+      },
+    ],
   ],
 };

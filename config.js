@@ -4,4 +4,5 @@ export default {
   googleClientId: '925243319638-ttosmhr4pf4ada5i37ve5gbsggo5isgm.apps.googleusercontent.com',
   googleSecret: 'dbLc9FzmOLj_uL1ad7jRIeqt',
   requestTimeout: 15000, // in miliseconds
+  mailScriptUrl: 'https://script.google.com/macros/s/AKfycbwQESb-a6aBFJd3Nwax1_dsIbGPDRskfy2pIz4G-w/exec',
 };

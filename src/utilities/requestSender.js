@@ -60,10 +60,10 @@ export default {
     return fetchTimeout(`${url}`, requestOptions, config.requestTimeout, 'TIMEOUT')
       .then(response => handleResponse(response));
   },
-  sendPostRequestWithoutAuthorization(url, body) {
+  sendPostRequestWithoutAuthorization(url, body, contentType = 'application/json') {
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': contentType },
       body: JSON.stringify(body),
     };
 

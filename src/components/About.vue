@@ -13,13 +13,8 @@
         <a href="https://github.com/maciejgrzywacz" target="_blank">Maciej Grzywacz</a>
       </li>
     </ul>
-    <div class="m-5">
-      <p>Jeżeli zauważyłeś jakieś błędy możesz je nam zgłosić na adres email:
-        <a href="mailto://gameberproject.bugreport@gmail.com">
-          gameberproject.bugreport@gmail.com
-        </a>
-      </p>
-    </div>
+    <h2 class="p-3">Skontaktuj się z nami</h2>
+    <ContactForm class="mt-3 mb-2"/>
   </div>
 </template>
 
@@ -28,3 +23,13 @@
   text-align: center;
 }
 </style>
+
+<script>
+import ContactForm from '@/components/ContactForm.vue';
+
+export default {
+  components: {
+    ContactForm,
+  },
+};
+</script>
