@@ -1,5 +1,11 @@
 # client_web
 
+## Photos scaling
+### A standard photo size for horizontal image is 1280x800 jpg format with 80% quality. Vertical images are usually scalled by dividibg it's width and height by 3, jpg format and 80% quality
+```
+https://bulkresizephotos.com/pl
+```
+
 ## Photos
 ```
 https://unsplash.com
