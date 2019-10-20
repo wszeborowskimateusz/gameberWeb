@@ -89,7 +89,7 @@ const actions = {
       .then(
         user => onLoginSuccess(commit, dispatch, user, username),
         (error) => {
-          toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
+          toasts.errorToast(`${error}. Spróbuj ponownie.`);
           commit('loginFailure', error);
         },
       );
@@ -99,7 +99,7 @@ const actions = {
       .then(
         user => onLoginSuccess(commit, dispatch, user),
         (error) => {
-          toasts.errorToast('Wystąpił problem przy próbie logowania. Spróbuj ponownie.');
+          toasts.errorToast(`${error}. Spróbuj ponownie.`);
           commit('loginFailure', error);
         },
       );
@@ -123,7 +123,7 @@ const actions = {
           toasts.successToast('Rejestracja przebiegła pomyślnie. Teraz możesz się zalogować.');
         },
         (error) => {
-          toasts.errorToast('Wystąpił problem przy próbie rejestracji. Spróbuj ponownie.');
+          toasts.errorToast(error);
           commit('registerFailure', error);
         },
       );
