@@ -61,12 +61,24 @@ export default {
       lockedCountries: [],
       categories: [],
       lastSelectedCountry: null,
-      isInterfaceHidden: false,
+      isNormalInterfaceHidden: false,
+      isBigInterfaceHidden: false,
+      isHugeInterfaceHidden: false,
       map: {},
       lockedCountriesSeries: {},
-      lockedCountriesInterfaceSeries: {},
+      lockedCountriesInterfaces:
+      {
+        normalCountrySeries: {},
+        bigCountrySeries: {},
+        hugeCountrySeries: {}
+      },
       unlockedCountriesSeries: {},
-      unlockedCountriesInterfaceSeries: {}
+      unlockedCountriesInterfaces: 
+      {
+        normalCountrySeries: {},
+        bigCountrySeries: {},
+        hugeCountrySeries: {}
+      }
     };
   },
   components: {
@@ -109,6 +121,23 @@ export default {
     async getMapCountries() {
       const allCountries = await mapService.getMapCountries();
 
+      // PRZYPISAINE SKALI
+      allCountries.forEach(c => {        
+        if (c.scale === 3) {
+          Object.assign(c, mapConsts.mapInterface.hugeCountry);
+        }
+        else if (c.scale === 2) {
+          Object.assign(c, mapConsts.mapInterface.bigCountry);
+        }
+        else {
+          c.scale = 1;
+          Object.assign(c, mapConsts.mapInterface.normalCountry);
+        }
+
+        c.price_string = `${c.price}$`;
+      });
+
+
       const allIds = allCountries.map(c => c._id);
 
       const unlockedCountries = await mapService.getUnlockedCountries();
@@ -131,9 +160,18 @@ export default {
           cat => cat.country_id === c._id
         );
 
+        countryCategories.forEach(cat => cat.scale = c.scale);
+
+        let iconSpacing = mapConsts.mapInterface.normalCountry.categoryIconsSpacing;
+        if (c.scale == 2) {
+          iconSpacing = mapConsts.mapInterface.bigCountry.categoryIconsSpacing;
+        }
+        else if (c.scale == 3) {
+          iconSpacing = mapConsts.mapInterface.hugeCountry.categoryIconsSpacing;
+        }
         const points = this.getCirclePoints(
           countryCategories.length,
-          mapConsts.categoryIconsSpacing,
+          iconSpacing,
           0,
           0
         );
@@ -174,33 +212,70 @@ export default {
 
       // map zoom events
       this.map.events.on("zoomlevelchanged", () => {
-        if (
-          this.lockedCountriesInterfaceSeries &&
-          this.unlockedCountriesInterfaceSeries
-        ) {
-          if (
-            this.map.zoomLevel > mapConsts.interfaceShowZoomLevel &&
-            this.isInterfaceHidden
-          ) {
-            this.lockedCountriesInterfaceSeries.show();
-            this.unlockedCountriesInterfaceSeries.show();
-            this.isInterfaceHidden = false;
-          } else if (
-            this.map.zoomLevel <= mapConsts.interfaceShowZoomLevel &&
-            !this.isInterfaceHidden
-          ) {
-            this.lockedCountriesInterfaceSeries.hide();
-            this.unlockedCountriesInterfaceSeries.hide();
-            this.isInterfaceHidden = true;
+        const zoomLevel = this.map.zoomLevel;
+
+        if (this.lockedCountriesInterfaces.normalCountrySeries) {
+          if (zoomLevel > mapConsts.mapInterface.normalCountry.interfaceShowZoomLevel
+            && this.isNormalInterfaceHidden) {
+              this.lockedCountriesInterfaces.normalCountrySeries.show();
+              if (this.unlockedCountriesInterfaces.normalCountrySeries) {
+                this.unlockedCountriesInterfaces.normalCountrySeries.show();
+              }
+              this.isNormalInterfaceHidden = false;
+          }
+          else if (zoomLevel < mapConsts.mapInterface.normalCountry.interfaceShowZoomLevel
+            && !this.isNormalInterfaceHidden){
+              this.lockedCountriesInterfaces.normalCountrySeries.hide();
+              if (this.unlockedCountriesInterfaces.normalCountrySeries) {
+                this.unlockedCountriesInterfaces.normalCountrySeries.hide();
+              }
+              this.isNormalInterfaceHidden = true;
+          }
+        }
+
+        if (this.lockedCountriesInterfaces.bigCountrySeries) {
+          if (zoomLevel > mapConsts.mapInterface.bigCountry.interfaceShowZoomLevel
+            && this.isBigInterfaceHidden) {
+              this.lockedCountriesInterfaces.bigCountrySeries.show();
+              if (this.unlockedCountriesInterfaces.bigCountrySeries) {
+                this.unlockedCountriesInterfaces.bigCountrySeries.show();
+              }
+              this.isBigInterfaceHidden = false;
+          }
+          else if (zoomLevel < mapConsts.mapInterface.bigCountry.interfaceShowZoomLevel
+            && !this.isBigInterfaceHidden){
+              this.lockedCountriesInterfaces.bigCountrySeries.hide();
+              if (this.unlockedCountriesInterfaces.bigCountrySeries) {
+                this.unlockedCountriesInterfaces.bigCountrySeries.hide();
+              }
+              this.isBigInterfaceHidden = true;
+          }
+        }
+
+        if (this.lockedCountriesInterfaces.hugeCountrySeries) {
+          if (zoomLevel > mapConsts.mapInterface.hugeCountry.interfaceShowZoomLevel
+            && this.isHugeInterfaceHidden) {
+              this.lockedCountriesInterfaces.hugeCountrySeries.show();
+              this.isHugeInterfaceHidden = false;
+          }
+          else if (zoomLevel < mapConsts.mapInterface.hugeCountry.interfaceShowZoomLevel
+            && !this.isHugeInterfaceHidden){
+              this.lockedCountriesInterfaces.hugeCountrySeries.hide();
+              this.isHugeInterfaceHidden = true;
           }
         }
       });
     },
     async redrawMap() {
       const unlockedCountriesSeriesIndex = this.map.series.indexOf(this.unlockedCountriesSeries);
-      const unlockedCountriesInterfaceSeriesIndex = this.map.series.indexOf(this.unlockedCountriesInterfaceSeries);
+      const unlockedCountriesInterfaceNormalIndex = this.map.series.indexOf(this.unlockedCountriesInterfaces.normalCountrySeries);
+      const unlockedCountriesInterfaceBigIndex = this.map.series.indexOf(this.unlockedCountriesInterfaces.bigCountrySeries);
+      const unlockedCountriesInterfaceHugeIndex = this.map.series.indexOf(this.unlockedCountriesInterfaces.hugeCountrySeries);
+
       const lockedCountriesSeriesIndex = this.map.series.indexOf(this.lockedCountriesSeries);
-      const lockedCountriesInterfaceSeriesIndex = this.map.series.indexOf(this.lockedCountriesInterfaceSeries);
+      const lockedCountriesInterfacenNormalIndex = this.map.series.indexOf(this.lockedCountriesInterfaces.normalCountrySeries);
+      const lockedCountriesInterfacenBigIndex = this.map.series.indexOf(this.lockedCountriesInterfaces.bigCountrySeries);
+      const lockedCountriesInterfacenHugeIndex = this.map.series.indexOf(this.lockedCountriesInterfaces.hugeCountrySeries);
       
       await this.getMapCountries();
       await this.getCategories();
@@ -213,11 +288,28 @@ export default {
       this.map.series
         .removeIndex(this.map.series.indexOf(unlockedCountriesInterfaceSeriesIndex))
         .dispose();
+
       this.map.series
         .removeIndex(this.map.series.indexOf(lockedCountriesSeriesIndex))
         .dispose();
       this.map.series
-        .removeIndex(this.map.series.indexOf(lockedCountriesInterfaceSeriesIndex))
+        .removeIndex(this.map.series.indexOf(lockedCountriesInterfacenNormalIndex))
+        .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(lockedCountriesInterfacenBigIndex))
+        .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(lockedCountriesInterfacenHugeIndex))
+        .dispose();
+
+      this.map.series
+        .removeIndex(this.map.series.indexOf(unlockedCountriesInterfaceNormalIndex))
+        .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(unlockedCountriesInterfaceBigIndex))
+        .dispose();
+      this.map.series
+        .removeIndex(this.map.series.indexOf(unlockedCountriesInterfaceHugeIndex))
         .dispose();
 
       this.map.invalidateData();
@@ -234,47 +326,87 @@ export default {
         this
       );
 
-      // locked country interface
-      this.lockedCountriesInterfaceSeries = new am4maps.MapImageSeries();
-      if (this.map.zoomLevel < mapConsts.interfaceShowZoomLevel) {
-        this.lockedCountriesInterfaceSeries.hidden = true;
+      // locked country interfaces
+      // normal country
+      this.lockedCountriesInterfaces.normalCountrySeries = new am4maps.MapImageSeries();
+      if (this.map.zoomLevel < mapConsts.mapInterface.normalCountry.interfaceShowZoomLevel) {
+        this.lockedCountriesInterfaces.normalCountrySeries.hidden = true;
       }
 
-      const lockedCountryInterfaceTemplate = this.lockedCountriesInterfaceSeries
-        .mapImages.template;
-      lockedCountryInterfaceTemplate.propertyFields.latitude = "centerLatitude";
-      lockedCountryInterfaceTemplate.propertyFields.longitude =
-        "centerLongitude";
-      lockedCountryInterfaceTemplate.contextMenuDisabled = true;
-      lockedCountryInterfaceTemplate.events.on("hit", this.lockIconClick, this);
+      // big country
+      this.lockedCountriesInterfaces.bigCountrySeries = new am4maps.MapImageSeries();
+      if (this.map.zoomLevel < mapConsts.mapInterface.bigCountry.interfaceShowZoomLevel) {
+        this.lockedCountriesInterfaces.bigCountrySeries.hidden = true;
+      }
 
-      // add lock icon
-      const categoryIcon = lockedCountryInterfaceTemplate.createChild(am4core.Image);
-      categoryIcon.href = imagesGetter.getImgUrl('game_map/map_lock_icon.png');
-      categoryIcon.width = mapConsts.lockIconSize;
-      categoryIcon.verticalCenter = 'middle';
-      categoryIcon.horizontalCenter = 'middle';
+      // huge country
+      this.lockedCountriesInterfaces.hugeCountrySeries = new am4maps.MapImageSeries();
+      if (this.map.zoomLevel < mapConsts.mapInterface.hugeCountry.interfaceShowZoomLevel) {
+        this.lockedCountriesInterfaces.hugeCountrySeries.hidden = true;
+      }
 
-      // add price label
-      const priceLabel = lockedCountryInterfaceTemplate.createChild(
-        am4core.Label
-      );
-      priceLabel.propertyFields.text = "price_string";
-      priceLabel.fontSize = mapConsts.labelFontSize;
-      priceLabel.verticalCenter = "middle";
-      priceLabel.horizontalCenter = "middle";
-      priceLabel.dx = mapConsts.priceLabelDxOffset;
-      priceLabel.dy = mapConsts.priceLabelDyOffset;
-
-      // add data to locked countries interface
-      this.lockedCountries.forEach(country => {
-        country.price_string = `${country.price}$`;
-        // this.lockedCountriesInterfaceSeries.addData(country);
-      });
-      this.lockedCountriesInterfaceSeries.addData(this.lockedCountries);
+      for (var series in this.lockedCountriesInterfaces)
+      {
+        const lockedCountryInterfaceTemplate = this.lockedCountriesInterfaces[series].mapImages.template;
+        lockedCountryInterfaceTemplate.propertyFields.latitude = "centerLatitude";
+        lockedCountryInterfaceTemplate.propertyFields.longitude = "centerLongitude";
+        lockedCountryInterfaceTemplate.contextMenuDisabled = true;
+        lockedCountryInterfaceTemplate.events.on("hit", this.lockIconClick, this);
       
+        // add lock icon
+        const categoryIcon = lockedCountryInterfaceTemplate.createChild(am4core.Image);
+        categoryIcon.href = imagesGetter.getImgUrl('game_map/map_lock_icon.png');
+        categoryIcon.verticalCenter = 'middle';
+        categoryIcon.horizontalCenter = 'middle';
+      
+        // add price label
+        const priceLabel = lockedCountryInterfaceTemplate.createChild(
+          am4core.Label
+        );
+        priceLabel.propertyFields.text = "price_string";
+        priceLabel.verticalCenter = "middle";
+        priceLabel.horizontalCenter = "middle";
+
+        if (series === 'normalCountrySeries')
+        {
+          categoryIcon.width = mapConsts.mapInterface.normalCountry.lockIconSize;
+          categoryIcon.height = mapConsts.mapInterface.normalCountry.lockIconSize;
+
+
+          priceLabel.fontSize = mapConsts.mapInterface.normalCountry.labelFontSize;
+          priceLabel.dx = mapConsts.mapInterface.normalCountry.priceLabelDxOffset;
+          priceLabel.dy = mapConsts.mapInterface.normalCountry.priceLabelDyOffset;
+        }
+        else if (series === 'bigCountrySeries')
+        {
+          categoryIcon.width = mapConsts.mapInterface.bigCountry.lockIconSize;
+          categoryIcon.height = mapConsts.mapInterface.bigCountry.lockIconSize;
+
+          priceLabel.fontSize = mapConsts.mapInterface.bigCountry.labelFontSize;
+          priceLabel.dx = mapConsts.mapInterface.bigCountry.priceLabelDxOffset;
+          priceLabel.dy = mapConsts.mapInterface.bigCountry.priceLabelDyOffset;
+        }
+        else if (series === 'hugeCountrySeries')
+        {
+          categoryIcon.width = mapConsts.mapInterface.hugeCountry.lockIconSize;
+          categoryIcon.height = mapConsts.mapInterface.hugeCountry.lockIconSize;
+
+          priceLabel.fontSize = mapConsts.mapInterface.hugeCountry.labelFontSize;
+          priceLabel.dx = mapConsts.mapInterface.hugeCountry.priceLabelDxOffset;
+          priceLabel.dy = mapConsts.mapInterface.hugeCountry.priceLabelDyOffset;
+        }
+      
+
+      }
+
+      this.lockedCountriesInterfaces.normalCountrySeries.addData(this.lockedCountries.filter(c => c.scale == null || c.scale === 1));
+      this.lockedCountriesInterfaces.bigCountrySeries.addData(this.lockedCountries.filter(c => c.scale === 2));
+      this.lockedCountriesInterfaces.hugeCountrySeries.addData(this.lockedCountries.filter(c => c.scale === 3));
+
       this.map.series.push(this.lockedCountriesSeries);
-      this.map.series.push(this.lockedCountriesInterfaceSeries);
+      this.map.series.push(this.lockedCountriesInterfaces.normalCountrySeries);
+      this.map.series.push(this.lockedCountriesInterfaces.bigCountrySeries);
+      this.map.series.push(this.lockedCountriesInterfaces.hugeCountrySeries);
     },
     drawUnlockedCountries() {
       this.unlockedCountriesSeries = new am4maps.MapPolygonSeries();
@@ -290,53 +422,97 @@ export default {
         this
       );
 
-      // unlocked country interface
-      this.unlockedCountriesInterfaceSeries = new am4maps.MapImageSeries();
-      if (this.map.zoomLevel < mapConsts.interfaceShowZoomLevel) {
-        this.unlockedCountriesInterfaceSeries.hidden = true;
+      // Interface
+      this.unlockedCountriesInterfaces.normalCountrySeries = new am4maps.MapImageSeries();
+      if (this.map.zoomLevel < mapConsts.mapInterface.normalCountry.interfaceShowZoomLevel) {
+        this.unlockedCountriesInterfaces.normalCountrySeries.hidden = true;
       }
-      this.unlockedCountriesInterfaceSeries.tooltip.dy = mapConsts.categoryTootltipDyOffset;
+      this.unlockedCountriesInterfaces.normalCountrySeries.tooltip.dy = mapConsts.mapInterface.normalCountry.categoryTootltipDyOffset;
 
-      const unlockedCountryInterfaceTemplate = this
-        .unlockedCountriesInterfaceSeries.mapImages.template;
-      unlockedCountryInterfaceTemplate.propertyFields.latitude = "latitude";
-      unlockedCountryInterfaceTemplate.propertyFields.longitude = "longitude";
-      unlockedCountryInterfaceTemplate.contextMenuDisabled = true;
-      unlockedCountryInterfaceTemplate.propertyFields.tooltipText =
-        "category_name";
+      this.unlockedCountriesInterfaces.bigCountrySeries = new am4maps.MapImageSeries();
+      if (this.map.zoomLevel < mapConsts.mapInterface.bigCountry.interfaceShowZoomLevel) {
+        this.unlockedCountriesInterfaces.bigCountrySeries.hidden = true;
+      }
+      this.unlockedCountriesInterfaces.bigCountrySeries.tooltip.dy = mapConsts.mapInterface.bigCountry.categoryTootltipDyOffset;
 
-      // category icon mouse events
-      unlockedCountryInterfaceTemplate.events.on("over", ev => {
-        ev.target.scale = 1.2;
-      });
-      unlockedCountryInterfaceTemplate.events.on("out", ev => {
-        ev.target.scale = 1.0;
-      });
+      this.unlockedCountriesInterfaces.hugeCountrySeries = new am4maps.MapImageSeries();
+      if (this.map.zoomLevel < mapConsts.mapInterface.hugeCountry.interfaceShowZoomLevel) {
+        this.unlockedCountriesInterfaces.hugeCountrySeries.hidden = true;
+      }
+      this.unlockedCountriesInterfaces.hugeCountrySeries.tooltip.dy = mapConsts.mapInterface.hugeCountry.categoryTootltipDyOffset;
+
+      for (let series in this.unlockedCountriesInterfaces) {
+        const unlockedCountryInterfaceTemplate = this.unlockedCountriesInterfaces[series].mapImages.template;
+        unlockedCountryInterfaceTemplate.propertyFields.latitude = "latitude";
+        unlockedCountryInterfaceTemplate.propertyFields.longitude = "longitude";
+        unlockedCountryInterfaceTemplate.contextMenuDisabled = true;
+        unlockedCountryInterfaceTemplate.propertyFields.tooltipText = "category_name";
+
+        // category icon mouse events
+        unlockedCountryInterfaceTemplate.events.on("over", ev => {
+          ev.target.scale = 1.2;
+        });
+        unlockedCountryInterfaceTemplate.events.on("out", ev => {
+          ev.target.scale = 1.0;
+        });
+        
+        unlockedCountryInterfaceTemplate.events.on('hit', (ev) => {
+          this.$router.push('games/' + ev.target.dataItem.dataContext._id);
+        });
+
+        const categoryIcon = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
+        categoryIcon.propertyFields.href = 'category_icon';
+        categoryIcon.verticalCenter = 'middle';
+        categoryIcon.horizontalCenter = 'middle';
+
+        const completedCategoryIcon = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
+        completedCategoryIcon.propertyFields.href = 'completition_icon';
+        completedCategoryIcon.verticalCenter = 'middle';
+        completedCategoryIcon.horizontalCenter = 'middle';
+
+        if(series === 'normalCountrySeries')
+        {
+          categoryIcon.width = mapConsts.mapInterface.normalCountry.categoryIconSize;
+          categoryIcon.height = mapConsts.mapInterface.normalCountry.categoryIconSize;
+          
+          completedCategoryIcon.width = mapConsts.mapInterface.normalCountry.completitionIconSize;
+          completedCategoryIcon.height = mapConsts.mapInterface.normalCountry.completitionIconSize;
+          completedCategoryIcon.dx = mapConsts.mapInterface.normalCountry.completitionIconDxOffset;
+          completedCategoryIcon.dy = mapConsts.mapInterface.normalCountry.completitionIconDxOffset;
+        }
+        else if(series == 'bigCountrySeries')
+        {
+          categoryIcon.width = mapConsts.mapInterface.bigCountry.categoryIconSize;
+          categoryIcon.height = mapConsts.mapInterface.bigCountry.categoryIconSize;
+          
+          completedCategoryIcon.width = mapConsts.mapInterface.bigCountry.completitionIconSize;
+          completedCategoryIcon.height = mapConsts.mapInterface.bigCountry.completitionIconSize;
+          completedCategoryIcon.dx = mapConsts.mapInterface.bigCountry.completitionIconDxOffset;
+          completedCategoryIcon.dy = mapConsts.mapInterface.bigCountry.completitionIconDxOffset;
+        }
+        else if(series == 'hugeCountrySeries')
+        {
+          categoryIcon.width = mapConsts.mapInterface.hugeCountry.categoryIconSize;
+          categoryIcon.height = mapConsts.mapInterface.hugeCountry.categoryIconSize;
+          
+          completedCategoryIcon.width = mapConsts.mapInterface.hugeCountry.completitionIconSize;
+          completedCategoryIcon.height = mapConsts.mapInterface.hugeCountry.completitionIconSize;
+          completedCategoryIcon.dx = mapConsts.mapInterface.hugeCountry.completitionIconDxOffset;
+          completedCategoryIcon.dy = mapConsts.mapInterface.hugeCountry.completitionIconDxOffset;
+        }
+        
+
+      }
       
-      unlockedCountryInterfaceTemplate.events.on('hit', (ev) => {
-        this.$router.push('games/' + ev.target.dataItem.dataContext._id);
-      });
+      this.unlockedCountriesInterfaces.normalCountrySeries.addData(this.categories.filter(c => c.scale == 1));
+      this.unlockedCountriesInterfaces.bigCountrySeries.addData(this.categories.filter(c => c.scale == 2));
+      this.unlockedCountriesInterfaces.hugeCountrySeries.addData(this.categories.filter(c => c.scale == 3));
 
-      const categoryIcon = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
-      categoryIcon.propertyFields.href = 'category_icon';
-      categoryIcon.width = mapConsts.categoryIconSize;
-      categoryIcon.height = mapConsts.categoryIconSize;
-      categoryIcon.verticalCenter = 'middle';
-      categoryIcon.horizontalCenter = 'middle';
-
-      const completedCategoryIcon = unlockedCountryInterfaceTemplate.createChild(am4core.Image);
-      completedCategoryIcon.propertyFields.href = 'completition_icon';
-      completedCategoryIcon.width = mapConsts.completitionIconSize;
-      completedCategoryIcon.height = mapConsts.completitionIconSize;
-      completedCategoryIcon.dx = mapConsts.completitionIconDxOffset;
-      completedCategoryIcon.dy = mapConsts.completitionIconDxOffset;
-      completedCategoryIcon.verticalCenter = 'middle';
-      completedCategoryIcon.horizontalCenter = 'middle';
-      
-      this.unlockedCountriesInterfaceSeries.addData(this.categories);
       
       this.map.series.push(this.unlockedCountriesSeries);
-      this.map.series.push(this.unlockedCountriesInterfaceSeries);
+      this.map.series.push(this.unlockedCountriesInterfaces.normalCountrySeries);
+      this.map.series.push(this.unlockedCountriesInterfaces.bigCountrySeries);
+      this.map.series.push(this.unlockedCountriesInterfaces.hugeCountrySeries);
     },
     countryPolygonClick(ev) {
       // Reset zoom if already zoomed to country
