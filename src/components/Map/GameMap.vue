@@ -373,7 +373,7 @@ export default {
           categoryIcon.height = mapConsts.mapInterface.normalCountry.lockIconSize;
 
 
-          priceLabel.fontSize = mapConsts.mapInterface.normalCountry.labelFontSize;
+          priceLabel.fontSize = mapConsts.mapInterface.normalCountry.lockLabelFontSize;
           priceLabel.dx = mapConsts.mapInterface.normalCountry.priceLabelDxOffset;
           priceLabel.dy = mapConsts.mapInterface.normalCountry.priceLabelDyOffset;
         }
@@ -382,7 +382,7 @@ export default {
           categoryIcon.width = mapConsts.mapInterface.bigCountry.lockIconSize;
           categoryIcon.height = mapConsts.mapInterface.bigCountry.lockIconSize;
 
-          priceLabel.fontSize = mapConsts.mapInterface.bigCountry.labelFontSize;
+          priceLabel.fontSize = mapConsts.mapInterface.bigCountry.lockLabelFontSize;
           priceLabel.dx = mapConsts.mapInterface.bigCountry.priceLabelDxOffset;
           priceLabel.dy = mapConsts.mapInterface.bigCountry.priceLabelDyOffset;
         }
@@ -391,7 +391,7 @@ export default {
           categoryIcon.width = mapConsts.mapInterface.hugeCountry.lockIconSize;
           categoryIcon.height = mapConsts.mapInterface.hugeCountry.lockIconSize;
 
-          priceLabel.fontSize = mapConsts.mapInterface.hugeCountry.labelFontSize;
+          priceLabel.fontSize = mapConsts.mapInterface.hugeCountry.lockLabelFontSize;
           priceLabel.dx = mapConsts.mapInterface.hugeCountry.priceLabelDxOffset;
           priceLabel.dy = mapConsts.mapInterface.hugeCountry.priceLabelDyOffset;
         }
@@ -470,6 +470,12 @@ export default {
         completedCategoryIcon.verticalCenter = 'middle';
         completedCategoryIcon.horizontalCenter = 'middle';
 
+        // add category name label
+        const categoryLabel = unlockedCountryInterfaceTemplate.createChild(am4core.Label);
+        categoryLabel.propertyFields.text = "category_name";
+        categoryLabel.verticalCenter = "middle";
+        categoryLabel.horizontalCenter = "middle";
+
         if(series === 'normalCountrySeries')
         {
           categoryIcon.width = mapConsts.mapInterface.normalCountry.categoryIconSize;
@@ -479,6 +485,10 @@ export default {
           completedCategoryIcon.height = mapConsts.mapInterface.normalCountry.completitionIconSize;
           completedCategoryIcon.dx = mapConsts.mapInterface.normalCountry.completitionIconDxOffset;
           completedCategoryIcon.dy = mapConsts.mapInterface.normalCountry.completitionIconDxOffset;
+
+          categoryLabel.fontSize = mapConsts.mapInterface.normalCountry.categoryLabelFontSize;
+          categoryLabel.dx = mapConsts.mapInterface.normalCountry.categoryLabelDxOffset;
+          categoryLabel.dy = mapConsts.mapInterface.normalCountry.categoryLabelDyOffset;
         }
         else if(series == 'bigCountrySeries')
         {
@@ -489,6 +499,10 @@ export default {
           completedCategoryIcon.height = mapConsts.mapInterface.bigCountry.completitionIconSize;
           completedCategoryIcon.dx = mapConsts.mapInterface.bigCountry.completitionIconDxOffset;
           completedCategoryIcon.dy = mapConsts.mapInterface.bigCountry.completitionIconDxOffset;
+
+          categoryLabel.fontSize = mapConsts.mapInterface.bigCountry.categoryLabelFontSize;
+          categoryLabel.dx = mapConsts.mapInterface.bigCountry.categoryLabelDxOffset;
+          categoryLabel.dy = mapConsts.mapInterface.bigCountry.categoryLabelDyOffset;
         }
         else if(series == 'hugeCountrySeries')
         {
@@ -499,6 +513,10 @@ export default {
           completedCategoryIcon.height = mapConsts.mapInterface.hugeCountry.completitionIconSize;
           completedCategoryIcon.dx = mapConsts.mapInterface.hugeCountry.completitionIconDxOffset;
           completedCategoryIcon.dy = mapConsts.mapInterface.hugeCountry.completitionIconDxOffset;
+
+          categoryLabel.fontSize = mapConsts.mapInterface.hugeCountry.categoryLabelFontSize;
+          categoryLabel.dx = mapConsts.mapInterface.hugeCountry.categoryLabelDxOffset;
+          categoryLabel.dy = mapConsts.mapInterface.hugeCountry.categoryLabelDyOffset;
         }
         
 
