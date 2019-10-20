@@ -94,7 +94,7 @@ const actions = {
         },
       );
   },
-  loginWithGoogle({ commit, dispatch }, { authCode }) {
+  loginWithGoogle({ commit, dispatch }, authCode) {
     userService.loginWithGoogle(authCode)
       .then(
         user => onLoginSuccess(commit, dispatch, user),
