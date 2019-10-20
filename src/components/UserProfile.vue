@@ -35,7 +35,7 @@
               v-bind:key="achievement.name"
               :title="achievement.name"
             >
-              <img :src="achievement.src" />
+              <img class="achievement__image" :src="achievement.src" />
             </a>
             <br />
             <button
@@ -179,6 +179,11 @@
   border-radius: 50%;
   height: auto;
   width: 100%;
+}
+
+.achievement__image {
+  width: 100px;
+  height: 100px;
 }
 
 .image_badge {
