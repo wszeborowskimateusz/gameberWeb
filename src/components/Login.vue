@@ -32,7 +32,7 @@
       </div>
     </form>
     <div class="m-4">
-    Nie masz jeszcze konta ? Utwórz je poprzez portale społecznościowe, bądź załóż je
+    Nie masz jeszcze konta ? Utwórz je poprzez Google, bądź załóż je
     <router-link to="/register">tutaj</router-link>
     </div>
     <div class="row">
