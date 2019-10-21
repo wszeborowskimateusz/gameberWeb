@@ -267,7 +267,10 @@ export default {
           currentGame.isFinished = true;
           this.nextGameAction();
         } else if (serverResponse.isCorrect === true) {
-          if (shouldShowModal === true) bootbox.correctAnswerAlert();
+          if (shouldShowModal === true
+          && this.category.currentGameIndex < this.category.games.length - 1) {
+            bootbox.correctAnswerAlert();
+          }
           currentGame.isFinished = true;
           this.nextGameAction();
         } else if (
