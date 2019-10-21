@@ -95,6 +95,7 @@ const actions = {
       );
   },
   loginWithGoogle({ commit, dispatch }, authCode) {
+    commit('loginInProgress');
     userService.loginWithGoogle(authCode)
       .then(
         user => onLoginSuccess(commit, dispatch, user),

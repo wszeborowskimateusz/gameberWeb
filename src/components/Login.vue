@@ -43,7 +43,7 @@
             alt="Google &quot;G&quot; Logo"
             :src="imagesGetter.getImgUrl('login/google_logo.png')"
           />
-          Login with Google
+          Zaloguj się z Google
         </button>
       </div>
     </div>
@@ -59,7 +59,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import CubeSpin from 'vue-loading-spinner/src/components/Circle8.vue';
-import config from '../../config';
 import imagesGetter from '@/utilities/imagesGetter';
 
 export default {
@@ -70,8 +69,6 @@ export default {
       username: '',
       password: '',
       submitted: false,
-      button_pressed: false,
-      fb_app_id: config.facebookAppId,
     };
   },
   components: {
@@ -95,9 +92,7 @@ export default {
         .then((authCode) => {
           this.loginWithGoogle(authCode);
         })
-        .catch((error) => {
-          console.log(`failed: ${error}`);
-        });
+        .catch(() => {});
     },
   },
 };
