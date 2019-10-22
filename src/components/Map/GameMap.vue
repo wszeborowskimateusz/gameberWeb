@@ -121,7 +121,7 @@ export default {
     async getMapCountries() {
       const allCountries = await mapService.getMapCountries();
 
-      // PRZYPISAINE SKALI
+      // Adding scale
       allCountries.forEach(c => {        
         if (c.scale === 3) {
           Object.assign(c, mapConsts.mapInterface.hugeCountry);
