@@ -194,6 +194,10 @@ body {
   border-right: 1px solid #847d88;
 }
 
+.nav-item {
+  white-space: nowrap;
+}
+
 @media (max-width: 1200px) {
   .navbar .divider-vertical {
     display: none;
