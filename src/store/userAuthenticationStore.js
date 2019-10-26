@@ -70,7 +70,7 @@ function onLoginSuccess(commit, dispatch, user, username) {
           router.push(`/games/${user.seasonalCategoryId}`);
         }
       },
-      'Przyjmuję wyzwania',
+      'Przyjmuję wyzwanie',
       'Odrzucam wyzwanie',
     );
   }
