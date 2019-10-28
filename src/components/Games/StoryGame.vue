@@ -62,6 +62,12 @@
 }
 </style>
 
+<style>
+.VueCarousel-navigation-button {
+  font-size: 3em;
+}
+</style>
+
 <script>
 import { Carousel, Slide } from 'vue-carousel';
 
