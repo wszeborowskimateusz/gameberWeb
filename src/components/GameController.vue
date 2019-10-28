@@ -89,7 +89,7 @@
 
 .multiplayer__timer {
   font-size: 3em;
-  color: #fff;
+  color: #000;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.5);
 }
