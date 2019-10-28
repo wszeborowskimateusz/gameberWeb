@@ -1,10 +1,10 @@
 <template>
-  <div class="row no-gutters">
-    <div class="col-12 col-sm-6 col-md-4 crossword">
+  <div class="row">
+    <div class="col-md-10 col-lg-6 mt-5 mt-md-0 crossword">
       <canvas width="0" height="0" id="crosswordCanvas"></canvas>
       <form>
-        <div class="crosswordRow" v-for="(row, x) in game.grid" v-bind:key="x">
-          <div class="m-1 crosswordElem" v-for="(letter, y) in row" v-bind:key="x + ',' + y">
+        <div class="crosswordRow row" v-for="(row, x) in game.grid" v-bind:key="x">
+          <div class="m-1 crosswordElem col-1" v-for="(letter, y) in row" v-bind:key="x + ',' + y">
             <input
               type="text"
               :id="x + ',' + y"
@@ -27,7 +27,7 @@
         </div>
       </form>
     </div>
-    <div class="col-12 col-md-4 col-md-6 p-3">
+    <div class="col-md-12 col-lg-6 mt-5 p-3">
       <div class="m-2 text-center crosswordAnchors inline-block">
         <span class="h4 text-center">Pionowo</span>
         <ul class="text-left list-group" id="crosswordAnchorsAcross"></ul>
@@ -37,7 +37,7 @@
         <ul class="text-left list-group" id="crosswordAnchorsDown"></ul>
       </div>
     </div>
-    <div class="col-2">
+    <div class="check_answer__button">
       <button type="button" class="btn btn-primary" v-on:click="checkAnswer()">
         Sprawdź odpowiedź
       </button>
@@ -46,6 +46,10 @@
 </template>
 
 <style scoped>
+.crossword {
+  position: relative;
+}
+
 .crosswordElem {
   width: 2vw;
   height: 2vw;
@@ -84,6 +88,11 @@
 
 .inline-block {
   display: inline-block;
+}
+
+.check_answer__button {
+  position: absolute;
+  right: 5px;
 }
 </style>
 
