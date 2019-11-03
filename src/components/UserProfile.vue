@@ -93,7 +93,7 @@
           <div class="progress">
             <div
               class="progress-bar dynamic progress-bar-animated progress-bar-striped bg-info"
-              :style="{ width: user.experiencePoints + '%' }"
+              :style="{ width: (user.experiencePoints / user.pointsToAchieveNewLevel) * 100 + '%' }"
               role="progressbar"
               :aria-valuenow="user.experiencePoints"
               aria-valuemin="0"
