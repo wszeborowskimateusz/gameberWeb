@@ -2,7 +2,7 @@
     <div class="wordSearch row">
       <p class="h4 col-12">Wykreśl podane niżej słowa</p>
       <p class="h6 col-12">Po każdym wykreślonym słowie wciśnij przycisk "Sprawdź odpowiedź"</p>
-        <div class="puzzle col-12 col-sm-8 col-md-6">
+        <div class="puzzle col-12 col-sm-12 col-md-6">
             <div v-for="(row, x) in puzzle.grid" v-bind:key="row.length + x" >
                 <button class="puzzleButton btn btn-primary m-1"
                     v-on:click="pressLetter($event)"
@@ -12,16 +12,10 @@
                 </button>
             </div>
         </div>
-        <div class="col-12 col-sm-4 col-md-3 my-2 my-sm-0">
+        <div class="col-12 col-sm-12 col-md-3 my-2 my-sm-0">
             <div class="word border m-3" v-for="word in gameInfo.words" v-bind:key="word">
                 {{word}}
             </div>
-        </div>
-        <div class="col-12 col-sm-2 col-md-3 mb-2 mb-sm-0">
-            <button type="button" class="btn btn-primary"
-                        v-on:click="checkAnswer()">
-                        Sprawdź odpowiedź
-            </button>
         </div>
     </div>
 </template>
@@ -73,7 +67,6 @@
 /* global wordsearch */
 import $ from 'jquery';
 import arrayManipulation from '@/utilities/arrayManipulation';
-import bootbox from '@/utilities/bootbox';
 import imagesGetter from '@/utilities/imagesGetter';
 
 
@@ -109,6 +102,7 @@ export default {
     },
     pressLetter(event) {
       $(event.target).toggleClass('puzzleButton puzzleButtonMarked');
+      this.checkAnswer();
     },
     checkAnswer() {
       let wordFromBegining = '';
@@ -138,7 +132,6 @@ export default {
         for (let i = 1; i < checkedButtonsIds.length; i += 1) {
           if ((checkedButtonsIds[i - 1].x + direction.x !== checkedButtonsIds[i].x)
              || (checkedButtonsIds[i - 1].y + direction.y !== checkedButtonsIds[i].y)) {
-            this.adjacentCrossingInformation();
             return;
           }
         }
@@ -168,23 +161,10 @@ export default {
         if (this.wordsToSearch.length === 0) {
           this.puzzleSolved();
         }
-      } else {
-        this.wrongWordCrossed();
       }
     },
     puzzleSolved() {
       this.$parent.finishGame('');
-    },
-    wrongWordCrossed() {
-      $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
-      bootbox.alert(`Niestety nie wykreśliłeś żadnego z podanych wyrazów
-            <img src="${this.sadImageUrl}">`);
-    },
-    adjacentCrossingInformation() {
-      $('.puzzleButtonMarked').toggleClass('puzzleButton puzzleButtonMarked');
-      bootbox.alert(`Musisz wykreślać literki przylegające do siebie 
-            poziomo, pionowo lub ukośnie
-            <img src="${this.sadImageUrl}">`);
     },
   },
 };
