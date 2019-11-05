@@ -1,5 +1,6 @@
 <template>
   <div class="wordPicker">
+    <p class="h5 m-2">Które z podanych słów najbardziej pasuje do obrazka ?</p>
     <div>
       <img v-bind:src="gameInfo.img" class="wordPickerImage rounded mb-2" />
     </div>

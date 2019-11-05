@@ -1,5 +1,7 @@
 <template>
     <div class="wordSearch row">
+      <p class="h4 col-12">Wykreśl podane niżej słowa</p>
+      <p class="h6 col-12">Po każdym wykreślonym słowie wciśnij przycisk "Sprawdź odpowiedź"</p>
         <div class="puzzle col-12 col-sm-8 col-md-6">
             <div v-for="(row, x) in puzzle.grid" v-bind:key="row.length + x" >
                 <button class="puzzleButton btn btn-primary m-1"
@@ -69,11 +71,11 @@
 <script>
 /* eslint-env browser */
 /* global wordsearch */
+import $ from 'jquery';
 import arrayManipulation from '@/utilities/arrayManipulation';
 import bootbox from '@/utilities/bootbox';
 import imagesGetter from '@/utilities/imagesGetter';
 
-import $ from 'jquery';
 
 export default {
   data() {
