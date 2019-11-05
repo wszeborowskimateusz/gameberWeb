@@ -1,7 +1,6 @@
 <template>
     <div class="wordSearch row">
-      <p class="h4 col-12">Wykreśl podane niżej słowa</p>
-      <p class="h6 col-12">Po każdym wykreślonym słowie wciśnij przycisk "Sprawdź odpowiedź"</p>
+      <p class="h5 col-12">Wykreśl podane niżej słowa</p>
         <div class="puzzle col-12 col-sm-12 col-md-6">
             <div v-for="(row, x) in puzzle.grid" v-bind:key="row.length + x" >
                 <button class="puzzleButton btn btn-primary m-1"
