@@ -93,15 +93,15 @@
           <div class="progress">
             <div
               class="progress-bar dynamic progress-bar-animated progress-bar-striped bg-info"
-              :style="{ width: (user.experiencePoints / user.pointsToAchieveNewLevel) * 100 + '%' }"
+              :style="{ width: (currentExperiencePoints / maxExperiencePoints) * 100 + '%' }"
               role="progressbar"
-              :aria-valuenow="user.experiencePoints"
-              :aria-valuemin="user.pointsToAchievePreviousLevel"
-              :aria-valuemax="user.pointsToAchieveNewLevel"
+              :aria-valuenow="currentExperiencePoints"
+              aria-valuemin="0"
+              :aria-valuemax="maxExperiencePoints"
             ></div>
-            <div
-              class="progress-bar-title bar-title"
-            >{{user.experiencePoints}} / {{user.pointsToAchieveNewLevel}}</div>
+            <div class="progress-bar-title bar-title">
+              {{currentExperiencePoints}} / {{maxExperiencePoints}}
+            </div>
           </div>
         </div>
       </div>
@@ -264,6 +264,12 @@ export default {
     // If we browse our own profile or other user's profile
     isOurOwnProfile() {
       return !this.userId;
+    },
+    maxExperiencePoints() {
+      return this.user.pointsToAchieveNewLevel - this.user.pointsToAchievePreviousLevel;
+    },
+    currentExperiencePoints() {
+      return this.user.experiencePoints - this.user.pointsToAchievePreviousLevel;
     },
   },
   mounted() {
