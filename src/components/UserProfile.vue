@@ -96,7 +96,7 @@
               :style="{ width: (user.experiencePoints / user.pointsToAchieveNewLevel) * 100 + '%' }"
               role="progressbar"
               :aria-valuenow="user.experiencePoints"
-              aria-valuemin="0"
+              :aria-valuemin="user.pointsToAchievePreviousLevel"
               :aria-valuemax="user.pointsToAchieveNewLevel"
             ></div>
             <div
