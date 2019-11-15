@@ -1,6 +1,10 @@
 import toasts from '@/utilities/toasts';
 import notificationService from '@/services/notificationsService';
 
+function getUnreadNotificationsCount(notifications) {
+  return notifications.filter(n => !n.isRead).length;
+}
+
 const getDefaultState = () => ({ notifications: [], isLoading: false, notificationsCount: 0 });
 
 const notificationsState = getDefaultState();
@@ -56,7 +60,7 @@ const mutations = {
   },
   gettingNotificationsSuccess(state, notifications) {
     state.notifications = notifications;
-    state.notificationsCount = notifications.length;
+    state.notificationsCount = getUnreadNotificationsCount(notifications);
     state.isLoading = false;
   },
   gettingNotificationsFailure(state) {
@@ -68,11 +72,11 @@ const mutations = {
   },
   markingNotificationAsReadSuccess(state, notificationId) {
     state.notifications.find(x => x.id === notificationId).isRead = true;
-    state.notificationsCount = state.notifications.length;
+    state.notificationsCount = getUnreadNotificationsCount(state.notifications);
   },
   removingNotificationSuccess(state, notificationId) {
     state.notifications = state.notifications.filter(x => x.id !== notificationId);
-    state.notificationsCount = state.notifications.length;
+    state.notificationsCount = getUnreadNotificationsCount(state.notifications);
   },
   resetState(state) {
     Object.assign(state, getDefaultState());
